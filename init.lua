@@ -108,15 +108,28 @@ end
 
 core.register_node("server_shop:shop", {
 	description = "Shop",
+	drawtype = "nodebox",
 	tiles = {
-		"server_shop.png",
-		"server_shop.png",
-		"server_shop.png",
-		"server_shop.png",
-		"server_shop.png",
+		"server_shop_side.png",
+		"server_shop_side.png",
+		"server_shop_side.png",
+		"server_shop_side.png",
+		"server_shop_side.png",
 		"server_shop_front.png",
-		"server_shop.png"},
-	drawtype = "normal",
+		"server_shop_side.png",
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, -0.5, 0.5, 1.5, 0.5},
+	},
+	collision_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, -0.5, 0.5, 1.45, 0.5},
+	},
+	node_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, -0.5, 0.5, 1.5, 0.5},
+	},
 	groups = {oddly_breakable_by_hand=1,},
 	paramtype2 = "facedir",
 	after_place_node = function(pos, placer)

@@ -9,7 +9,7 @@ TODO:
 - don't allow other players to interfere with transactions
 - update input field text when "Set ID" button is pressed by owner
 - don't allow non-owners to dig node
-- create vending machine-like textures
+- touch up textures
 - make usable with "folks" mod
 - register shops in file in "world" directory
 - use "server" privilege to manage shops instead of owner
@@ -17,4 +17,4 @@ TODO:
 - add localization support
 - display shop name at top of formspec
 - make "register_shop" & "get_shop" global functions
-- make two nodes high
+- fix texture tiling
