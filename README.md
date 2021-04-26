@@ -17,12 +17,12 @@ TODO
 ### Licensing:
 
 - Code: [MIT](LICENSE.txt)
-- Textures: [CC0](textures/sources.txt)
+- Textures: CC0
 
 ### Dependencies:
 
 - Required:
-  - none
+  - [currency](https://forum.minetest.net/viewtopic.php?t=21339)
 - Optional:
   - none
 
@@ -30,7 +30,6 @@ Compatible with:
 
 ### Links:
 
-- [Minetest forum]()
-- [GitHub repo]()
+- [GitHub repo](https://github.com/AntumMT/mod-server_shop)
 - [Changelog](CHANGES.txt)
 - [TODO](TODO.txt)
