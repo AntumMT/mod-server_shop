@@ -1,0 +1,19 @@
+
+TODO:
+- update "deposited" value when player inserts minegeld notes
+- return item if player deposits something other than minegeld notes
+- add option to buy multiple of an item
+- calculate price when "Buy" button is pressed & deduct it from "deposited" value
+- inform player if not enough money is deposited
+- return deposited money when "Refund" button is pressed
+- don't allow other players to interfere with transactions
+- update input field text when "Set ID" button is pressed by owner
+- don't allow non-owners to dig node
+- create vending machine-like textures
+- make usable with "folks" mod
+- register shops in file in "world" directory
+- use "server" privilege to manage shops instead of owner
+- ignore "Enter" keypress in ID input field
+- add localization support
+- display shop name at top of formspec
+- make "register_shop" & "get_shop" global functions
