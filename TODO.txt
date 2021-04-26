@@ -17,3 +17,4 @@ TODO:
 - add localization support
 - display shop name at top of formspec
 - make "register_shop" & "get_shop" global functions
+- make two nodes high
