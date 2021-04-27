@@ -215,7 +215,7 @@ core.register_node("server_shop:shop", {
 	after_place_node = function(pos, placer)
 		local meta = core.get_meta(pos)
 		meta:set_string("owner", placer:get_player_name() or "")
-		meta:set_string("infotext", "Owned by: " .. meta:get_string("owner"))
+		--meta:set_string("infotext", "Owned by: " .. meta:get_string("owner"))
 	end,
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local meta = core.get_meta(pos)

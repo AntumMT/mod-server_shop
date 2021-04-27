@@ -11,8 +11,8 @@ TODO:
 - ignore "Enter" keypress in ID input field
 - add localization support
 - display shop name at top of formspec
+- show shop name when player points at node
 - make "register_shop" & "get_shop" global functions
 - fix texture tiling
-- don't show owner name when player points at node
 - allow registering custom types of currency
 - make 2 nodes high using mesh
