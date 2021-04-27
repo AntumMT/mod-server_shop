@@ -25,6 +25,13 @@ local function get_shop(id)
 	end
 end
 
+local function get_shop_name(id)
+	local shop = get_shop(id)
+	if shop then
+		return shop.name
+	end
+end
+
 
 local fs_width = 14
 local fs_height = 11
@@ -380,10 +387,14 @@ core.register_node(node_name, {
 			meta:set_int("selected", meta:get_int("default_selected"))
 		elseif fields.btn_id and is_shop_admin(pos, sender) then
 			local new_id = fields.input_id:trim()
+			-- FIXME: allow to be set to "" in order to remove shop
 			if new_id ~= "" then
-				core.log("action", "Setting shop ID to \"" .. new_id .. "\"")
+				core.log("action", pname .. " sets " .. node_name .. " ID to \"" .. new_id
+					.. "\" at (" .. pos.x .. "," .. pos.y .. "," .. pos.z .. ")")
 				meta:set_string("id", new_id)
-				fields.input_id = meta:get_string("id")
+				fields.input_id = new_id
+				-- set or remove displayed text when pointed at
+				meta:set_string("infotext", "Shop: " .. get_shop_name(new_id))
 			end
 		elseif fields.products then
 			-- set selected index in meta data to be retrieved when "buy" button is pressed
