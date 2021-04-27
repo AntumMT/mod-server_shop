@@ -81,10 +81,16 @@ local function get_formspec(pos, player_name)
 				.. "field[" .. tostring(fs_width-4.3) .. ",0.2;4.1,0.75;input_id;;" .. id .. "]"
 		end
 
+		-- ensure selected value in meta data
+		if meta:get_int("selected") < 1 then
+			meta:set_int("selected", meta:get_int("default_selected"))
+		end
+
 		formspec = formspec
 			.. "label[0.2,1;Deposited: " .. tostring(deposited) .. " MG]"
 			.. "list[context;deposit;0.2,1.5;1,1;0]"
-			.. "textlist[2.15,1.5;9.75,3;products;" .. get_products(id) .. ";1;false]"
+			.. "textlist[2.15,1.5;9.75,3;products;" .. get_products(id) .. ";"
+				.. tostring(meta:get_int("selected")) .. ";false]"
 			.. "button[0.2," .. tostring(btn_y) .. ";" .. tostring(btn_w) .. ",0.75;btn_refund;Refund]"
 			.. "button[" .. tostring(fs_width-(btn_w+0.2)) .. "," .. tostring(btn_y) .. ";" .. tostring(btn_w) .. ",0.75;btn_buy;Buy]"
 			.. "list[current_player;main;2.15,5.5;8,4;0]"
@@ -208,6 +214,8 @@ core.register_node("server_shop:shop", {
 	paramtype2 = "facedir",
 	on_construct = function(pos)
 		local meta = core.get_meta(pos)
+		-- set which item should be selected when formspec is opened
+		meta:set_int("default_selected", 1)
 		meta:set_string("formspec", get_formspec(pos))
 	end,
 	after_place_node = function(pos, placer)
@@ -233,13 +241,19 @@ core.register_node("server_shop:shop", {
 		local meta = core.get_meta(pos)
 		local pname = sender:get_player_name()
 
-		if fields.btn_id and pname == meta:get_string("owner") then
+		if fields.quit then
+			-- reset selected to default when closed
+			meta:set_int("selected", meta:get_int("default_selected"))
+		elseif fields.btn_id and pname == meta:get_string("owner") then
 			local new_id = fields.input_id:trim()
 			if new_id ~= "" then
 				core.log("action", "Setting shop ID to \"" .. new_id .. "\"")
 				meta:set_string("id", new_id)
 				fields.input_id = meta:get_string("id")
 			end
+		elseif fields.products then
+			-- set selected index in meta data to be retrieved when "buy" button is pressed
+			meta:set_int("selected", fields.products:sub(5))
 		elseif fields.btn_refund then
 			local pinv = sender:get_inventory()
 			local refund = calculate_refund(meta:get_int("deposited"))
