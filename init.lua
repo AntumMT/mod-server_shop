@@ -3,7 +3,7 @@ server_shop = {}
 
 local shops = {}
 
-local function register_shop(name, id, def)
+function server_shop.register_shop(name, id, def)
 	local shop = {}
 	shop.name = name
 	shop.id = id
@@ -27,7 +27,7 @@ local products = {
 }
 
 
-register_shop("Cobble", "cobble", products)
+server_shop.register_shop("Cobble", "cobble", products)
 
 
 local fs_width = 14

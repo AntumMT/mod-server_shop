@@ -12,7 +12,9 @@ TODO:
 - add localization support
 - display shop name at top of formspec
 - show shop name when player points at node
-- make "register_shop" & "get_shop" global functions
+- make "get_shop" global function
 - fix texture tiling
 - allow registering custom types of currency
 - make 2 nodes high using mesh
+- clean up code
+- rename to "server_shops"
