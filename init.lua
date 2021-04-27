@@ -97,7 +97,16 @@ local function is_shop_admin(pos, player)
 
 	local meta = core.get_meta(pos)
 	return core.check_player_privs(player, "server")
-		or player:get_player_name() == meta:get_string("owner")
+		--or player:get_player_name() == meta:get_string("owner")
+end
+
+local function is_shop_owner(pos, player)
+	if not player then
+		return false
+	end
+
+	local meta = core.get_meta(pos)
+	return player:get_player_name() == meta:get_string("owner")
 end
 
 local function get_formspec(pos, player)
@@ -380,7 +389,7 @@ core.register_node(node_name, {
 			return false
 		end
 
-		return is_shop_admin(pos, player)
+		return is_shop_owner(pos, player) or is_shop_admin(pos, player)
 	end,
 	on_dig = function(pos, node, digger)
 		local deposited = core.get_meta(pos):get_int("deposited")

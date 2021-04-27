@@ -26,7 +26,7 @@ server_shop.register_shop("Basic", "basic", {
 
 Shops can optionally be registered in `<world_path>/server_shops.lua` file (this will be changed in the future to use configuration instead of Lua code).
 
-Server admins use the chat command `/giveme server_shop:shop` to receive a shop node. After placing the node, the ID can be set with the "Set ID" button & text input field (only players with the "server" privilege or node owners can set ID or dig node). Set the ID to the shop ID you want associated with this shop node ("basic" for the example above) & the list will be populated with the registered products & prices.
+Server admins use the chat command `/giveme server_shop:shop` to receive a shop node. After placing the node, the ID can be set with the "Set ID" button & text input field (only players with the "server" privilege can set ID). Set the ID to the shop ID you want associated with this shop node ("basic" for the example above) & the list will be populated with the registered products & prices.
 
 To make purchases, players deposit [minegeld notes][mod.currency] into the deposit slot. Select an item to purchase & press the "Buy" button. If there is adequate money deposited, player will receive the item & the price will be deducted from the deposited amount. Press the "Refund" button to retrieve any money not spent.
 
