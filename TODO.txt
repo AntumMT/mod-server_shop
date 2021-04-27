@@ -18,3 +18,4 @@ TODO:
 - clean up code
 - check if shop is already registered before re-registering
 - make loading world directory file more secure (don't use raw Lua)
+- show image of selected item
