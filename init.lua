@@ -206,6 +206,10 @@ core.register_node("server_shop:shop", {
 	]]
 	groups = {oddly_breakable_by_hand=1,},
 	paramtype2 = "facedir",
+	on_construct = function(pos)
+		local meta = core.get_meta(pos)
+		meta:set_string("formspec", get_formspec(pos))
+	end,
 	after_place_node = function(pos, placer)
 		local meta = core.get_meta(pos)
 		meta:set_string("owner", placer:get_player_name() or "")

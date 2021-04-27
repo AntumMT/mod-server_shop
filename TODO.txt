@@ -16,6 +16,5 @@ TODO:
 - allow registering custom types of currency
 - make 2 nodes high using mesh
 - clean up code
-- rename to "server_shops"
 - check if shop is already registered before re-registering
 - make loading world directory file more secure (don't use raw Lua)
