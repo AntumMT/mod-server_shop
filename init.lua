@@ -100,6 +100,12 @@ local function get_formspec(pos, player)
 		local deposited = meta:get_int("deposited")
 
 		local formspec = "formspec_version[4]size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
+
+		local shop_name = meta:get_string("name"):trim()
+		if shop_name ~= "" then
+			formspec = formspec .. "label[0.2,0.4;Shop: " .. shop_name .. "]"
+		end
+
 		if is_shop_admin(pos, player) then
 			formspec = formspec
 				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w) .. ",0.75;btn_id;Set ID]"
@@ -393,8 +399,16 @@ core.register_node(node_name, {
 					.. "\" at (" .. pos.x .. "," .. pos.y .. "," .. pos.z .. ")")
 				meta:set_string("id", new_id)
 				fields.input_id = new_id
+
 				-- set or remove displayed text when pointed at
-				meta:set_string("infotext", "Shop: " .. get_shop_name(new_id))
+				local shop_name = get_shop_name(new_id)
+				if shop_name then
+					meta:set_string("infotext", "Shop: " .. shop_name)
+					meta:set_string("name", shop_name)
+				else
+					meta:set_string("infotext", nil)
+					meta:set_string("name", nil)
+				end
 			end
 		elseif fields.products then
 			-- set selected index in meta data to be retrieved when "buy" button is pressed

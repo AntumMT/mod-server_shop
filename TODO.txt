@@ -11,7 +11,6 @@ TODO:
   - touch up textures
   - fix texture tiling
   - make 2 nodes high using mesh
-  - display shop name at top of formspec
   - show image of selected item
 - Misc.:
   - make usable with "folks" mod
