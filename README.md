@@ -6,9 +6,9 @@ Shops intended to be set up by [Minetest](https://www.minetest.net/) server admi
 
 No craft recipe is given as this for administrators, currently a machine can only be set up with `/giveme server_shop:shop` command.
 
-***WARNING:** this mod is not ready for active use*
+***WARNING:** this mod is in early development, see [TODO](TODO.txt) list*
 
-<!-- ![screenshot](screenshot.png) -->
+![screenshot](screenshot.png)
 
 #### Usage:
 
