@@ -100,9 +100,7 @@ local function get_formspec(pos, player_name)
 			formname = formname .. "_" .. id
 		end
 
-		formspec = formspec .. formname
-
-		return formspec
+		return formspec .. formname
 end
 
 
