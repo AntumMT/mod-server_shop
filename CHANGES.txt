@@ -5,3 +5,4 @@ pre
 - created simple shop list for testing
 - formspec displays items & prices of associated shop
 - owner can set ID (ID how associated shop is accessed)
+- minegeld notes can be deposited & refunded
