@@ -106,6 +106,81 @@ local function get_formspec(pos, player_name)
 end
 
 
+local currencies = {
+	{"currency:minegeld", 1,},
+	{"currency:minegeld_5", 5,},
+	{"currency:minegeld_10", 10,},
+	{"currency:minegeld_50", 50,},
+	{"currency:minegeld_100", 100,},
+}
+
+--- Calculates how much money is being deposited.
+local function calculate_value(stack)
+	local value = 0
+	for _, c in ipairs(currencies) do
+		if stack:get_name() == c[1] then
+			value = stack:get_count() * c[2]
+			break
+		end
+	end
+
+	return value
+end
+
+--- Calculates money to be returned to player.
+--
+--  FIXME: not very intuitive
+local function calculate_refund(total)
+	local refund = 0
+
+	local hun = math.floor(total / 100)
+	total = total - (hun * 100)
+
+	local fif = math.floor(total / 50)
+	total = total - (fif * 50)
+
+	local ten = math.floor(total / 10)
+	total = total - (ten * 10)
+
+	local fiv = math.floor(total / 5)
+	total = total - (fiv * 5)
+
+	-- at this point, 'total' should always be divisible by whole number
+	local one = total / 1
+	total = total - one
+
+	if total ~= 0 then
+		core.log("warning", "Refund did not result in 0 deposited balance")
+	end
+
+	local refund = {}
+	for _, c in ipairs(currencies) do
+		local iname = c[1]
+		local ivalue = c[2]
+		local icount = 0
+
+		if ivalue == 1 then
+			icount = one
+		elseif ivalue == 5 then
+			icount = fiv
+		elseif ivalue == 10 then
+			icount = ten
+		elseif ivalue == 50 then
+			icount = fif
+		elseif ivalue == 100 then
+			icount = hun
+		end
+
+		if icount > 0 then
+			local stack = ItemStack(iname)
+			stack:set_count(icount)
+			table.insert(refund, stack)
+		end
+	end
+
+	return refund
+end
+
 core.register_node("server_shop:shop", {
 	description = "Shop",
 	drawtype = "nodebox",
@@ -118,6 +193,10 @@ core.register_node("server_shop:shop", {
 		"server_shop_front.png",
 		"server_shop_side.png",
 	},
+	--[[
+	drawtype = "mesh",
+	mesh = "server_shop.obj",
+	tiles = {"server_shop_mesh.png",},
 	selection_box = {
 		type = "fixed",
 		fixed = {-0.5, -0.5, -0.5, 0.5, 1.5, 0.5},
@@ -130,6 +209,7 @@ core.register_node("server_shop:shop", {
 		type = "fixed",
 		fixed = {-0.5, -0.5, -0.5, 0.5, 1.5, 0.5},
 	},
+	]]
 	groups = {oddly_breakable_by_hand=1,},
 	paramtype2 = "facedir",
 	after_place_node = function(pos, placer)
@@ -143,17 +223,60 @@ core.register_node("server_shop:shop", {
 		local inv = meta:get_inventory()
 		inv:set_size("deposit", 1)
 	end,
+	can_dig = function(pos, player)
+		local meta = core.get_meta(pos)
+		if player:get_player_name() == meta:get_string("owner") and meta:get_int("deposited") == 0 then
+			return true
+		end
+
+		return false
+	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local meta = core.get_meta(pos)
+		local pname = sender:get_player_name()
 
-		if fields.btn_id and sender:get_player_name() == meta:get_string("owner") then
+		if fields.btn_id and pname == meta:get_string("owner") then
 			local new_id = fields.input_id:trim()
 			if new_id ~= "" then
 				core.log("action", "Setting shop ID to \"" .. new_id .. "\"")
 				meta:set_string("id", new_id)
-				-- FIXME: update input field text
 				fields.input_id = meta:get_string("id")
 			end
+		elseif fields.btn_refund then
+			local pinv = sender:get_inventory()
+			local refund = calculate_refund(meta:get_int("deposited"))
+			for _, istack in ipairs(refund) do
+				print("Refunding " .. tostring(istack:get_count()) .. " of " .. istack:get_name())
+
+				if not pinv:room_for_item("main", istack) then
+					-- FIXME: should amount be left in machine & player warned instead of dropping on ground?
+					core.chat_send_player(pname, "WARNING: " .. tostring(istack:get_count())
+						.. " " .. istack:get_description() .. " was dropped on the ground")
+					core.item_drop(istack, sender, sender:get_pos())
+				else
+					pinv:add_item("main", istack)
+				end
+			end
+
+			-- reset deposited amount after refund
+			meta:set_int("deposited", 0)
 		end
+
+		-- refresh formspec dialog
+		meta:set_string("formspec", get_formspec(pos, pname))
 	end,
+	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		local deposited = calculate_value(stack)
+		if deposited > 0 then
+			local meta = core.get_meta(pos)
+			meta:set_int("deposited", meta:get_int("deposited") + deposited)
+
+			-- refresh formspec dialog
+			meta:set_string("formspec", get_formspec(pos, player:get_player_name()))
+
+			return -1
+		end
+
+		return 0
+	end
 })
