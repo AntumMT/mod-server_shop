@@ -57,9 +57,9 @@ local function get_products(id)
 			end
 
 			if products == "" then
-				products = item_name .. ": " .. tostring(item_price) .. " MG"
+				products = item_name .. " : " .. tostring(item_price) .. " MG"
 			else
-				products = products .. "," .. item_name .. ": " .. tostring(item_price) .. " MG"
+				products = products .. "," .. item_name .. " : " .. tostring(item_price) .. " MG"
 			end
 
 			::continue::
