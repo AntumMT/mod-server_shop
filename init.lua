@@ -110,6 +110,7 @@ local function get_formspec(pos, player)
 			formspec = formspec
 				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w) .. ",0.75;btn_id;Set ID]"
 				.. "field[" .. tostring(fs_width-4.3) .. ",0.2;4.1,0.75;input_id;;" .. id .. "]"
+				.. "field_close_on_enter[input_id;false]"
 		end
 
 		-- ensure selected value in meta data

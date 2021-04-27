@@ -5,7 +5,6 @@ TODO:
   - make loading world directory file more secure (don't use raw Lua)
 - Functionality:
   - add option to buy multiple of an item
-  - use "Enter" keypress in ID input to set ID & keep formspec open
   - optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
 - Visuals:
   - touch up textures
