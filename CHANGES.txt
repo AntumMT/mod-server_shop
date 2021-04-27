@@ -1,10 +1,10 @@
 
-pre
+1.0
 - created node
 - created simple textures
-- created simple shop list for testing
 - formspec displays items & prices of associated shop
-- owner can set ID (ID how associated shop is accessed)
 - minegeld notes can be deposited & refunded
 - shops are configured from world directory
-- only node owners & players with "server" priv can dig or alter
+- players with "server" priv alter
+- players with "server" priv or node owners can dig
+- implemented deposit, purchase, & refund functionality
