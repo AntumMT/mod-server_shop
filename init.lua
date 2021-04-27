@@ -1,14 +1,18 @@
 
 server_shop = {}
+server_shop.name = core.get_current_modname()
 
 local shops = {}
 
 function server_shop.register_shop(name, id, def)
+	-- FIXME: check if shop is alreay registered
 	local shop = {}
 	shop.name = name
 	shop.id = id
 	shop.def = def
 	table.insert(shops, shop)
+
+	core.log("action", "[" .. server_shop.name .. "] Registered shop: " .. shop.id)
 end
 
 local function get_shop(id)
@@ -18,16 +22,6 @@ local function get_shop(id)
 		end
 	end
 end
-
--- shop definition
-local products = {
-	{"default:cobble", 1},
-	{"default:dirt"},
-	{"pear", 2},
-}
-
-
-server_shop.register_shop("Cobble", "cobble", products)
 
 
 local fs_width = 14
@@ -280,3 +274,12 @@ core.register_node("server_shop:shop", {
 		return 0
 	end
 })
+
+
+-- load configured shops from world directory
+local shops_file = core.get_worldpath() .. "/server_shops.lua"
+local fopen = io.open(shops_file, "r")
+if fopen ~= nil then
+	io.close(fopen)
+	dofile(shops_file)
+end

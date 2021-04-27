@@ -6,7 +6,6 @@ TODO:
 - don't allow other players to interfere with transactions
 - touch up textures
 - make usable with "folks" mod
-- register shops in file in "world" directory
 - use "server" privilege to manage shops instead of owner
 - ignore "Enter" keypress in ID input field
 - add localization support
@@ -18,3 +17,5 @@ TODO:
 - make 2 nodes high using mesh
 - clean up code
 - rename to "server_shops"
+- check if shop is already registered before re-registering
+- make loading world directory file more secure (don't use raw Lua)
