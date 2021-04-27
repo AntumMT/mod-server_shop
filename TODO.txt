@@ -1,13 +1,11 @@
 
 TODO:
 - add option to buy multiple of an item
-- calculate price when "Buy" button is pressed & deduct it from "deposited" value
-- inform player if not enough money is deposited
 - don't allow other players to interfere with transactions
 - touch up textures
 - make usable with "folks" mod
 - use "server" privilege to manage shops instead of owner
-- ignore "Enter" keypress in ID input field
+- use "Enter" keypress in ID input to set ID & keep formspec open
 - add localization support
 - display shop name at top of formspec
 - show shop name when player points at node
@@ -19,3 +17,4 @@ TODO:
 - check if shop is already registered before re-registering
 - make loading world directory file more secure (don't use raw Lua)
 - show image of selected item
+- optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)

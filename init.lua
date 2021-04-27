@@ -29,7 +29,7 @@ local fs_height = 11
 local btn_w = 1.75
 local btn_y = 4.6
 
-local function get_products(id)
+local function get_product_list(id)
 	local products = ""
 	local shop = get_shop(id)
 
@@ -89,7 +89,7 @@ local function get_formspec(pos, player_name)
 		formspec = formspec
 			.. "label[0.2,1;Deposited: " .. tostring(deposited) .. " MG]"
 			.. "list[context;deposit;0.2,1.5;1,1;0]"
-			.. "textlist[2.15,1.5;9.75,3;products;" .. get_products(id) .. ";"
+			.. "textlist[2.15,1.5;9.75,3;products;" .. get_product_list(id) .. ";"
 				.. tostring(meta:get_int("selected")) .. ";false]"
 			.. "button[0.2," .. tostring(btn_y) .. ";" .. tostring(btn_w) .. ",0.75;btn_refund;Refund]"
 			.. "button[" .. tostring(fs_width-(btn_w+0.2)) .. "," .. tostring(btn_y) .. ";" .. tostring(btn_w) .. ",0.75;btn_buy;Buy]"
@@ -179,6 +179,78 @@ local function calculate_refund(total)
 	return refund
 end
 
+--- Calculates the price of item being purchased.
+--
+--  @function calculate_price
+--  @local
+--  @param shop_id String identifier of shop.
+--  @param item_id String identifier of item (e.g. default:dirt).
+--  @param quantity Number of item being purchased.
+--  @return Total value of purchase.
+local function calculate_price(shop_id, item_id, quantity)
+	local shop = get_shop(shop_id)
+	if not shop then
+		return 0
+	end
+
+	local price_per = 0
+	for _, i in ipairs(shop.def) do
+		if i[1] == item_id then
+			price_per = i[2]
+			break
+		end
+	end
+
+	return price_per * quantity
+end
+
+--- Retrieves item name/id from shop list.
+--
+--  @function get_shop_index
+--  @local
+--  @param shop_id String identifier of shop.
+--  @param idx Index of the item to retrieve.
+--  @return String item identifier or `nil` if shop does not contain item.
+local function get_shop_index(shop_id, idx)
+	local shop = get_shop(shop_id)
+	if shop then
+		local product = shop.def[idx]
+		if product then
+			return product[1]
+		end
+	end
+end
+
+--- Add item(s) to player inventory or drops on ground.
+--
+--  @function player The player who is receiving the item.
+--  @local
+--  @param product String identifier of the item.
+--  @param quantity Amount to give.
+local function give_product(player, product, quantity)
+	local istack = product
+	if type(istack) == "string" then
+		-- create the ItemStack
+		istack = ItemStack(product)
+		-- make sure we give at leaset 1
+		if not quantity then quantity = 1 end
+		istack:set_count(quantity)
+	elseif quantity and istack:get_count() ~= quantity then
+		istack:set_count(quantity)
+	end
+
+	-- add to player inventory or drop on ground
+	local pinv = player:get_inventory()
+	if not pinv:room_for_item("main", istack) then
+		core.chat_send_player(player:get_player_name(), "WARNING: "
+			.. tostring(istack:get_count()) .. " " .. istack:get_description()
+			.. " was dropped on the ground.")
+		core.item_drop(istack, player, player:get_pos())
+	else
+		pinv:add_item("main", istack)
+	end
+end
+
 core.register_node("server_shop:shop", {
 	description = "Shop",
 	drawtype = "nodebox",
@@ -253,23 +325,44 @@ core.register_node("server_shop:shop", {
 			-- set selected index in meta data to be retrieved when "buy" button is pressed
 			meta:set_int("selected", fields.products:sub(5))
 		elseif fields.btn_refund then
-			local pinv = sender:get_inventory()
 			local refund = calculate_refund(meta:get_int("deposited"))
 			for _, istack in ipairs(refund) do
-				print("Refunding " .. tostring(istack:get_count()) .. " of " .. istack:get_name())
-
-				if not pinv:room_for_item("main", istack) then
-					-- FIXME: should amount be left in machine & player warned instead of dropping on ground?
-					core.chat_send_player(pname, "WARNING: " .. tostring(istack:get_count())
-						.. " " .. istack:get_description() .. " was dropped on the ground")
-					core.item_drop(istack, sender, sender:get_pos())
-				else
-					pinv:add_item("main", istack)
-				end
+				give_product(sender, istack)
 			end
 
 			-- reset deposited amount after refund
 			meta:set_int("deposited", 0)
+		elseif fields.btn_buy then
+			-- get selected index
+			local selected = meta:get_int("selected")
+			local shop_id = meta:get_string("id")
+			local product = get_shop_index(shop_id, selected)
+
+			if not product then
+				core.log("warning", "Trying to buy undefined item from shop \""
+					.. tostring(shop_id) .. "\"")
+				return
+			end
+
+			-- FIXME: allow purchasing multiples
+			local product_count = 1
+			local total = calculate_price(shop_id, product, product_count)
+
+			local deposited = meta:get_int("deposited")
+			if total > deposited then
+				core.chat_send_player(pname, "You haven't deposited enough money.")
+				return
+			end
+
+			product = ItemStack(product)
+			product:set_count(product_count)
+
+			-- subtract total from deposited money
+			meta:set_int("deposited", deposited - total)
+			-- execute transaction
+			core.chat_send_player(pname, "You purchased " .. tostring(product:get_count())
+				.. " " .. product:get_description() .. " for " .. tostring(total) .. " MG.")
+			give_product(sender, product)
 		end
 
 		-- refresh formspec dialog
