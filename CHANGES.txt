@@ -7,3 +7,4 @@ pre
 - owner can set ID (ID how associated shop is accessed)
 - minegeld notes can be deposited & refunded
 - shops are configured from world directory
+- only node owners & players with "server" priv can dig or alter

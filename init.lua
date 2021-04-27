@@ -2,6 +2,8 @@
 server_shop = {}
 server_shop.name = core.get_current_modname()
 
+local node_name = "server_shop:shop"
+
 local shops = {}
 
 function server_shop.register_shop(name, id, def)
@@ -69,13 +71,29 @@ local function get_product_list(id)
 	return products
 end
 
-local function get_formspec(pos, player_name)
+--- Checks if a player has admin rights to for managing shop.
+--
+--  @local
+--  @function is_shop_admin
+--  @param pos Position of shop.
+--  @param player Player requesting permissions.
+local function is_shop_admin(pos, player)
+	if not player then
+		return false
+	end
+
+	local meta = core.get_meta(pos)
+	return core.check_player_privs(player, "server")
+		or player:get_player_name() == meta:get_string("owner")
+end
+
+local function get_formspec(pos, player)
 		local meta = core.get_meta(pos)
 		local id = meta:get_string("id")
 		local deposited = meta:get_int("deposited")
 
 		local formspec = "formspec_version[4]size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
-		if meta:get_string("owner") == player_name then
+		if is_shop_admin(pos, player) then
 			formspec = formspec
 				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w) .. ",0.75;btn_id;Set ID]"
 				.. "field[" .. tostring(fs_width-4.3) .. ",0.2;4.1,0.75;input_id;;" .. id .. "]"
@@ -251,7 +269,40 @@ local function give_product(player, product, quantity)
 	end
 end
 
-core.register_node("server_shop:shop", {
+--- Sets the owner of the shop & gives admin privileges.
+--
+--  @local
+--  @function set_owner
+--  @param pos Position of shop.
+--  @param pname String name of new owner.
+local function set_owner(pos, pname)
+	local meta = core.get_meta(pos)
+	meta:set_string("owner", pname)
+end
+
+--- Sets the amount of money deposited into machine.
+--
+--  @local
+--  @function set_deposit_balance
+--  @param pos Position of shop.
+--  @param amount Integer amount to be set.
+--[[ UNUSED:
+local function set_deposit_balance(pos, amount)
+	local meta = core.get_meta(pos)
+	meta:set_int("deposited", amount)
+end
+]]
+
+--- Retrieves amound of money currently deposited into shop.
+--
+--  @local
+--  @function get_deposit_balance
+--  @param pos Position of shop.
+local function get_deposit_balance(pos)
+	return core.get_meta(pos):get_int("deposited")
+end
+
+core.register_node(node_name, {
 	description = "Shop",
 	drawtype = "nodebox",
 	tiles = {
@@ -290,22 +341,35 @@ core.register_node("server_shop:shop", {
 	end,
 	after_place_node = function(pos, placer)
 		local meta = core.get_meta(pos)
-		meta:set_string("owner", placer:get_player_name() or "")
-		--meta:set_string("infotext", "Owned by: " .. meta:get_string("owner"))
+		set_owner(pos, placer:get_player_name())
 	end,
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local meta = core.get_meta(pos)
-		meta:set_string("formspec", get_formspec(pos, player:get_player_name()))
+		meta:set_string("formspec", get_formspec(pos, player))
 		local inv = meta:get_inventory()
 		inv:set_size("deposit", 1)
 	end,
 	can_dig = function(pos, player)
 		local meta = core.get_meta(pos)
-		if player:get_player_name() == meta:get_string("owner") and meta:get_int("deposited") == 0 then
-			return true
+		local deposited = meta:get_int("deposited")
+
+		if deposited > 0 then
+			core.log(player:get_player_name() .. " attempted to dig " .. node_name
+				.. " containing " .. tostring(deposited) .. " MG at ("
+				.. pos.x .. "," .. pos.y .. "," .. pos.z .. ")")
+			return false
 		end
 
-		return false
+		return is_shop_admin(pos, player)
+	end,
+	on_dig = function(pos, node, digger)
+		local deposited = core.get_meta(pos):get_int("deposited")
+		core.node_dig(pos, node, digger)
+
+		if deposited < 0 then
+			core.log("warning", digger:get_player_name() .. " dug " .. node_name
+				.. " containing negative deposit balance")
+		end
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local meta = core.get_meta(pos)
@@ -314,7 +378,7 @@ core.register_node("server_shop:shop", {
 		if fields.quit then
 			-- reset selected to default when closed
 			meta:set_int("selected", meta:get_int("default_selected"))
-		elseif fields.btn_id and pname == meta:get_string("owner") then
+		elseif fields.btn_id and is_shop_admin(pos, sender) then
 			local new_id = fields.input_id:trim()
 			if new_id ~= "" then
 				core.log("action", "Setting shop ID to \"" .. new_id .. "\"")
@@ -366,7 +430,7 @@ core.register_node("server_shop:shop", {
 		end
 
 		-- refresh formspec dialog
-		meta:set_string("formspec", get_formspec(pos, pname))
+		meta:set_string("formspec", get_formspec(pos, sender))
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
 		local deposited = calculate_value(stack)
@@ -375,7 +439,7 @@ core.register_node("server_shop:shop", {
 			meta:set_int("deposited", meta:get_int("deposited") + deposited)
 
 			-- refresh formspec dialog
-			meta:set_string("formspec", get_formspec(pos, player:get_player_name()))
+			meta:set_string("formspec", get_formspec(pos, player))
 
 			return -1
 		end

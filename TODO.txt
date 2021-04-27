@@ -2,7 +2,6 @@
 TODO:
 - Security:
   - don't allow other players to interfere with transactions
-  - use "server" privilege to manage shops instead of owner
   - make loading world directory file more secure (don't use raw Lua)
 - Functionality:
   - add option to buy multiple of an item
@@ -22,3 +21,4 @@ TODO:
   - allow registering custom types of currency
   - clean up code
   - check if shop is already registered before re-registering
+  - let shops with deposit balance be dug, & drop balance on ground
