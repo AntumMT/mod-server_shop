@@ -6,6 +6,12 @@ local node_name = "server_shop:shop"
 
 local shops = {}
 
+--- Registers a shop list to be accessed via a shop node.
+--
+--  @function server_shop.register_shop
+--  @param name Human readable name to be displayed.
+--  @param id String ID associated with shop list.
+--  @param def Shop definition (e.g. items & prices)
 function server_shop.register_shop(name, id, def)
 	-- FIXME: check if shop is alreay registered
 	local shop = {}
