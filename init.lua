@@ -333,7 +333,8 @@ end
 
 core.register_node(node_name, {
 	description = "Shop",
-	drawtype = "nodebox",
+	--drawtype = "nodebox",
+	drawtype = "normal",
 	tiles = {
 		"server_shop_side.png",
 		"server_shop_side.png",
