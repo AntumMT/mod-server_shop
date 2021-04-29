@@ -141,7 +141,7 @@ local function get_formspec(pos, player)
 			.. "button[0.2," .. tostring(btn_y) .. ";" .. tostring(btn_w) .. ",0.75;btn_refund;Refund]"
 			.. "button[" .. tostring(fs_width-(btn_w+0.2)) .. "," .. tostring(btn_y) .. ";" .. tostring(btn_w) .. ",0.75;btn_buy;Buy]"
 			.. "list[current_player;main;2.15,5.5;8,4;0]"
-
+			.. "button_exit[" .. tostring(fs_width-(btn_w+0.2)) .. ",10;" .. tostring(btn_w) .. ",0.75;btn_close;Close]"
 		local formname = "server_shop"
 		if id and id ~= "" then
 			formname = formname .. "_" .. id
