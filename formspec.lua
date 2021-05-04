@@ -63,7 +63,7 @@ function server_shop.get_formspec(pos, player)
 
 		local shop_name = meta:get_string("name"):trim()
 		if shop_name ~= "" then
-			formspec = formspec .. "label[0.2,0.4;Shop: " .. shop_name .. "]"
+			formspec = formspec .. "label[0.2,0.4;" .. shop_name .. "]"
 		end
 
 		if ss.is_shop_admin(pos, player) then

@@ -271,7 +271,7 @@ core.register_node(node_name, {
 				-- set or remove displayed text when pointed at
 				local shop_name = get_shop_name(new_id)
 				if shop_name then
-					meta:set_string("infotext", "Shop: " .. shop_name)
+					meta:set_string("infotext", shop_name)
 					meta:set_string("name", shop_name)
 				else
 					meta:set_string("infotext", nil)
