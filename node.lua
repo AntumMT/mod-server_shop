@@ -169,6 +169,16 @@ local function give_product(player, product, quantity)
 	end
 end
 
+local function give_refund(meta, player)
+	local refund = calculate_refund(meta:get_int("deposited"))
+	for _, istack in ipairs(refund) do
+		give_product(player, istack)
+	end
+
+	-- reset deposited amount after refund
+	meta:set_int("deposited", 0)
+end
+
 
 core.register_node(node_name, {
 	description = "Shop",
@@ -245,6 +255,8 @@ core.register_node(node_name, {
 		local pname = sender:get_player_name()
 
 		if fields.quit then
+			-- refund any money still deposited
+			give_refund(meta, sender)
 			-- reset selected to default when closed
 			meta:set_int("selected", meta:get_int("default_selected"))
 		elseif fields.btn_id and ss.is_shop_admin(pos, sender) then
@@ -270,13 +282,7 @@ core.register_node(node_name, {
 			-- set selected index in meta data to be retrieved when "buy" button is pressed
 			meta:set_int("selected", fields.products:sub(5))
 		elseif fields.btn_refund then
-			local refund = calculate_refund(meta:get_int("deposited"))
-			for _, istack in ipairs(refund) do
-				give_product(sender, istack)
-			end
-
-			-- reset deposited amount after refund
-			meta:set_int("deposited", 0)
+			give_refund(meta, sender)
 		elseif fields.btn_buy then
 			-- get selected index
 			local selected = meta:get_int("selected")
