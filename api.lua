@@ -13,14 +13,14 @@ local shops = {}
 --  @param name Human readable name to be displayed.
 --  @param def Shop definition (e.g. items & prices)
 function ss.register_shop(id, name, def)
-	-- FIXME: check if shop is alreay registered
-	local shop = {}
-	shop.name = name
-	shop.id = id
-	shop.def = def
-	table.insert(shops, shop)
+	if shops[id] then
+		core.log("warning", "[" .. ss.modname .. "] Overwriting shop with id: " .. id)
+	end
 
-	core.log("action", "[" .. ss.modname .. "] Registered shop: " .. shop.id)
+	local new_shop = {name=name, def=def,}
+	shops[id] = new_shop
+
+	core.log("action", "[" .. ss.modname .. "] Registered shop: " .. id)
 end
 
 --- Retrieves shop by ID.
@@ -29,11 +29,7 @@ end
 --  @param id String identifier of shop.
 --  @return Table of shop contents.
 function ss.get_shop(id)
-	for _, s in pairs(shops) do
-		if s.id == id then
-			return s
-		end
-	end
+	return shops[id]
 end
 
 --- Checks if a player has admin rights to for managing shop.
@@ -49,7 +45,6 @@ function ss.is_shop_admin(pos, player)
 
 	local meta = core.get_meta(pos)
 	return core.check_player_privs(player, "server")
-		--or player:get_player_name() == meta:get_string("owner")
 end
 
 --- Checks if a player is the owner of node.
