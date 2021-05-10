@@ -3,6 +3,18 @@ server_shop = {}
 server_shop.modname = core.get_current_modname()
 server_shop.modpath = core.get_modpath(server_shop.modname)
 
+function server_shop.log(lvl, msg)
+	if not msg then
+		msg = lvl
+		lvl = nil
+	end
+
+	if not lvl then
+		core.log("[" .. server_shop.modname .. "] " .. msg)
+	else
+		core.log(lvl, "[" .. server_shop.modname .. "] " .. msg)
+	end
+end
 
 local scripts = {
 	"api",

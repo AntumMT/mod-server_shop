@@ -14,13 +14,13 @@ local shops = {}
 --  @param def Shop definition (e.g. items & prices)
 function ss.register_shop(id, name, def)
 	if shops[id] then
-		core.log("warning", "[" .. ss.modname .. "] Overwriting shop with id: " .. id)
+		ss.log("warning", "Overwriting shop with id: " .. id)
 	end
 
 	local new_shop = {name=name, def=def,}
 	shops[id] = new_shop
 
-	core.log("action", "[" .. ss.modname .. "] Registered shop: " .. id)
+	ss.log("action", "Registered shop: " .. id)
 end
 
 --- Retrieves shop by ID.
