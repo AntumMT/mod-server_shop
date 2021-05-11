@@ -1,10 +1,7 @@
 
-1.2
+1.1
 - use json format for shops configuration in world directory
 - switched id & name parameters positions in register_shop
-
-
-1.1
 - show preview image of selected item
 - node owners can't set ID unless they have "server" priv
 
