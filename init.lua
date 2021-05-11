@@ -36,13 +36,13 @@ if fopen ~= nil then
 
 	local json = core.parse_json(content)
 	for _, shop in ipairs(json) do
-		local products = {}
-		for k, v in pairs(shop.products) do
-			table.insert(products, {k, v})
+		local sells = {}
+		for k, v in pairs(shop.sells) do
+			table.insert(sells, {k, v})
 		end
 
 		-- FIXME: need safety checks
-		server_shop.register_shop(shop.id, shop.name, products)
+		server_shop.register_shop(shop.id, shop.name, sells)
 	end
 else
 	-- create file if doesn't exist

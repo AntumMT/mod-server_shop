@@ -31,13 +31,13 @@ Shops can optionally be registered in `<world_path>/server_shops.json` file. Exa
   {
     "id":"frank",
     "name":"Frank's Shop",
-    "products":
+    "sells":
     {"default:wood":1}
   },
   {
     "id":"julie",
     "name":"Julie's Shop",
-    "products":
+    "sells":
     {
       "default:iron_lump":5,
       "default:copper_lump":5,
