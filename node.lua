@@ -277,6 +277,9 @@ core.register_node(node_name, {
 					meta:set_string("infotext", nil)
 					meta:set_string("name", nil)
 				end
+
+				-- make sure selected index is set back to default value
+				meta:set_int("selected", meta:get_int("default_selected"))
 			end
 		elseif fields.products then
 			-- set selected index in meta data to be retrieved when "buy" button is pressed

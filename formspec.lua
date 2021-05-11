@@ -81,8 +81,18 @@ function server_shop.get_formspec(pos, player)
 		-- get item name for displaying image
 		local selected_item = nil
 		local shop = ss.get_shop(id)
+
 		if shop then
-			selected_item = shop.def[meta:get_int("selected")][1]
+			-- make sure we're not out of range of the shop list
+			local s_idx = meta:get_int("selected")
+			if s_idx > #shop.def then
+				s_idx = 1
+			end
+
+			selected_item = shop.def[meta:get_int("selected")]
+			if selected_item then
+				selected_item = selected_item[1]
+			end
 		end
 
 		local margin_r = fs_width-(btn_w+0.2)
