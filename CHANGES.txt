@@ -1,4 +1,8 @@
 
+1.1
+- use json format for shops configuration in world directory
+
+
 1.0
 - created node
 - created simple textures
