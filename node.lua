@@ -41,17 +41,6 @@ local function get_shop_index(shop_id, idx)
 	end
 end
 
---- Sets the owner of the shop & gives admin privileges.
---
---  @local
---  @function set_owner
---  @param pos Position of shop.
---  @param pname String name of new owner.
-local function set_owner(pos, pname)
-	local meta = core.get_meta(pos)
-	meta:set_string("owner", pname)
-end
-
 --- Calculates the price of item being purchased.
 --
 --  @function calculate_price
@@ -211,8 +200,8 @@ core.register_node(node_name, {
 		meta:set_string("formspec", ss.get_formspec(pos))
 	end,
 	after_place_node = function(pos, placer)
-		local meta = core.get_meta(pos)
-		set_owner(pos, placer:get_player_name())
+		-- set node owner
+		core.get_meta(pos):set_string("owner", placer:get_player_name())
 	end,
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local meta = core.get_meta(pos)
