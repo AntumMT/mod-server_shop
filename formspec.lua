@@ -99,9 +99,13 @@ function server_shop.get_formspec(pos, player)
 
 		formspec = formspec
 			.. "label[0.2,1;Deposited: " .. tostring(deposited) .. " MG]"
-			.. "list[context;deposit;0.2,1.5;1,1;0]"
-			.. "textlist[2.15,1.5;9.75,3;products;" .. get_product_list(id) .. ";"
-				.. tostring(meta:get_int("selected")) .. ";false]"
+
+		if id ~= "" then -- don't allow deposits to unregistered stores
+			formspec = formspec .. "list[context;deposit;0.2,1.5;1,1;0]"
+		end
+
+		formspec = formspec .. "textlist[2.15,1.5;9.75,3;products;" .. get_product_list(id) .. ";"
+			.. tostring(meta:get_int("selected")) .. ";false]"
 
 		if selected_item and selected_item ~= "" then
 			formspec = formspec
