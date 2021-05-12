@@ -80,16 +80,14 @@ end
 
 --- Checks if a player has admin rights to for managing shop.
 --
---  @function server_shoip.is_shop_admin
---  @param pos Position of shop.
+--  @function server_shop.is_shop_admin
 --  @param player Player requesting permissions.
 --  @return `true` if player has *server* priv.
-function ss.is_shop_admin(pos, player)
+function ss.is_shop_admin(player)
 	if not player then
 		return false
 	end
 
-	local meta = core.get_meta(pos)
 	return core.check_player_privs(player, "server")
 end
 

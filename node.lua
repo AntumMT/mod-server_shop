@@ -220,7 +220,7 @@ core.register_node(node_name, {
 			return false
 		end
 
-		return ss.is_shop_owner(pos, player) or ss.is_shop_admin(pos, player)
+		return ss.is_shop_owner(pos, player) or ss.is_shop_admin(player)
 	end,
 	on_dig = function(pos, node, digger)
 		local deposited = core.get_meta(pos):get_int("deposited")

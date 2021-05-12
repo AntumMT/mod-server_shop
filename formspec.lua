@@ -9,8 +9,8 @@ local btn_y = 4.6
 
 --- Retrieves shop product list by ID.
 --
---  @function get_product_list
 --  @local
+--  @function get_product_list
 --  @param id String identifier of shop.
 --  @return String of shop contents.
 function get_product_list(id)
@@ -53,8 +53,12 @@ function get_product_list(id)
 	return products
 end
 
-
-function server_shop.get_formspec(pos, player)
+--- Retrieves formspec layout.
+--
+--  @function server_shop.get_formspec
+--  @param pos
+--  @param player
+function ss.get_formspec(pos, player)
 		local meta = core.get_meta(pos)
 		local id = meta:get_string("id")
 		local deposited = meta:get_int("deposited")
@@ -66,7 +70,7 @@ function server_shop.get_formspec(pos, player)
 			formspec = formspec .. "label[0.2,0.4;" .. shop_name .. "]"
 		end
 
-		if ss.is_shop_admin(pos, player) then
+		if ss.is_shop_admin(player) then
 			formspec = formspec
 				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w) .. ",0.75;btn_id;Set ID]"
 				.. "field[" .. tostring(fs_width-4.3) .. ",0.2;4.1,0.75;input_id;;" .. id .. "]"
