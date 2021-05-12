@@ -32,7 +32,7 @@ end
 local shops_file = core.get_worldpath() .. "/server_shops.json"
 
 local function shop_file_error(msg)
-	ss.log("error", shops_file .. ": " .. msg)
+	error(shops_file .. ": " .. msg)
 end
 
 local fopen = io.open(shops_file, "r")
@@ -43,22 +43,29 @@ if fopen ~= nil then
 	local json = core.parse_json(content)
 	for _, shop in ipairs(json) do
 		if shop.type == "currency" then
+			if type(shop.value) ~= "number" or shop.value <= 0 then
+				shop_file_error("invalid or undeclared currency \"value\"; must be a number greater than 0")
+			end
+
 			ss.register_currency(shop.name, shop.value)
 		elseif shop.type == "sell" then
-			if not shop.id or type(shop.id) ~= "string" then
-				shop_file_error("invalid or undeclared \"id\", must be string")
-			elseif not shop.name or type(shop.name) ~= "string" then
-				shop_file_error("invalid or undeclared \"name\", must be string")
-			elseif not shop.products or type(shop.products) ~= "table" then
-				shop_file_error("invalid or undeclared \"products\" list, must be table")
+			if type(shop.id) ~= "string" or shop.id:trim() == "" then
+				shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
+			elseif type(shop.name) ~= "string" or shop.name:trim() == "" then
+				shop_file_error("invalid or undeclared \"name\"; must be non-empty string")
+			elseif type(shop.products) ~= "table" then
+				shop_file_error("invalid or undeclared \"products\" list; must be non-empty table")
 			else
+				shop.id = shop.id:trim()
+				shop.name = shop.name:trim()
 				local products = {}
+
 				for k, v in pairs(shop.products) do
-					if not k or k == "" or type(k) ~= "string" then
+					if type(k) ~= "string" or k == "" then
 						shop_file_error("shop " .. shop.id .. ": invalid or undeclared product name, must be string")
-					elseif not v or type(v) ~= "number" then
+					elseif type(v) ~= "number" or v <= 0 then
 						shop_file_error("shop " .. shop.id .. ": invalid or undeclared product value ("
-							.. k .. "), must be number")
+							.. k .. "), must be number greater than 0")
 					else
 						table.insert(products, {k, v})
 					end
