@@ -15,7 +15,6 @@ TODO:
   - make usable with "folks" mod
   - add localization support
   - make "get_shop" global function
-  - allow registering custom types of currency
   - clean up code
   - check if shop is already registered before re-registering
   - let shops with deposit balance be dug, & drop balance on ground

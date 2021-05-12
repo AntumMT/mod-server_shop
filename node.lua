@@ -4,18 +4,10 @@ local ss = server_shop
 
 local node_name = "server_shop:shop"
 
-local currencies = {
-	{"currency:minegeld", 1,},
-	{"currency:minegeld_5", 5,},
-	{"currency:minegeld_10", 10,},
-	{"currency:minegeld_50", 50,},
-	{"currency:minegeld_100", 100,},
-}
-
 --- Calculates how much money is being deposited.
 local function calculate_value(stack)
 	local value = 0
-	for _, c in ipairs(currencies) do
+	for _, c in ipairs(ss.registered_currencies) do
 		if stack:get_name() == c[1] then
 			value = stack:get_count() * c[2]
 			break
@@ -112,7 +104,7 @@ local function calculate_refund(total)
 	end
 
 	local refund = {}
-	for _, c in ipairs(currencies) do
+	for _, c in ipairs(ss.registered_currencies) do
 		local iname = c[1]
 		local ivalue = c[2]
 		local icount = 0

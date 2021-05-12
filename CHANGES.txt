@@ -1,4 +1,8 @@
 
+pre
+- custom currencies can be registered
+
+
 1.1
 - use json format for shops configuration in world directory
 - switched id & name parameters positions in register_shop

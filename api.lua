@@ -1,10 +1,61 @@
+
 --- API
 --
+--  @module api.lua
+
 
 local ss = server_shop
 
-
+--- Registered shops.
+--
+--  @local
+--  @table shops
 local shops = {}
+
+--- Currencies registered for trade.
+--
+--  @table server_shop.registered_currencies
+ss.registered_currencies = {}
+
+--- Registers an item that can be used as currency.
+--
+--  @function server_shop.register_currency
+--  @tparam string item Item name.
+--  @tparam int value Value the item should represent.
+function ss.register_currency(item, value)
+	if not core.registered_items[item] then
+		ss.log("warning", "Registering unrecognized item as currency: " .. item)
+	end
+
+	value = tonumber(value)
+	if not value then
+		ss.log("error", "Currency type for " .. item .. " must be a number. Got \"" .. type(value) .. "\"")
+		return
+	end
+
+	local old_value = ss.registered_currencies[item]
+	if old_value then
+		ss.log("warning", "Overwriting value for currency " .. item
+			.. " from " .. tostring(old_value)
+			.. " to " .. tostring(value))
+	end
+
+	ss.registered_currencies[item] = value
+
+	ss.log("action", item .. " registered as currency with value of " .. tostring(value))
+end
+
+-- TODO:
+--   - register currencies in world directory
+--   - add coins
+for _, cur in ipairs({
+		{"currency:minegeld", 1,},
+		{"currency:minegeld_5", 5,},
+		{"currency:minegeld_10", 10,},
+		{"currency:minegeld_50", 50,},
+		{"currency:minegeld_100", 100,},}) do
+	ss.register_currency(cur[1], cur[2])
+end
 
 --- Registers a shop list to be accessed via a shop node.
 --
