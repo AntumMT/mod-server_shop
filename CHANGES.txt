@@ -1,6 +1,13 @@
 
 pre
 - custom currencies can be registered
+- changed format of world "server_shops.json":
+  - "sells" keyword changed to "products"
+  - added required "type" keyword can be:
+    - "currency" to register new currency
+    - "sell" to register new seller shop
+  - currencies can be registered using "currency" type:
+    - subkeys are "name" (string) & "value" (number)
 
 
 1.1
