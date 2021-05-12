@@ -17,6 +17,9 @@ local shops = {}
 --  @table server_shop.registered_currencies
 ss.registered_currencies = {}
 
+-- Suffix displayed after deposited amount.
+ss.currency_suffix = nil
+
 --- Registers an item that can be used as currency.
 --
 --  @function server_shop.register_currency
@@ -46,6 +49,10 @@ function ss.register_currency(item, value)
 end
 
 --- Registers a shop list to be accessed via a shop node.
+--
+--  TODO:
+--    - log warning if `def` name or value missing or wrong type or
+--      if name is empty string
 --
 --  @function server_shop.register_shop
 --  @param id String ID associated with shop list.

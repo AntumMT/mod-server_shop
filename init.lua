@@ -48,6 +48,12 @@ if fopen ~= nil then
 			end
 
 			ss.register_currency(shop.name, shop.value)
+		elseif shop.type == "suffix" then
+			if type(shop.value) ~= "string" or shop.value:trim() == "" then
+				shop_file_error("invalid or undeclared suffix \"value\"; must be non-empty string")
+			else
+				ss.currency_suffix = shop.value
+			end
 		elseif shop.type == "sell" then
 			if type(shop.id) ~= "string" or shop.id:trim() == "" then
 				shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
