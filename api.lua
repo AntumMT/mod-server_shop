@@ -45,18 +45,6 @@ function ss.register_currency(item, value)
 	ss.log("action", item .. " registered as currency with value of " .. tostring(value))
 end
 
--- TODO:
---   - register currencies in world directory
---   - add coins
-for _, cur in ipairs({
-		{"currency:minegeld", 1,},
-		{"currency:minegeld_5", 5,},
-		{"currency:minegeld_10", 10,},
-		{"currency:minegeld_50", 50,},
-		{"currency:minegeld_100", 100,},}) do
-	ss.register_currency(cur[1], cur[2])
-end
-
 --- Registers a shop list to be accessed via a shop node.
 --
 --  @function server_shop.register_shop

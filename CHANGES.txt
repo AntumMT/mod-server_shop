@@ -8,6 +8,7 @@ pre
     - "sell" to register new seller shop
   - currencies can be registered using "currency" type:
     - subkeys are "name" (string) & "value" (number)
+- "currency" mod minegeld notes not registered automatically
 
 
 1.1
