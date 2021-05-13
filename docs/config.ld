@@ -4,7 +4,7 @@ format = "markdown"
 not_luadoc = true
 boilerplate = false
 
-file = {"api.lua", "formspec.lua",}
+file = {"api.lua", "formspec.lua", "settings.lua",}
 
 
 local function italic(value)
