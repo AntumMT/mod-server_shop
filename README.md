@@ -24,26 +24,50 @@ server_shop.register_shop("basic", "Basic Shop", {
 })
 ```
 
-Shops can optionally be registered in `<world_path>/server_shops.json` file. Example:
+Shops can optionally be configured in `<world_path>/server_shops.json` file. To register a seller shop (buyers currently not supported), set `type` to "sell". `id` is a string identifier for the shop. `name` is the string displayed in the formspec & when a player points at the node. `products` is a list of products sold at the shop in format "name:value".
 
+Example:
 ```json
 [
   {
+    "type":"sell",
     "id":"frank",
     "name":"Frank's Shop",
-    "sells":
-    {"default:wood":1}
+    "products":{"default:wood":1}
   },
   {
+    "type":"sell",
     "id":"julie",
     "name":"Julie's Shop",
-    "sells":
+    "products":
     {
       "default:iron_lump":5,
       "default:copper_lump":5,
     }
   },
 ]
+```
+
+When registering a new currency, set `type` to "currency". `name` is the item to be used as currency & `value` is the item's worth:
+```json
+	{
+		"type":"currency",
+		"name":"currency:minegeld",
+		"value":1,
+	},
+	{
+		"type":"currency",
+		"name":"currency:minegeld_5",
+		"value":5,
+	},
+```
+
+You can also register a currency suffix to be displayed in the formspec. Use `type` "suffix" & set `value` to the string to be displayed:
+```json
+	{
+		"type":"suffix",
+		"value":"MG",
+	},
 ```
 
 Server admins use the chat command `/giveme server_shop:shop` to receive a shop node. After placing the node, the ID can be set with the "Set ID" button & text input field (only players with the "server" privilege can set ID). Set the ID to the shop ID you want associated with this shop node ("basic" for the example above) & the list will be populated with the registered products & prices.
