@@ -34,9 +34,6 @@ core.register_node(ss.modname .. ":shop", {
 	]]
 	groups = {oddly_breakable_by_hand=1,},
 	paramtype2 = "facedir",
-	on_construct = function(pos)
-		core.get_meta(pos):set_string("formspec", ss.get_formspec(pos))
-	end,
 	after_place_node = function(pos, placer)
 		-- set node owner
 		core.get_meta(pos):set_string("owner", placer:get_player_name())
