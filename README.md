@@ -70,6 +70,7 @@ Compatible with:
 
 - [GitHub repo](https://github.com/AntumMT/mod-server_shop)
 - [Minetest forum](https://forum.minetest.net/viewtopic.php?t=26645)
+- [API](https://antummt.github.io/mod-server_shop/docs/api.html)
 - [Changelog](CHANGES.txt)
 - [TODO](TODO.txt)
 
