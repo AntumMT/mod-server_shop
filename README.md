@@ -60,9 +60,9 @@ To make purchases, players deposit [minegeld notes][mod.currency] into the depos
 ### Dependencies:
 
 - Required:
-  - [currency][mod.currency]
-- Optional:
   - none
+- Optional:
+  - [currency][mod.currency]
 
 Compatible with:
 
