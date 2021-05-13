@@ -46,5 +46,5 @@ local callbacks = {
 	end,
 }
 
-local inv = core.create_detached_inventory("detached:" .. ss.modname, callbacks)
+local inv = core.create_detached_inventory(ss.modname, callbacks)
 inv:set_size("deposit", 1)
