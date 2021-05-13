@@ -22,6 +22,9 @@ ss.currency_suffix = nil
 
 --- Registers an item that can be used as currency.
 --
+--  TODO:
+--    - after registering currency, should re-organize table from highest value to lowest
+--
 --  @function server_shop.register_currency
 --  @tparam string item Item name.
 --  @tparam int value Value the item should represent.

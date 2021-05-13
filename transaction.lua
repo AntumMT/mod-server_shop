@@ -60,8 +60,8 @@ end
 --- Calculates money to be returned to player.
 --
 --  FIXME:
---    - could be broken after changing currencies def
 --    - not very intuitive
+--    - doesn't allow currency values other than 1, 5, 10, 50, & 100
 --
 --  @local
 --  @function calculate_refund
@@ -90,25 +90,23 @@ local function calculate_refund(total)
 	end
 
 	local refund = {}
-	for _, c in ipairs(ss.registered_currencies) do
-		local iname = c[1]
-		local ivalue = c[2]
+	for c, v in pairs(ss.registered_currencies) do
 		local icount = 0
 
-		if ivalue == 1 then
+		if v == 1 then
 			icount = one
-		elseif ivalue == 5 then
+		elseif v == 5 then
 			icount = fiv
-		elseif ivalue == 10 then
+		elseif v == 10 then
 			icount = ten
-		elseif ivalue == 50 then
+		elseif v == 50 then
 			icount = fif
-		elseif ivalue == 100 then
+		elseif v == 100 then
 			icount = hun
 		end
 
 		if icount > 0 then
-			local stack = ItemStack(iname)
+			local stack = ItemStack(c)
 			stack:set_count(icount)
 			table.insert(refund, stack)
 		end
