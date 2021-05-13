@@ -20,6 +20,7 @@ end
 
 local scripts = {
 	"api",
+	"deposit",
 	"formspec",
 	"node",
 }
