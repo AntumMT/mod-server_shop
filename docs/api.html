@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Shops for Minetest</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>server_shop</h1>
+
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>api.lua</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>api.lua</code></h1>
+<p>API</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.register_currency">server_shop.register_currency (item, value)</a></td>
+	<td class="summary">Registers an item that can be used as currency.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.register_shop">server_shop.register_shop (id, name, def)</a></td>
+	<td class="summary">Registers a shop list to be accessed via a shop node.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.get_shop">server_shop.get_shop (id)</a></td>
+	<td class="summary">Retrieves shop by ID.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.is_shop_admin">server_shop.is_shop_admin (player)</a></td>
+	<td class="summary">Checks if a player has admin rights to for managing shop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.is_shop_owner">server_shop.is_shop_owner (pos, player)</a></td>
+	<td class="summary">Checks if a player is the owner of node.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.registered_currencies">server_shop.registered_currencies</a></td>
+	<td class="summary">Currencies registered for trade.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "server_shop.register_currency"></a>
+    <strong>server_shop.register_currency (item, value)</strong>
+    </dt>
+    <dd>
+    Registers an item that can be used as currency.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">item</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Item name.
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">int</span></span>
+         Value the item should represent.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.register_shop"></a>
+    <strong>server_shop.register_shop (id, name, def)</strong>
+    </dt>
+    <dd>
+
+<p>Registers a shop list to be accessed via a shop node. </p>
+
+<p>  TODO:</p>
+<pre><code>- log warning if &lt;code&gt;def&lt;/code&gt; name or value missing or wrong type or
+  if name is empty string
+</code></pre>
+
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+         String ID associated with shop list.
+        </li>
+        <li><span class="parameter">name</span>
+         Human readable name to be displayed.
+        </li>
+        <li><span class="parameter">def</span>
+         Shop definition (e.g. items &amp; prices)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.get_shop"></a>
+    <strong>server_shop.get_shop (id)</strong>
+    </dt>
+    <dd>
+    Retrieves shop by ID.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+         String identifier of shop.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Table of shop contents.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.is_shop_admin"></a>
+    <strong>server_shop.is_shop_admin (player)</strong>
+    </dt>
+    <dd>
+    Checks if a player has admin rights to for managing shop.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         Player requesting permissions.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        <code>true</code> if player has <em>server</em> priv.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.is_shop_owner"></a>
+    <strong>server_shop.is_shop_owner (pos, player)</strong>
+    </dt>
+    <dd>
+    Checks if a player is the owner of node.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pos</span>
+         Position of shop node.
+        </li>
+        <li><span class="parameter">player</span>
+         Player to be checked.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        <code>true</code> if player is owner.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "server_shop.registered_currencies"></a>
+    <strong>server_shop.registered_currencies</strong>
+    </dt>
+    <dd>
+    Currencies registered for trade.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2021-05-12 17:46:17 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
