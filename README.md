@@ -19,7 +19,7 @@ No craft recipe is given as this for administrators, currently a machine can onl
 Shop lists are registered with the `server_shop.register_shop(id, name, def)` function. `id` is a string identifier associated with the shop list. `name` is a human-readable string that will be displayed as the shop's title. `def` is the shop list definition. Shop lists are defined in a table of tuples in `{itemname, price}` format.
 
 Registration example:
-```
+```lua
 server_shop.register_shop("basic", "Basic Shop", {
 	{
 		{"default:wood", 2},
