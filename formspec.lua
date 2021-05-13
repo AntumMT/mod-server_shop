@@ -89,13 +89,14 @@ end
 --  @param pos
 --  @param player
 function ss.get_formspec(pos, player)
-		local meta = core.get_meta(pos)
-		local id = meta:get_string("id")
-		local deposited = meta:get_int("deposited")
+		local smeta = core.get_meta(pos)
+		local pmeta = player:get_meta()
+		local id = smeta:get_string("id")
+		local deposited = pmeta:get_int(ss.modname .. ":" .. id .. ":deposited")
 
 		local formspec = "formspec_version[4]size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
 
-		local shop_name = meta:get_string("name"):trim()
+		local shop_name = smeta:get_string("name"):trim()
 		if shop_name ~= "" then
 			formspec = formspec .. "label[0.2,0.4;" .. shop_name .. "]"
 		end
@@ -109,7 +110,7 @@ function ss.get_formspec(pos, player)
 
 		local selected_idx = 1
 		if player then
-			selected_idx = player:get_meta():get_int(ss.modname .. ":selected")
+			selected_idx = pmeta:get_int(ss.modname .. ":selected")
 		end
 		if selected_idx < 1 then
 			selected_idx = 1
