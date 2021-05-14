@@ -1,5 +1,5 @@
 
-pre
+1.2
 - custom currencies can be registered
 - changed format of world "server_shops.json":
   - "sells" keyword changed to "products"
