@@ -57,7 +57,7 @@ if fopen ~= nil then
 				else
 					ss.currency_suffix = shop.value
 				end
-			elseif shop.type == "sell" then
+			elseif shop.type == "sell" or shop.type == "buy" then
 				if type(shop.id) ~= "string" or shop.id:trim() == "" then
 					shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
 				elseif type(shop.name) ~= "string" or shop.name:trim() == "" then
@@ -65,26 +65,16 @@ if fopen ~= nil then
 				elseif type(shop.products) ~= "table" then
 					shop_file_error("invalid or undeclared \"products\" list; must be non-empty table")
 				else
-					shop.id = shop.id:trim()
-					shop.name = shop.name:trim()
-					local products = {}
-
-					for k, v in pairs(shop.products) do
-						if type(k) ~= "string" or k == "" then
-							shop_file_error("shop " .. shop.id .. ": invalid or undeclared product name, must be string")
-						elseif type(v) ~= "number" or v <= 0 then
-							shop_file_error("shop " .. shop.id .. ": invalid or undeclared product value ("
-								.. k .. "), must be number greater than 0")
-						else
-							table.insert(products, {k, v})
-						end
+					if not shop.products then shop.products = {} end
+					if #shop.products == 0 then
+						ss.log("warning", shops_file .. ": empty shop list for shop id \"" .. shop.id .. "\"")
 					end
 
-					if #products == 0 then
-						ss.log("warning", shop_file .. ": empty shop list for shop id \"" .. shop.id .. "\"")
+					if shop.type == "sell" then
+						server_shop.register_seller(shop.id, shop.name, shop.products)
+					else
+						server_shop.register_buyer(shop.id, shop.name, shop.products)
 					end
-
-					server_shop.register_shop(shop.id, shop.name, products)
 				end
 			elseif not shop.type then
 				error(shops_file .. ": mandatory \"type\" parameter not set")

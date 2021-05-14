@@ -7,6 +7,7 @@ TODO:
   - optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
   - add shop for players to receive money for selling items
   - allow any currency value, not just 1, 5, 10, 50, & 100
+  - allow custom currency types for buyer shops
 - Visuals:
   - touch up textures
   - fix texture tiling
