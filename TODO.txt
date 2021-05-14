@@ -17,3 +17,5 @@ TODO:
   - add localization support
   - add chat command to reload shops file in world directory
   - set shop name from formspec instead of registration so shops with different names can use same content
+  - fix so unknown items don't mess up shop
+  - don't set node meta data "id" if not a registered shop ID
