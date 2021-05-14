@@ -1,4 +1,4 @@
-## Server Shop
+## Server Shop (v1.2)
 
 ---
 ### Description:
