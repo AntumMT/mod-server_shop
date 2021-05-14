@@ -7,8 +7,6 @@ Shops intended to be set up by [Minetest](https://www.minetest.net/) server admi
 
 No craft recipe is given as this for administrators, currently a machine can only be set up with `/giveme server_shop:shop` command.
 
-***WARNING:** this mod is in early development, see [TODO](TODO.txt) list*
-
 ![screenshot](screenshot.png)
 
 ---
@@ -85,13 +83,13 @@ In `server_shops.json`, set `type` to "suffix" & `value` to the string to be dis
 	},
 ```
 
+By default, if the [currency][mod.currency] mod is installed, the minegeld notes will be registered as currency. This can be disabled by setting `server_shop.use_currency_defaults` to `false`.
+
 #### Setting up Shops in Game:
 
 Server admins use the chat command `/giveme server_shop:shop` to receive a shop node. After placing the node, the ID can be set with the "Set ID" button & text input field (only players with the "server" privilege can set ID). Set the ID to the shop ID you want associated with this shop node ("basic" for the example above) & the list will be populated with the registered products & prices.
 
 To make purchases, players deposit currency items into the deposit slot. Select an item to purchase & press the "Buy" button. If there is adequate money deposited, player will receive the item & the price will be deducted from the deposited amount. Press the "Refund" button to retrieve any money not spent.
-
-***SECURITY WARNING:*** As stated, this mod is in early development. Currently, it is possible to interfere in another player's transactions. So this mod is *not* recommended for use with public servers at this time.
 
 ---
 ### Licensing:
@@ -106,8 +104,6 @@ To make purchases, players deposit currency items into the deposit slot. Select 
   - none
 - Optional:
   - [currency][mod.currency]
-
-Compatible with:
 
 ---
 ### Links:
