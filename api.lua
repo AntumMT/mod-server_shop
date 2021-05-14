@@ -21,7 +21,8 @@ ss.currency_suffix = nil
 --- Registers an item that can be used as currency.
 --
 --  TODO:
---    - after registering currency, should re-organize table from highest value to lowest
+--
+--  - after registering currency, should re-organize table from highest value to lowest
 --
 --  @function server_shop.register_currency
 --  @tparam string item Item name.
@@ -77,12 +78,12 @@ function ss.format_id(id)
 	return id:trim()
 end
 
---- Registers a shop list to be accessed via a shop node.
+--- Registers a seller shop.
 --
---  @function server_shop.register_shop
+--  @function server_shop.register_seller
 --  @tparam string id Shop string identifier.
 --  @tparam string name Human readable name.
---  @tparam table[string, int] def List of products & prices in format `{item_name, price}`.
+--  @tparam table[string,int] def List of products & prices in format `{item_name, price}`.
 function ss.register_seller(id, name, def)
 	if type(id) ~= "string" then
 		ss.log("error", ss.modname .. ".register_seller: invalid \"id\" parameter")
@@ -111,7 +112,7 @@ end
 --  @function server_shop.register_buyer
 --  @tparam string id Shop string identifier.
 --  @tparam string name Human readable name.
---  @tparam table[string, int] def List of products & prices in format `{item_name, price}`.
+--  @tparam table[string,int] def List of products & prices in format `{item_name, price}`.
 function ss.register_buyer(id, name, def)
 	if type(id) ~= "string" then
 		ss.log("error", ss.modname .. ".register_buyer: invalid \"id\" parameter")
@@ -142,8 +143,8 @@ end
 --  @function server_shop.register_shop
 --  @tparam string id Shop string identifier.
 --  @tparam string name Human readable name.
---  @tparam table[string, int] def List of products & prices in format `{item_name, price}`.
---  @tparam bool buyer Denotes whether to register seller or buyer shop (default: `false`).
+--  @tparam table[string,int] def List of products & prices in format `{item_name, price}`.
+--  @tparam bool buyer Denotes whether to register seller or buyer shop (default: `false` (seller)).
 function ss.register_shop(id, name, def, buyer)
 	if buyer then
 		ss.register_buyer(id, name, def)
