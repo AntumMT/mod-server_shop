@@ -43,8 +43,6 @@ local function calculate_product_value(stack, id, buyer)
 		end
 	end
 
-	print("Value per: " .. tostring(value_per))
-
 	return value_per * stack:get_count()
 end
 
