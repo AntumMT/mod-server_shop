@@ -68,14 +68,11 @@ end
 
 --- Checks ID string for invalid characters.
 --
---  FIXME: replace whitespace with underscore (_)
---
 --  @function server_shop.format_id
 --  @tparam string id Shop identifier string.
 --  @treturn string Formatted string.
 function ss.format_id(id)
-	-- FIXME: replace whitespace with underscore (_)
-	return id:trim()
+	return id:trim():gsub("%s", "_")
 end
 
 --- Registers a seller shop.
