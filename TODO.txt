@@ -21,3 +21,4 @@ TODO:
   - don't set node meta data "id" if not a registered shop ID
   - allow shops to be configured live
   - add player shops
+  - prune non-registered items from shops (after server has finished startup)
