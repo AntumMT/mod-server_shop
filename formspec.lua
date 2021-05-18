@@ -72,9 +72,13 @@ function get_product_list(id, buyer)
 				if not item_price then
 					core.log("warning", "Price not set for item \"" .. p[1] .. "\" for shop ID \"" .. id .. "\"")
 				elseif products == "" then
-					products = item_name .. " : " .. tostring(item_price) .. " MG"
+					products = item_name .. " : " .. tostring(item_price)
 				else
-					products = products .. "," .. item_name .. " : " .. tostring(item_price) .. " MG"
+					products = products .. "," .. item_name .. " : " .. tostring(item_price)
+				end
+
+				if ss.currency_suffix then
+					products = products .. " " .. ss.currency_suffix
 				end
 			end
 		end

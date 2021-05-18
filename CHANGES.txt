@@ -1,4 +1,8 @@
 
+1.4
+- fixed custom suffix not reflected in product list
+
+
 1.3
 - added buyer shops
 - changed json product list type to indexed array
