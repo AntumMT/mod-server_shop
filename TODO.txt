@@ -17,5 +17,4 @@ TODO:
   - allow shops to be configured live
   - set shop name from formspec instead of registration so shops with different names can use same content
   - add player shops
-  - fix so unknown items don't mess up shop
-  - prune non-registered items from shops (after server has finished startup)
+  - fix so unknown items don't mess up shop (may become a problem when shops are registered live)
