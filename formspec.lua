@@ -302,7 +302,8 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 			-- execute transaction
 			core.chat_send_player(player:get_player_name(), "You purchased " .. tostring(product:get_count())
-				.. " " .. product:get_description() .. " for " .. tostring(total) .. " MG.")
+				.. " " .. product:get_description() .. " for " .. tostring(total) .. " "
+				.. ss.currency_suffix .. ".")
 			transaction.give_product(player, product, product_count)
 		end
 
