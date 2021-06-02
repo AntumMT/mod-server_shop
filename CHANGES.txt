@@ -1,6 +1,7 @@
 
 1.4
 - fixed custom suffix not reflected in product list & messages
+- custom quantity can be set
 
 
 1.3
