@@ -6,6 +6,7 @@ TODO:
   - optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
   - allow any currency value, not just 1, 5, 10, 50, & 100
   - allow custom currency types for buyer shops
+	- buyer shops: hold items in inventory & don't process until "sell" button pressed
 - Visuals:
   - touch up textures
   - fix texture tiling
