@@ -5,7 +5,6 @@ TODO:
 - Functionality:
 	- optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
 	- allow any currency value, not just 1, 5, 10, 50, & 100
-	- allow custom currency types for buyer shops
 	- buyer shops: hold items in inventory & don't process until "sell" button pressed
 - Visuals:
 	- touch up textures
@@ -27,3 +26,5 @@ TODO:
 		- "/server_shop reload"
 	- check for aliases before pruning shops
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
+	- allow setting multiple currencies in one entry in server_shops.json
+	- output warning if no item registered with currency value 1
