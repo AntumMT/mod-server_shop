@@ -6,6 +6,7 @@ v1.4
 - unregistered items are pruned from shops after server startup
 - fixed buyer shop not refunding on formspec close
 - added setting to disable auto-refunding on formspec close
+- currencies can be registered with any whole number value
 
 v1.3
 ----

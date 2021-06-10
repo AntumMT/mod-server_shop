@@ -60,21 +60,6 @@ function ss.register_currency(item, value)
 		return
 	end
 
-	-- FIXME: support any numerical value
-	local values = {1, 5, 10, 50, 100}
-	local value_ok = false
-	for _, v in ipairs(values) do
-		if value == v then
-			value_ok = true
-			break
-		end
-	end
-	if not value_ok then
-		ss.log("error", "cannot register currency value " .. value
-			.. ", supported values are " .. table.concat(values, ", "))
-		return
-	end
-
 	local old_value = registered_currencies[item]
 	if old_value then
 		ss.log("warning", "Overwriting value for currency " .. item
