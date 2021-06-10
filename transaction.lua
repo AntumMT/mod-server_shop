@@ -106,7 +106,7 @@ local function calculate_refund(total)
 	end
 
 	local refund = {}
-	for c, v in pairs(ss.registered_currencies) do
+	for c, v in pairs(ss.get_currencies()) do
 		local icount = 0
 
 		if v == 1 then

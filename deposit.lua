@@ -12,7 +12,7 @@ local transaction = dofile(ss.modpath .. "/transaction.lua")
 local function calculate_currency_value(stack)
 	local value = 0
 
-	for c, v in pairs(ss.registered_currencies) do
+	for c, v in pairs(ss.get_currencies()) do
 		if stack:get_name() == c then
 			value = stack:get_count() * v
 			break
