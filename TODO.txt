@@ -23,7 +23,6 @@ TODO:
 		- "/server_shop add <buyer>|<seller> <id> <item> <price>"
 		- "/server_shop remove <buyer>|<seller> <id> <item>
 		- "/server_shop reload"
-	- check for aliases before pruning shops
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
 	- allow setting multiple currencies in one entry in server_shops.json
 	- output warning if no item registered with currency value 1

@@ -107,12 +107,23 @@ core.after(0, function()
 			local pname = def.def[idx][1]
 			local value = def.def[idx][2]
 			if not core.registered_items[pname] then
-				ss.log("warning", "removing unregistered item from seller shop id \"" .. id .. "\": " .. pname)
+				ss.log("warning", "removing unregistered item \"" .. pname
+					.. "\" from seller shop id \"" .. id .. "\"")
 				table.remove(def.def, idx)
 			elseif not value then
 				-- FIXME: this should be done in registration method
-				ss.log("warning", "removing item without value from seller shop id \"" .. id .. "\": " .. pname)
+				ss.log("warning", "removing item \"" .. pname
+					.. "\" without value from seller shop id \"" .. id .. "\"")
 				table.remove(def.def, idx)
+			end
+
+			-- check aliases
+			local alias_of = core.registered_aliases[pname]
+			if alias_of then
+				ss.log("action", "replacing alias \"" .. pname .. "\" with \"" .. alias_of
+					.. "\" in seller shop id \"" .. id .. "\"")
+				table.remove(def.def, idx)
+				table.insert(def.def, idx, {alias_of, value})
 			end
 		end
 	end
@@ -122,12 +133,23 @@ core.after(0, function()
 			local pname = def.def[idx][1]
 			local value = def.def[idx][2]
 			if not core.registered_items[pname] then
-				ss.log("warning", "removing unregistered item from buyer shop id \"" .. id .. "\": " .. pname)
+				ss.log("warning", "removing unregistered item \"" .. pname
+					.. "\" from buyer shop id \"" .. id .. "\"")
 				table.remove(def.def, idx)
 			elseif not value then
 				-- FIXME: this should be done in registration method
-				ss.log("warning", "removing item without value from seller shop id \"" .. id .. "\": " .. pname)
+				ss.log("warning", "removing item \"" .. pname
+					.. "\" without value from buyer shop id \"" .. id .. "\"")
 				table.remove(def.def, idx)
+			end
+
+			-- check aliases
+			local alias_of = core.registered_aliases[pname]
+			if alias_of then
+				ss.log("action", "replacing alias \"" .. pname .. "\" with \"" .. alias_of
+					.. "\" in buyer shop id \"" .. id .. "\"")
+				table.remove(def.def, idx)
+				table.insert(def.def, idx, {alias_of, value})
 			end
 		end
 	end
