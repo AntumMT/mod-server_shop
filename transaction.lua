@@ -75,60 +75,36 @@ end
 
 --- Calculates money to be returned to player.
 --
---  FIXME:
---    - not very intuitive
---    - doesn't allow currency values other than 1, 5, 10, 50, & 100
---
 --  @local
 --  @function calculate_refund
 --  @param total
 local function calculate_refund(total)
-	local refund = 0
+	local currencies = ss.get_currencies()
+	local keys = {}
 
-	local hun = math.floor(total / 100)
-	total = total - (hun * 100)
-
-	local fif = math.floor(total / 50)
-	total = total - (fif * 50)
-
-	local ten = math.floor(total / 10)
-	total = total - (ten * 10)
-
-	local fiv = math.floor(total / 5)
-	total = total - (fiv * 5)
-
-	-- at this point, 'total' should always be divisible by whole number
-	local one = total / 1
-	total = total - one
-
-	if total ~= 0 then
-		core.log("warning", "Refund did not result in 0 deposited balance")
+	-- sort currencies by value
+	for k in pairs(currencies) do
+		table.insert(keys, k)
 	end
+	table.sort(keys, function(kL, kR) return currencies[kL] > currencies[kR] end)
 
 	local refund = {}
-	for c, v in pairs(ss.get_currencies()) do
-		local icount = 0
+	local remain = total
 
-		if v == 1 then
-			icount = one
-		elseif v == 5 then
-			icount = fiv
-		elseif v == 10 then
-			icount = ten
-		elseif v == 50 then
-			icount = fif
-		elseif v == 100 then
-			icount = hun
-		end
+	for _, k in ipairs(keys) do
+		local v = currencies[k]
+		local count = math.floor(remain / v)
 
-		if icount > 0 then
-			local stack = ItemStack(c)
-			stack:set_count(icount)
+		if count > 0 then
+			local stack = ItemStack(k)
+			stack:set_count(count)
 			table.insert(refund, stack)
+
+			remain = remain - (count * v)
 		end
 	end
 
-	return refund
+	return refund, remain
 end
 
 --- Returns remaining deposited money to player.
@@ -146,9 +122,21 @@ local function give_refund(id, player, buyer)
 	local pmeta = player:get_meta()
 	local deposit_id = format_deposit_id(id, buyer)
 
-	local refund = calculate_refund(pmeta:get_int(deposit_id))
+	local refund, remain = calculate_refund(pmeta:get_int(deposit_id))
 	for _, istack in ipairs(refund) do
 		give_product(player, istack)
+	end
+
+	if remain > 0 then
+		ss.log("warning", "refund left remaining balance: Shop ID: " .. id
+			.. ", Player: " .. player:get_player_name() .. ", Balance: " .. remain)
+		pmeta:set_int(deposit_id, remain)
+		return
+	end
+
+	if remain < 0 then
+		ss.log("warning", "refunded extra money: Shop ID: " .. id
+			.. ", Player: " .. player:get_player_name() .. ", Discrepancy: " .. remain)
 	end
 
 	-- reset deposited amount after refund
