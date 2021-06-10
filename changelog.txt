@@ -4,6 +4,7 @@ v1.4
 - fixed custom suffix not reflected in product list & messages
 - custom quantity can be set
 - unregistered items are pruned from shops after server startup
+- fixed buyer shop not refunding on formspec close
 
 v1.3
 ----

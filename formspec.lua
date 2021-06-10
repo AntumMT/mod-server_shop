@@ -263,7 +263,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 		if fields.quit then
 			-- return money to player if formspec closed
-			transaction.give_refund(id, player)
+			transaction.give_refund(id, player, buyer)
 			pmeta:set_string(ss.modname .. ":quant", nil)
 			return false
 		elseif fields.btn_id or (fields.key_enter and fields.key_enter_field == "input_id") then
