@@ -1,6 +1,5 @@
-## Server Shop
+## Server Shops
 
----
 ### Description:
 
 Shops intended to be set up by [Minetest](https://www.minetest.net/) server administrators.
@@ -9,7 +8,6 @@ No craft recipe is given as this for administrators, currently a machine can onl
 
 ![screenshot](screenshot.png)
 
----
 ### Usage:
 
 #### Registering Shops:
@@ -106,13 +104,11 @@ To make purchases, player first deposits registered currency items into the depo
 
 For buyer shops, the product list shows what items can be sold to this shop & how much money a player will receive for each item. To sell to the shop, drop an item in the deposit slot. If the shop accepts the item, the value will be added to the deposited amount. Press the "Refund" button to retrieve the value of the items sold.
 
----
 ### Licensing:
 
 - Code: [MIT](LICENSE.txt)
 - Textures: CC0
 
----
 ### Dependencies:
 
 - Required:
@@ -120,7 +116,6 @@ For buyer shops, the product list shows what items can be sold to this shop & ho
 - Optional:
   - [currency][mod.currency]
 
----
 ### Links:
 
 - [GitHub repo](https://github.com/AntumMT/mod-server_shop)
