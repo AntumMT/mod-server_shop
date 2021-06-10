@@ -7,7 +7,6 @@ TODO:
 	- allow any currency value, not just 1, 5, 10, 50, & 100
 	- allow custom currency types for buyer shops
 	- buyer shops: hold items in inventory & don't process until "sell" button pressed
-	- add setting to disable auto-refund when formspec is closed
 - Visuals:
 	- touch up textures
 	- fix texture tiling

@@ -5,6 +5,7 @@ v1.4
 - custom quantity can be set
 - unregistered items are pruned from shops after server startup
 - fixed buyer shop not refunding on formspec close
+- added setting to disable auto-refunding on formspec close
 
 v1.3
 ----
