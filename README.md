@@ -4,7 +4,7 @@
 
 Shops intended to be set up by [Minetest](https://www.minetest.net/) server administrators.
 
-No craft recipe is given as this for administrators, currently a machine can only be set up with `/giveme server_shop:shop` command.
+No craft recipe is given as this for administrators, currently a machine can only be set up with `/giveme` command. The two shop nodes are `server_shop:buy` & `server_shop:sell`.
 
 ![screenshot](screenshot.png)
 
