@@ -105,8 +105,13 @@ core.after(0, function()
 		-- FIXME: should rename "def" to "products" in shop table
 		for idx = #def.def, 1, -1 do
 			local pname = def.def[idx][1]
+			local value = def.def[idx][2]
 			if not core.registered_items[pname] then
 				ss.log("warning", "removing unregistered item from seller shop id \"" .. id .. "\": " .. pname)
+				table.remove(def.def, idx)
+			elseif not value then
+				-- FIXME: this should be done in registration method
+				ss.log("warning", "removing item without value from seller shop id \"" .. id .. "\": " .. pname)
 				table.remove(def.def, idx)
 			end
 		end
@@ -115,8 +120,13 @@ core.after(0, function()
 	for id, def in pairs(ss.get_shops(true)) do
 		for idx = #def.def, 1, -1 do
 			local pname = def.def[idx][1]
+			local value = def.def[idx][2]
 			if not core.registered_items[pname] then
 				ss.log("warning", "removing unregistered item from buyer shop id \"" .. id .. "\": " .. pname)
+				table.remove(def.def, idx)
+			elseif not value then
+				-- FIXME: this should be done in registration method
+				ss.log("warning", "removing item without value from seller shop id \"" .. id .. "\": " .. pname)
 				table.remove(def.def, idx)
 			end
 		end
