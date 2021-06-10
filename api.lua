@@ -26,6 +26,16 @@ ss.registered_currencies = {}
 -- Suffix displayed after deposited amount.
 ss.currency_suffix = nil
 
+local currency_count = 0
+
+--- Checks if there are registered currencies in order to give refunds.
+--
+--  @function server_shop.currency_is_registered
+--  @treturn bool `true` if at least one currency item is registered.
+function ss.currency_is_registered()
+	return currency_count > 0
+end
+
 --- Registers an item that can be used as currency.
 --
 --  TODO:
@@ -54,6 +64,7 @@ function ss.register_currency(item, value)
 	end
 
 	ss.registered_currencies[item] = value
+	currency_count = currency_count + 1
 
 	ss.log("action", item .. " registered as currency with value of " .. tostring(value))
 end

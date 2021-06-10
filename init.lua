@@ -94,8 +94,13 @@ else
 end
 
 
--- prune unregistered items
 core.after(0, function()
+	-- show warning if no currencies are registered
+	if not ss.currency_is_registered() then
+		ss.log("warning", "no currencies registered")
+	end
+
+	-- prune unregistered items
 	for id, def in pairs(ss.get_shops()) do
 		-- FIXME: should rename "def" to "products" in shop table
 		for idx = #def.def, 1, -1 do

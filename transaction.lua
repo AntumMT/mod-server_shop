@@ -138,6 +138,11 @@ end
 --  @tparam string id Shop id.
 --  @param player Player to whom refund is given.
 local function give_refund(id, player, buyer)
+	if not ss.currency_is_registered() then
+		ss.log("error", "no currencies registered, cannot give refund")
+		return
+	end
+
 	local pmeta = player:get_meta()
 	local deposit_id = format_deposit_id(id, buyer)
 
