@@ -23,3 +23,5 @@ TODO:
 		- "/server_shop remove <buyer>|<seller> <id> <item>
 		- "/server_shop reload"
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
+	- return detached inventory item stack in buyer shop to player when formspec closed
+	- place money directly in inventory when selling (remove need to press "refund" button)
