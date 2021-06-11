@@ -356,16 +356,20 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 			if inv:is_empty("deposit") then return false end
 
-			local stack = inv:get_stack("deposit", 1)
-			local total_value = transaction.calculate_product_value(stack, id, true)
-			if total_value <= 0 then return false end
+			local product = inv:get_stack("deposit", 1)
+			local total = transaction.calculate_product_value(product, id, true)
+			if total <= 0 then return false end
 
-			local refund, remain = transaction.calculate_refund(total_value)
+			local refund, remain = transaction.calculate_refund(total)
 			for _, istack in ipairs(refund) do
 				transaction.give_product(player, istack)
 			end
 
-			inv:remove_item("deposit", stack)
+			core.chat_send_player(player:get_player_name(),
+				S("You sold @1 @2 for @3 @4.", product:get_count(),
+					product:get_description(), total, ss.currency_suffix))
+
+			inv:remove_item("deposit", product)
 
 			if remain > 0 then
 				ss.log("warning", "buyer shop \"" .. id .. "\" failed to refund "
