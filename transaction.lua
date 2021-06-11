@@ -218,6 +218,7 @@ return {
 	set_deposit = set_deposit,
 	get_deposit = get_deposit,
 	give_product = give_product,
+	calculate_refund = calculate_refund,
 	give_refund = give_refund,
 	calculate_price = calculate_price,
 	calculate_currency_value = calculate_currency_value,

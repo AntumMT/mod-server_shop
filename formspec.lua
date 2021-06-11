@@ -190,13 +190,15 @@ function ss.get_formspec(pos, player, buyer)
 			end
 		end
 
-		formspec = formspec .. "label[0.2,1;"
-		if ss.currency_suffix and ss.currency_suffix ~= "" then
-			formspec = formspec .. S("Deposited: @1 @2", tostring(deposited), ss.currency_suffix)
-		else
-			formspec = formspec .. S("Deposited: @1", tostring(deposited))
+		if not buyer then
+			formspec = formspec .. "label[0.2,1;"
+			if ss.currency_suffix and ss.currency_suffix ~= "" then
+				formspec = formspec .. S("Deposited: @1 @2", tostring(deposited), ss.currency_suffix)
+			else
+				formspec = formspec .. S("Deposited: @1", tostring(deposited))
+			end
+			formspec = formspec .. "]"
 		end
-		formspec = formspec .. "]"
 
 		if is_registered then -- don't allow deposits to unregistered stores
 			local inv_type = format_formname(false)
@@ -215,10 +217,8 @@ function ss.get_formspec(pos, player, buyer)
 		end
 
 		if is_registered then
-			formspec = formspec .. btn_refund
-
 			if not buyer then
-				formspec = formspec
+				formspec = formspec .. btn_refund
 					.. "dropdown[" .. tostring(margin_r) .. ",3.77;" .. tostring(btn_w) .. ",0.75;quant;"
 					.. table.concat(quantities, ",") .. ";" .. tostring(quant_idx) .. "]"
 					.. btn_buy
@@ -357,11 +357,23 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			if inv:is_empty("deposit") then return false end
 
 			local stack = inv:get_stack("deposit", 1)
-			local to_deposit = transaction.calculate_product_value(stack, id, true)
-			if to_deposit <= 0 then return false end
+			local total_value = transaction.calculate_product_value(stack, id, true)
+			if total_value <= 0 then return false end
 
-			transaction.set_deposit(id, player, transaction.get_deposit(id, player, true) + to_deposit, true)
+			local refund, remain = transaction.calculate_refund(total_value)
+			for _, istack in ipairs(refund) do
+				transaction.give_product(player, istack)
+			end
+
 			inv:remove_item("deposit", stack)
+
+			if remain > 0 then
+				ss.log("warning", "buyer shop \"" .. id .. "\" failed to refund "
+					.. remain .. " to player " .. player:get_player_name())
+			elseif remain < 0 then
+				ss.log("warning", "buyer shop \"" .. id .. "\" gave "
+					.. remain .. " extra to player " .. player:get_player_name())
+			end
 		end
 
 		-- refresh formspec view
