@@ -11,10 +11,11 @@ function ss.log(lvl, msg)
 		lvl = nil
 	end
 
+	msg = "[" .. ss.modname .. "] " .. msg
 	if not lvl then
-		core.log("[" .. ss.modname .. "] " .. msg)
+		core.log(msg)
 	else
-		core.log(lvl, "[" .. ss.modname .. "] " .. msg)
+		core.log(lvl, msg)
 	end
 end
 
