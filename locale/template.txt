@@ -12,3 +12,4 @@ Deposited: @1=
 Deposited: @1 @2=
 You haven't deposited enough money.=
 You purchased @1 @2 for @3 @4.=
+WARNING: @1 @2 was dropped on the ground.=

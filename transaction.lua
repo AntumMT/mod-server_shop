@@ -1,5 +1,6 @@
 
 local ss = server_shop
+local S = core.get_translator(ss.modname)
 
 
 --- Formats a string from deposit identification.
@@ -64,9 +65,9 @@ local function give_product(player, product, quantity)
 	-- add to player inventory or drop on ground
 	local pinv = player:get_inventory()
 	if not pinv:room_for_item("main", istack) then
-		core.chat_send_player(player:get_player_name(), "WARNING: "
-			.. tostring(istack:get_count()) .. " " .. istack:get_description()
-			.. " was dropped on the ground.")
+		core.chat_send_player(player:get_player_name(),
+			S("WARNING: @1 @2 was dropped on the ground.",
+				istack:get_count(), istack:get_description()))
 		core.item_drop(istack, player, player:get_pos())
 	else
 		pinv:add_item("main", istack)
@@ -78,6 +79,7 @@ end
 --  @local
 --  @function calculate_refund
 --  @param total
+--  @return ItemStack list & remainder
 local function calculate_refund(total)
 	local currencies = ss.get_currencies()
 	local keys = {}
