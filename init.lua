@@ -54,6 +54,7 @@ if fopen ~= nil then
 
 				ss.register_currency(shop.name, shop.value)
 			elseif shop.type == "currencies" then
+				if not shop.currencies then shop.currencies = shop.value end -- allow "value" to be used instead of "currencies"
 				for k, v in pairs(shop.currencies) do
 					ss.register_currency(k, v)
 				end
