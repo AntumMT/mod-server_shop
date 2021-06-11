@@ -271,12 +271,26 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 		if fields.quit then
 			if server_shop.refund_on_close then
-				-- return money to player if formspec closed
-				transaction.give_refund(id, player, buyer)
+				if buyer then
+					local inv = core.get_inventory({type="detached", name=ss.modname .. ":buy"})
+					if not inv then return false end
+
+					if not inv:is_empty("deposit") then
+						local product = inv:get_stack("deposit", 1)
+						transaction.give_product(player, product)
+						inv:remove_item("deposit", product)
+					end
+				else
+					-- return money to player if formspec closed
+					transaction.give_refund(id, player, buyer)
+				end
 			end
 
-			-- reset selected amount
-			pmeta:set_string(ss.modname .. ":quant", nil)
+			if not buyer then
+				-- reset selected amount
+				pmeta:set_string(ss.modname .. ":quant", nil)
+			end
+
 			return false
 		elseif fields.btn_id or (fields.key_enter and fields.key_enter_field == "input_id") then
 			-- safety check that only server admin can set ID
