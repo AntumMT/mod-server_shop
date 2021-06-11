@@ -168,6 +168,49 @@ local function calculate_price(shop_id, item_id, quantity)
 	return price_per * quantity
 end
 
+--- Calculates value of an item stack against registered currencies.
+--
+--  @local
+--  @function calculate_currency_value
+--  @tparam ItemStack stack Item stack.
+--  @treturn int Total value of item stack.
+local function calculate_currency_value(stack)
+	local value = 0
+
+	for c, v in pairs(ss.get_currencies()) do
+		if stack:get_name() == c then
+			value = stack:get_count() * v
+			break
+		end
+	end
+
+	return value
+end
+
+--- Calculates value of an item stack against a registered shop's product list.
+--
+--  @local
+--  @function calculate_product_value
+--  @tparam ItemStack stack Item stack.
+--  @tparam string id Shop id.
+--  @tparam bool buyer Determines whether to parse buyer shops or seller shops.
+--  @treturn int Total value of item stack.
+local function calculate_product_value(stack, id, buyer)
+	local shop = ss.get_shop(id, buyer)
+	if not shop then return 0 end
+
+	local item_name = stack:get_name()
+	local value_per = 0
+	for _, product in ipairs(shop.products) do
+		if item_name == product[1] then
+			value_per = product[2]
+			break
+		end
+	end
+
+	return value_per * stack:get_count()
+end
+
 
 return {
 	set_deposit = set_deposit,
@@ -175,4 +218,6 @@ return {
 	give_product = give_product,
 	give_refund = give_refund,
 	calculate_price = calculate_price,
+	calculate_currency_value = calculate_currency_value,
+	calculate_product_value = calculate_product_value,
 }
