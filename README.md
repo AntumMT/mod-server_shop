@@ -4,7 +4,7 @@
 
 Shops intended to be set up by [Minetest](https://www.minetest.net/) server administrators.
 
-No craft recipe is given as this for administrators, currently a machine can only be set up with `/giveme` command. The two shop nodes are `server_shop:buy` & `server_shop:sell`.
+No craft recipe is given as this for administrators, currently a shop can only be set up with the `/giveme` command. The two shop nodes are `server_shop:buy` & `server_shop:sell`.
 
 ![screenshot](screenshot.png)
 
@@ -58,23 +58,17 @@ server_shop.register_currency("currency:minegeld", 1)
 server_shop.register_currency("currency:minegeld_5", 5)
 ```
 
-When registering a new currency in `server_shops.json`, set `type` to "currency". `name` is the item to be used as currency & `value` is the item's worth:
+When registering new currencies in `server_shops.json`, set `type` to "currencies". `value` is a table of item names & worth:
 ```json
 	{
-		"type":"currency",
-		"name":"currency:minegeld",
-		"value":1,
-	},
-	{
-		"type":"currency",
-		"name":"currency:minegeld_5",
-		"value":5,
+		"type":"currencies",
+		"value":
+		{
+			"currency:minegeld":1,
+			"currency:minegeld_5":5,
+		},
 	},
 ```
-
-***Notes:***
-- *Only currency values of 1, 5, 10, 50, & 100 are currently supported*
-- *Buyer shops currently do not work with custom currencies, only minegeld notes from currency mod supported*
 
 You can also register a currency suffix to be displayed in the formspec. Simply set the string value of `server_shop.currency_suffix`:
 
