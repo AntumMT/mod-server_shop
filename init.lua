@@ -98,6 +98,16 @@ core.after(0, function()
 	-- show warning if no currencies are registered
 	if not ss.currency_is_registered() then
 		ss.log("warning", "no currencies registered")
+	else
+		local have_ones = false
+		for k, v in pairs(ss.get_currencies()) do
+			have_ones = v == 1
+			if have_ones then break end
+		end
+
+		if not have_ones then
+			ss.log("warning", "no currency registered with value 1, players may not be refunded all of their money")
+		end
 	end
 
 	-- prune unregistered items
