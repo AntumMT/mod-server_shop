@@ -36,7 +36,7 @@ local function calculate_product_value(stack, id, buyer)
 
 	local item_name = stack:get_name()
 	local value_per = 0
-	for _, product in ipairs(shop.def) do
+	for _, product in ipairs(shop.products) do
 		if item_name == product[1] then
 			value_per = product[2]
 			break

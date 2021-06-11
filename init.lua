@@ -120,18 +120,18 @@ core.after(0, function()
 	-- prune unregistered items
 	for id, def in pairs(ss.get_shops()) do
 		-- FIXME: should rename "def" to "products" in shop table
-		for idx = #def.def, 1, -1 do
-			local pname = def.def[idx][1]
-			local value = def.def[idx][2]
+		for idx = #def.products, 1, -1 do
+			local pname = def.products[idx][1]
+			local value = def.products[idx][2]
 			if not core.registered_items[pname] then
 				ss.log("warning", "removing unregistered item \"" .. pname
 					.. "\" from seller shop id \"" .. id .. "\"")
-				table.remove(def.def, idx)
+				table.remove(def.products, idx)
 			elseif not value then
 				-- FIXME: this should be done in registration method
 				ss.log("warning", "removing item \"" .. pname
 					.. "\" without value from seller shop id \"" .. id .. "\"")
-				table.remove(def.def, idx)
+				table.remove(def.products, idx)
 			end
 
 			-- check aliases
@@ -139,25 +139,25 @@ core.after(0, function()
 			if alias_of then
 				ss.log("action", "replacing alias \"" .. pname .. "\" with \"" .. alias_of
 					.. "\" in seller shop id \"" .. id .. "\"")
-				table.remove(def.def, idx)
-				table.insert(def.def, idx, {alias_of, value})
+				table.remove(def.products, idx)
+				table.insert(def.products, idx, {alias_of, value})
 			end
 		end
 	end
 
 	for id, def in pairs(ss.get_shops(true)) do
-		for idx = #def.def, 1, -1 do
-			local pname = def.def[idx][1]
-			local value = def.def[idx][2]
+		for idx = #def.products, 1, -1 do
+			local pname = def.products[idx][1]
+			local value = def.products[idx][2]
 			if not core.registered_items[pname] then
 				ss.log("warning", "removing unregistered item \"" .. pname
 					.. "\" from buyer shop id \"" .. id .. "\"")
-				table.remove(def.def, idx)
+				table.remove(def.products, idx)
 			elseif not value then
 				-- FIXME: this should be done in registration method
 				ss.log("warning", "removing item \"" .. pname
 					.. "\" without value from buyer shop id \"" .. id .. "\"")
-				table.remove(def.def, idx)
+				table.remove(def.products, idx)
 			end
 
 			-- check aliases
@@ -165,8 +165,8 @@ core.after(0, function()
 			if alias_of then
 				ss.log("action", "replacing alias \"" .. pname .. "\" with \"" .. alias_of
 					.. "\" in buyer shop id \"" .. id .. "\"")
-				table.remove(def.def, idx)
-				table.insert(def.def, idx, {alias_of, value})
+				table.remove(def.products, idx)
+				table.insert(def.products, idx, {alias_of, value})
 			end
 		end
 	end

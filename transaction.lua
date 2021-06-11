@@ -158,7 +158,7 @@ local function calculate_price(shop_id, item_id, quantity)
 	end
 
 	local price_per = 0
-	for _, i in ipairs(shop.def) do
+	for _, i in ipairs(shop.products) do
 		if i[1] == item_id then
 			price_per = i[2]
 			break

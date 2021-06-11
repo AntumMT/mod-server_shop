@@ -35,7 +35,7 @@ end
 local function get_shop_index(shop_id, idx, buyer)
 	local shop = ss.get_shop(shop_id, buyer)
 	if shop then
-		local product = shop.def[idx]
+		local product = shop.products[idx]
 		if product then
 			return product[1]
 		end
@@ -53,8 +53,8 @@ function get_product_list(id, buyer)
 	local products = ""
 	local shop = ss.get_shop(id, buyer)
 
-	if shop and shop.def then
-		for _, p in ipairs(shop.def) do
+	if shop and shop.products then
+		for _, p in ipairs(shop.products) do
 			local item = core.registered_items[p[1]]
 
 			if not item then
@@ -175,11 +175,11 @@ function ss.get_formspec(pos, player, buyer)
 		local shop = ss.get_shop(id, buyer)
 		if shop then
 			-- make sure we're not out of range of the shop list
-			if selected_idx > #shop.def then
-				selected_idx = #shop.def
+			if selected_idx > #shop.products then
+				selected_idx = #shop.products
 			end
 
-			selected_item = shop.def[selected_idx]
+			selected_item = shop.products[selected_idx]
 			if selected_item then
 				selected_item = selected_item[1]
 			end

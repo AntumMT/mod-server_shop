@@ -12,7 +12,7 @@ No craft recipe is given as this for administrators, currently a shop can only b
 
 #### Registering Shops:
 
-There are two types of shops, seller & buyer. A seller shop can be registered with `server_shop.register_seller(id, name, def)`. A buyer with `server_shop.register_buyer(id, name, def)`. `id` is a string identifier associated with the shop list. `name` is a human-readable string that will be displayed as the shop's title. `def` is the shop list definition. Shop lists are defined in a table of tuples in `{itemname, value}` format. `itemname` is the technical string name of an item (e.g. `default:wood`). `value` is the number representation of what the item is worth.
+There are two types of shops, seller & buyer. A seller shop can be registered with `server_shop.register_seller(id, name, products)`. A buyer with `server_shop.register_buyer(id, name, products)`. `id` is a string identifier associated with the shop list. `name` is a human-readable string that will be displayed as the shop's title. `products` is the shop list definition. Shop lists are defined in a table of tuples in `{itemname, value}` format. `itemname` is the technical string name of an item (e.g. `default:wood`). `value` is the number representation of what the item is worth.
 
 *Example:*
 ```lua
