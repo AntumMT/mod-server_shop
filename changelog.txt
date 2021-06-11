@@ -8,6 +8,7 @@ v1.4
 - added setting to disable auto-refunding on formspec close
 - currencies can be registered with any whole number value
 - "currencies" key in server_shops.json used to register multiple currencies
+- buyer shops now have "sell" button instead of automatically selling when item is dropped
 
 v1.3
 ----

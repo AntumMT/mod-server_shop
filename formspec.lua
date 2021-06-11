@@ -144,6 +144,9 @@ function ss.get_formspec(pos, player, buyer)
 		local btn_buy = "button[" .. tostring(margin_r) .. ","
 			.. tostring(btn_y) .. ";" .. tostring(btn_w)
 			.. ",0.75;btn_buy;Buy]"
+		local btn_sell = "button[" .. tostring(margin_r) .. ","
+			.. tostring(btn_y) .. ";" .. tostring(btn_w)
+			.. ",0.75;btn_sell;Sell]"
 
 		local formspec = "formspec_version[4]"
 			.. "size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
@@ -211,12 +214,13 @@ function ss.get_formspec(pos, player, buyer)
 		if is_registered then
 			formspec = formspec .. btn_refund
 
-			-- buyers don't need a "Buy" button
 			if not buyer then
 				formspec = formspec
 					.. "dropdown[" .. tostring(margin_r) .. ",3.77;" .. tostring(btn_w) .. ",0.75;quant;"
 					.. table.concat(quantities, ",") .. ";" .. tostring(quant_idx) .. "]"
 					.. btn_buy
+			else
+				formspec = formspec .. btn_sell
 			end
 		end
 
@@ -339,6 +343,21 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 				.. " " .. product:get_description() .. " for " .. tostring(total) .. " "
 				.. ss.currency_suffix .. ".")
 			transaction.give_product(player, product, product_quant)
+		elseif fields.btn_sell then
+			local inv = core.get_inventory({type="detached", name=ss.modname .. ":buy",})
+			if not inv then
+				ss.log("error", "could not retrieve detached inventory: " .. ss.modname .. ":buy")
+				return false
+			end
+
+			if inv:is_empty("deposit") then return false end
+
+			local stack = inv:get_stack("deposit", 1)
+			local to_deposit = transaction.calculate_product_value(stack, id, true)
+			if to_deposit <= 0 then return false end
+
+			transaction.set_deposit(id, player, transaction.get_deposit(id, player, true) + to_deposit, true)
+			inv:remove_item("deposit", stack)
 		end
 
 		-- refresh formspec view
