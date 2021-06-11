@@ -1,5 +1,6 @@
 
 local ss = server_shop
+local S = core.get_translator(ss.modname)
 
 
 local fs_width = 14
@@ -140,13 +141,13 @@ function ss.get_formspec(pos, player, buyer)
 		local is_registered = ss.is_registered(id, buyer)
 		local margin_r = fs_width-(btn_w+0.2)
 		local btn_refund = "button[0.2," .. tostring(btn_y) .. ";"
-			.. tostring(btn_w) .. ",0.75;btn_refund;Refund]"
+			.. tostring(btn_w) .. ",0.75;btn_refund;" .. S("Refund") .. "]"
 		local btn_buy = "button[" .. tostring(margin_r) .. ","
 			.. tostring(btn_y) .. ";" .. tostring(btn_w)
-			.. ",0.75;btn_buy;Buy]"
+			.. ",0.75;btn_buy;" .. S("Buy") .. "]"
 		local btn_sell = "button[" .. tostring(margin_r) .. ","
 			.. tostring(btn_y) .. ";" .. tostring(btn_w)
-			.. ",0.75;btn_sell;Sell]"
+			.. ",0.75;btn_sell;" .. S("Sell") .. "]"
 
 		local formspec = "formspec_version[4]"
 			.. "size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
@@ -158,7 +159,8 @@ function ss.get_formspec(pos, player, buyer)
 
 		if ss.is_shop_admin(player) then
 			formspec = formspec
-				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w) .. ",0.75;btn_id;Set ID]"
+				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w)
+				.. ",0.75;btn_id;" .. S("Set ID") .. "]"
 				.. "field[" .. tostring(fs_width-4.3) .. ",0.2;4.1,0.75;input_id;;" .. id .. "]"
 				.. "field_close_on_enter[input_id;false]"
 		end
@@ -188,10 +190,11 @@ function ss.get_formspec(pos, player, buyer)
 			end
 		end
 
-		formspec = formspec
-			.. "label[0.2,1;Deposited: " .. tostring(deposited)
+		formspec = formspec .. "label[0.2,1;"
 		if ss.currency_suffix and ss.currency_suffix ~= "" then
-			formspec = formspec .. " " .. ss.currency_suffix
+			formspec = formspec .. S("Deposited: @1 @2", tostring(deposited), ss.currency_suffix)
+		else
+			formspec = formspec .. S("Deposited: @1", tostring(deposited))
 		end
 		formspec = formspec .. "]"
 
@@ -225,7 +228,8 @@ function ss.get_formspec(pos, player, buyer)
 		end
 
 		formspec = formspec	.. "list[current_player;main;2.15,5.5;8,4;0]"
-			.. "button_exit[" .. tostring(margin_r) .. ",10;" .. tostring(btn_w) .. ",0.75;btn_close;Close]"
+			.. "button_exit[" .. tostring(margin_r) .. ",10;" .. tostring(btn_w)
+			.. ",0.75;btn_close;" .. S("Close") .. "]"
 
 		local formname = format_formname(false)
 		if buyer then formname = format_formname(true) end
@@ -328,7 +332,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 			local deposited = transaction.get_deposit(id, player)
 			if total > deposited then
-				core.chat_send_player(player:get_player_name(), "You haven't deposited enough money.")
+				core.chat_send_player(player:get_player_name(), S("You haven't deposited enough money."))
 				return false
 			end
 
@@ -339,9 +343,9 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			transaction.set_deposit(id, player, deposited - total, buyer)
 
 			-- execute transaction
-			core.chat_send_player(player:get_player_name(), "You purchased " .. tostring(product:get_count())
-				.. " " .. product:get_description() .. " for " .. tostring(total) .. " "
-				.. ss.currency_suffix .. ".")
+			core.chat_send_player(player:get_player_name(),
+				S("You purchased @1 @2 for @3 @4.", product:get_count(),
+					product:get_description(), total, ss.currency_suffix))
 			transaction.give_product(player, product, product_quant)
 		elseif fields.btn_sell then
 			local inv = core.get_inventory({type="detached", name=ss.modname .. ":buy",})

@@ -9,6 +9,7 @@ v1.4
 - currencies can be registered with any whole number value
 - "currencies" key in server_shops.json used to register multiple currencies
 - buyer shops now have "sell" button instead of automatically selling when item is dropped
+- added localization support
 
 v1.3
 ----
