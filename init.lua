@@ -46,11 +46,17 @@ if fopen ~= nil then
 	if json then
 		for _, shop in ipairs(json) do
 			if shop.type == "currency" then
+				ss.log("warning", "using \"currency\" key in server_shops.json is deprecated, please use \"currencies\"")
+
 				if type(shop.value) ~= "number" or shop.value <= 0 then
 					shop_file_error("invalid or undeclared currency \"value\"; must be a number greater than 0")
 				end
 
 				ss.register_currency(shop.name, shop.value)
+			elseif shop.type == "currencies" then
+				for k, v in pairs(shop.currencies) do
+					ss.register_currency(k, v)
+				end
 			elseif shop.type == "suffix" then
 				if type(shop.value) ~= "string" or shop.value:trim() == "" then
 					shop_file_error("invalid or undeclared suffix \"value\"; must be non-empty string")

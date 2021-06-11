@@ -7,6 +7,7 @@ v1.4
 - fixed buyer shop not refunding on formspec close
 - added setting to disable auto-refunding on formspec close
 - currencies can be registered with any whole number value
+- "currencies" key in server_shops.json used to register multiple currencies
 
 v1.3
 ----
