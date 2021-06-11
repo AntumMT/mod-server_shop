@@ -59,7 +59,7 @@ function get_product_list(id, buyer)
 			local item = core.registered_items[p[1]]
 
 			if not item then
-				core.log("warning", "Unknown item \"" .. p[1] .. "\" for shop ID \"" .. id .. "\"")
+				ss.log("warning", "Unknown item \"" .. p[1] .. "\" for shop ID \"" .. id .. "\"")
 			else
 				local item_name = item.short_description
 				if not item_name then
@@ -71,7 +71,7 @@ function get_product_list(id, buyer)
 
 				local item_price = p[2]
 				if not item_price then
-					core.log("warning", "Price not set for item \"" .. p[1] .. "\" for shop ID \"" .. id .. "\"")
+					ss.log("warning", "Price not set for item \"" .. p[1] .. "\" for shop ID \"" .. id .. "\"")
 				elseif products == "" then
 					products = item_name .. " : " .. tostring(item_price)
 				else
