@@ -119,7 +119,6 @@ core.after(0, function()
 
 	-- prune unregistered items
 	for id, def in pairs(ss.get_shops()) do
-		-- FIXME: should rename "def" to "products" in shop table
 		for idx = #def.products, 1, -1 do
 			local pname = def.products[idx][1]
 			local value = def.products[idx][2]
