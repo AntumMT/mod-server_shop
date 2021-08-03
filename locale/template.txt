@@ -1,4 +1,6 @@
-Translated by:
+# textdomain:server_shop
+
+# Translators:
 
 
 Seller Shop=

@@ -1,4 +1,9 @@
 
+next
+----
+- added "textdomain" line to localization template
+
+
 v1.4
 ----
 - fixed custom suffix not reflected in product list & messages
@@ -18,6 +23,7 @@ v1.3
 - added buyer shops
 - changed json product list type to indexed array
 
+
 v1.2
 ----
 - custom currencies can be registered
@@ -33,12 +39,14 @@ v1.2
 - displayed currency suffix can be customized or omitted
 - no longer uses node meta for formspec
 
+
 v1.1
 ----
 - use json format for shops configuration in world directory
 - switched id & name parameters positions in register_shop
 - show preview image of selected item
 - node owners can't set ID unless they have "server" priv
+
 
 v1.0
 ----
