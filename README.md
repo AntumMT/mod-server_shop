@@ -112,9 +112,10 @@ For buyer shops, the product list shows what items can be sold to this shop & ho
 
 ### Links:
 
+- [![ContentDB](https://content.minetest.net/packages/AntumDeluge/server_shop/shields/title/)](https://content.minetest.net/packages/AntumDeluge/server_shop/)
 - [GitHub repo](https://github.com/AntumMT/mod-server_shop)
-- [Minetest forum](https://forum.minetest.net/viewtopic.php?t=26645)
-- [API](https://antummt.github.io/mod-server_shop/docs/api.html)
+- [Forum](https://forum.minetest.net/viewtopic.php?t=26645)
+- [Reference](https://antummt.github.io/mod-server_shop/docs/api.html)
 - [Changelog](changelog.txt)
 - [TODO](TODO.txt)
 
