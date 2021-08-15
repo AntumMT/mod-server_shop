@@ -3,6 +3,7 @@ next
 ----
 - added "textdomain" line to localization template
 - added "tall" shop nodes
+- fixed buyer shop not being registered when currency & default mods not available
 
 
 v1.4
