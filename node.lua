@@ -56,8 +56,7 @@ core.register_node(ss.modname .. ":sell", {
 core.register_alias(ss.modname .. ":shop", ss.modname .. ":sell") -- backward compat
 
 
-if core.registered_items["currency:minegeld_50"] and core.registered_items["default:gold_ingot"] then
-	core.register_node(ss.modname .. ":buy", {
+core.register_node(ss.modname .. ":buy", {
 	description = S("Buyer Shop"),
 	drawtype = "normal",
 	tiles = {
