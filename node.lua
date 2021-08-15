@@ -69,6 +69,15 @@ local def = {
 	},
 }
 
+--[[ FIXME: nodes are rotated when colored
+if core.get_modpath("unifieddyes") then
+	def.base.groups.ud_param2_colorable = 1
+	def.base.paramtype2 = "colorfacedir"
+	def.base.palette = "unifieddyes_palette_extended.png"
+	def.base.on_dig = unifieddyes.on_dig
+end
+]]
+
 
 local nodes = {
 	["sell"] = {def.short, def.sell},
