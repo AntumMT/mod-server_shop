@@ -2,6 +2,7 @@
 next
 ----
 - added "textdomain" line to localization template
+- added "tall" shop nodes
 
 
 v1.4
