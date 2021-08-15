@@ -5,7 +5,7 @@ local S = core.get_translator(ss.modname)
 
 local def = {
 	base = {
-		groups = {oddly_breakable_by_hand=1,},
+		groups = {oddly_breakable_by_hand=1},
 		paramtype2 = "facedir",
 		after_place_node = function(pos, placer)
 			-- set node owner
