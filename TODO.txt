@@ -4,6 +4,8 @@ TODO:
 	- might be an issue if admin changes shop ID while player is using
 - Functionality:
 	- optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
+	- fix deposited money not being saved when formspec closed
+	- fix inventory not being checked to see if there is room
 - Visuals:
 	- make colorable with unifieddyes
 - Misc.:
