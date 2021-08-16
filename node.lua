@@ -85,5 +85,6 @@ for _, size in ipairs({"small", "large"}) do
 	core.register_node(ss.modname..":shop_"..size, full_def)
 end
 
+core.register_alias(ss.modname..":shop", ss.modname..":shop_small")
 core.register_alias(ss.modname..":sell", ss.modname..":shop_small")
 core.register_alias(ss.modname..":buy", ss.modname..":shop_small")
