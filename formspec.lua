@@ -393,6 +393,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			core.chat_send_player(player:get_player_name(),
 				S("You purchased @1 @2 for @3 @4.", product:get_count(),
 					product:get_description(), total, ss.currency_suffix))
+
 			transaction.give_product(player, product, product_quant)
 		elseif fields.btn_sell then
 			local inv = core.get_inventory({type="detached", name=ss.modname .. ":buy",})
