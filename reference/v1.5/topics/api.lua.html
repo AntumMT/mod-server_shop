@@ -1,0 +1,604 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+    <link rel="icon" href="https://www.minetest.net/media/icon.svg" type="image/png" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Server Shops</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/settings.lua.html">settings</a></li>
+  <li><strong>api</strong></li>
+  <li><a href="../topics/formspec.html">formspec</a></li>
+  <li><a href="../topics/nodes.html">nodes</a></li>
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Topic <code>api.lua</code></h1>
+<p>Server Shops API</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.currency_is_registered">server_shop.currency_is_registered ()</a></td>
+	<td class="summary">Checks if there are registered currencies in order to give refunds.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.get_currencies">server_shop.get_currencies ()</a></td>
+	<td class="summary">Retrieves registered currencies &amp; values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.register_currency">server_shop.register_currency (item, value)</a></td>
+	<td class="summary">Registers an item that can be used as currency.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.format_id">server_shop.format_id (id)</a></td>
+	<td class="summary">Checks ID string for invalid characters.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.register">server_shop.register (id, name, products[, buyer])</a></td>
+	<td class="summary">Registers a shop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.unregister">server_shop.unregister (Shop)</a></td>
+	<td class="summary">Unregisters a shop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.register_seller">server_shop.register_seller (id, name, products)</a></td>
+	<td class="summary">Registers a seller shop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.register_buyer">server_shop.register_buyer (id, name, products)</a></td>
+	<td class="summary">Registers a buyer shop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.get_shop">server_shop.get_shop (id, buyer)</a></td>
+	<td class="summary">Retrieves shop product list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.is_registered">server_shop.is_registered (id, buyer)</a></td>
+	<td class="summary">Checks if a shop is registered.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.shop_type">server_shop.shop_type (id)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.is_shop_admin">server_shop.is_shop_admin (player)</a></td>
+	<td class="summary">Checks if a player has admin rights to for managing shop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#server_shop.is_shop_owner">server_shop.is_shop_owner (pos, player)</a></td>
+	<td class="summary">Checks if a player is the owner of node.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "server_shop.currency_is_registered"></a>
+    <strong>server_shop.currency_is_registered ()</strong>
+    </dt>
+    <dd>
+    Checks if there are registered currencies in order to give refunds.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if at least one currency item is registered.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.get_currencies"></a>
+    <strong>server_shop.get_currencies ()</strong>
+    </dt>
+    <dd>
+    Retrieves registered currencies &amp; values.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        Registered currencies.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.register_currency"></a>
+    <strong>server_shop.register_currency (item, value)</strong>
+    </dt>
+    <dd>
+    Registers an item that can be used as currency.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">item</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Item name.
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">int</span></span>
+         Value the item should represent.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.format_id"></a>
+    <strong>server_shop.format_id (id)</strong>
+    </dt>
+    <dd>
+    Checks ID string for invalid characters.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Shop identifier string.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        Formatted string.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.register"></a>
+    <strong>server_shop.register (id, name, products[, buyer])</strong>
+    </dt>
+    <dd>
+
+<p>Registers a shop. </p>
+
+<p>  <strong>Aliases:</strong></p>
+
+<ul>
+    <li>server_shop.register_shop</li>
+</ul>
+
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Shop string identifier.
+        </li>
+        <li><span class="parameter">name</span>
+         Can be a human readable <a href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> name or a <a href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a> with fiels "name", "products", &amp; "buyer".
+        </li>
+        <li><span class="parameter">products</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table[string,int]</a></span>
+         List of products &amp; prices in format <a href="{item_name,.html#price}">{item_name, price}</a>.
+        </li>
+        <li><span class="parameter">buyer</span>
+            <span class="types"><span class="type">bool</span></span>
+         Denotes whether to register seller or buyer shop (default: <code>false</code> (seller)).
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.unregister"></a>
+    <strong>server_shop.unregister (Shop)</strong>
+    </dt>
+    <dd>
+    Unregisters a shop.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">Shop</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         ID.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if shop was unregistered.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.register_seller"></a>
+    <strong>server_shop.register_seller (id, name, products)</strong>
+    </dt>
+    <dd>
+    Registers a seller shop.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Shop string identifier.
+        </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Human readable name.
+        </li>
+        <li><span class="parameter">products</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table[string,int]</a></span>
+         List of products &amp; prices in format <a href="{item_name,.html#price}">{item_name, price}</a>.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.register_buyer"></a>
+    <strong>server_shop.register_buyer (id, name, products)</strong>
+    </dt>
+    <dd>
+    Registers a buyer shop.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Shop string identifier.
+        </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Human readable name.
+        </li>
+        <li><span class="parameter">products</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table[string,int]</a></span>
+         List of products &amp; prices in format <a href="{item_name,.html#price}">{item_name, price}</a>.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.get_shop"></a>
+    <strong>server_shop.get_shop (id, buyer)</strong>
+    </dt>
+    <dd>
+    Retrieves shop product list.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         String identifier of shop.
+        </li>
+        <li><span class="parameter">buyer</span>
+            <span class="types"><span class="type">bool</span></span>
+         Denotes whether seller or buyer shops will be parsed (default: false) (deprecated).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        Table of shop contents.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.is_registered"></a>
+    <strong>server_shop.is_registered (id, buyer)</strong>
+    </dt>
+    <dd>
+    Checks if a shop is registered.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Shop string identifier.
+        </li>
+        <li><span class="parameter">buyer</span>
+            <span class="types"><span class="type">bool</span></span>
+         Denotes whether to check seller or buyer shops (default: false) (deprecated).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if the shop ID is found.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.shop_type"></a>
+    <strong>server_shop.shop_type (id)</strong>
+    </dt>
+    <dd>
+
+
+
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.is_shop_admin"></a>
+    <strong>server_shop.is_shop_admin (player)</strong>
+    </dt>
+    <dd>
+    Checks if a player has admin rights to for managing shop.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><a class="type" href="https://minetest.gitlab.io/minetest/class-reference/#objectref">ObjectRef</a></span>
+         Player requesting permissions.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        <code>true</code> if player has <em>server</em> priv.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "server_shop.is_shop_owner"></a>
+    <strong>server_shop.is_shop_owner (pos, player)</strong>
+    </dt>
+    <dd>
+    Checks if a player is the owner of node.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pos</span>
+            <span class="types"><a class="type" href="https://minetest.gitlab.io/minetest/representations-of-simple-things/#positionvector">vector</a></span>
+         Position of shop node.
+        </li>
+        <li><span class="parameter">player</span>
+            <span class="types"><a class="type" href="https://minetest.gitlab.io/minetest/class-reference/#objectref">ObjectRef</a></span>
+         Player to be checked.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if player is owner.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/AntumDeluge/LDoc/tree/custom">LDoc 1.4.6-antum-dev</a></i>
+<i style="float:right;">Last updated 2021-08-16 06:30:35 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

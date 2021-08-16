@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+    <link rel="icon" href="https://www.minetest.net/media/icon.svg" type="image/png" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Server Shops</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Description">Description </a></li>
+<li><a href="#Usage">Usage </a></li>
+<li><a href="#Licensing">Licensing </a></li>
+<li><a href="#Dependencies">Dependencies </a></li>
+<li><a href="#Links">Links </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/settings.lua.html">settings</a></li>
+  <li><a href="../topics/api.lua.html">api</a></li>
+  <li><a href="../topics/formspec.html">formspec</a></li>
+  <li><a href="../topics/nodes.html">nodes</a></li>
+  <li><strong>README</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h2>Server Shops</h2>
+
+<p><a name="Description"></a></p>
+<h3>Description</h3>
+
+<p>Shops intended to be set up by <a href="https://www.minetest.net/">Minetest</a> server administrators.</p>
+
+<p>No craft recipe is given as this for administrators, currently a shop can only be set up with the <code>/giveme</code> command. The two shop nodes are <code>server_shop:shop_small</code> &amp; <code>server_shop:shop_large</code> (they function identically).</p>
+
+<p><img src="../screenshot.png" width="700" /></p>
+
+<p><a name="Usage"></a></p>
+<h3>Usage</h3>
+
+<h4>Registering Shops</h4>
+
+<p>There are two types of shops, seller &amp; buyer. A seller shop can be registered with <a href="server_shop.register_seller(id, name,.html#products)">server_shop.register_seller(id, name, products)</a>. A buyer with <a href="server_shop.register_buyer(id, name,.html#products)">server_shop.register_buyer(id, name, products)</a>. <code>id</code> is a string identifier associated with the shop list. <code>name</code> is a human-readable string that will be displayed as the shop's title. <code>products</code> is the shop list definition. Shop lists are defined in a table of tuples in <a href="{itemname,.html#value}">{itemname, value}</a> format. <code>itemname</code> is the technical string name of an item (e.g. <code>default:wood</code>). <code>value</code> is the number representation of what the item is worth.</p>
+
+<p><em>Example:</em></p>
+
+<pre>
+<span class="comment">-- register seller
+</span>server_shop.register_seller(<span class="string">"frank"</span>, <span class="string">"Frank's Shop"</span>, {{<span class="string">"default:wood"</span>, <span class="number">2</span>}})
+
+<span class="comment">-- register buyer
+</span>server_shop.register_buyer(<span class="string">"julie"</span>, <span class="string">"Julie's Shop"</span>,  {
+    {<span class="string">"default:copper_lump"</span>, <span class="number">5</span>},
+    {<span class="string">"default:iron_lump"</span>, <span class="number">6</span>},
+})
+</pre>
+
+
+<p>Shops can optionally be configured in <code>&lt;world_path&gt;/server_shops.json</code> file. To register a shop, set <a href="https://www.lua.org/manual/5.1/manual.html#pdf-type">type</a> to "sell" or "buy". <code>id</code> is a string identifier for the shop. <code>name</code> is the string displayed in the formspec &amp; when a player points at the node. <code>products</code> is an array of products sold at the shop in format "name,value".</p>
+
+<p><em>Example:</em></p>
+
+<pre>
+[
+  {
+    <span class="string">"type"</span>:<span class="string">"sell"</span>,
+    <span class="string">"id"</span>:<span class="string">"frank"</span>,
+    <span class="string">"name"</span>:<span class="string">"Frank's Shop"</span>,
+    <span class="string">"products"</span>:<span class="string">[["default:wood",2]]</span>
+  },
+  {
+    <span class="string">"type"</span>:<span class="string">"buy"</span>,
+    <span class="string">"id"</span>:<span class="string">"julie"</span>,
+    <span class="string">"name"</span>:<span class="string">"Julie's Shop"</span>,
+    <span class="string">"products"</span>:
+    [
+      [<span class="string">"default:copper_lump"</span>,<span class="number">5</span>],
+      [<span class="string">"default:iron_lump"</span>,<span class="number">6</span>],
+    ]
+  },
+]
+</pre>
+
+
+<h4>Registering Currencies</h4>
+
+<p>Currencies can be registered with <code>server_shop.register_currency</code>:</p>
+
+<pre>
+server_shop.register_currency(<span class="string">"currency:minegeld"</span>, <span class="number">1</span>)
+server_shop.register_currency(<span class="string">"currency:minegeld_5"</span>, <span class="number">5</span>)
+</pre>
+
+
+<p>When registering new currencies in <code>server_shops.json</code>, set <a href="https://www.lua.org/manual/5.1/manual.html#pdf-type">type</a> to "currencies". <code>value</code> is a table of item names &amp; worth:</p>
+
+<pre>
+    {
+        <span class="string">"type"</span>:<span class="string">"currencies"</span>,
+        <span class="string">"value"</span>:
+        {
+            <span class="string">"currency:minegeld"</span>:<span class="number">1</span>,
+            <span class="string">"currency:minegeld_5"</span>:<span class="number">5</span>,
+        },
+    },
+</pre>
+
+
+<p>You can also register a currency suffix to be displayed in the formspec. Simply set the string value of <code>server_shop.currency_suffix</code>:</p>
+
+
+<pre>
+server_shop.currency_suffix = <span class="string">"MG"</span>
+</pre>
+
+
+<p>In <code>server_shops.json</code>, set <a href="https://www.lua.org/manual/5.1/manual.html#pdf-type">type</a> to "suffix" &amp; <code>value</code> to the string to be displayed:</p>
+
+<pre>
+    {
+        <span class="string">"type"</span>:<span class="string">"suffix"</span>,
+        <span class="string">"value"</span>:<span class="string">"MG"</span>,
+    },
+</pre>
+
+
+<p>By default, if the <a href="https://content.minetest.net/packages/VanessaE/currency/">currency</a> mod is installed, the minegeld notes will be registered as currency. This can be disabled by setting <code>server_shop.use_currency_defaults</code> to <code>false</code> in <code>minetest.conf</code>.</p>
+
+<h4>Setting up Shops in Game</h4>
+
+<p>Server admins use the chat command <a href="/giveme.html#server_shop:shop_small">/giveme server_shop:shop_small</a> or <a href="/giveme.html#server_shop:shop_large">/giveme server_shop:shop_large</a> to receive a shop node. After placing the node, the ID can be set with the "Set ID" button &amp; text input field (only players with the "server" privilege can set ID). Set the ID to the registered shop ID you want associated with this node ("frank" or "julie" for the examples above) &amp; the list will be populated with the registered products &amp; prices.</p>
+
+<h4>Using Seller Shops</h4>
+
+<p>To make purchases, player first deposits registered currency items into the deposit slot. Select an item in the products list &amp; press the "Buy" button. If there is adequate money deposited, player will receive the item &amp; the cost will be deducted from the deposited amount. To retrieve any money not spent, press the "Refund" button. If the formspec is closed while there is still a deposit balance, the remaining money will be refunded back to the player. If there is not room in the player's inventory, the remaining balance will be dropped on the ground.</p>
+
+<h4>Using Buyer Shops</h4>
+
+<p>For buyer shops, the product list shows what items can be sold to this shop &amp; how much money a player will receive for each item. To sell to the shop, place an item in the deposit slot. The slot will only accept items that the owner will purchase. Press the "Sell" button to recieve the value of the item(s).</p>
+
+<p><a name="Licensing"></a></p>
+<h3>Licensing</h3>
+
+<ul>
+    <li>Code: <a href="LICENSE.txt">MIT</a></li>
+    <li>Textures: CC0</li>
+</ul>
+
+<p><a name="Dependencies"></a></p>
+<h3>Dependencies</h3>
+
+<ul>
+    <li>Required:</li>
+    <li>none</li>
+    <li>Optional:</li>
+    <li><a href="https://content.minetest.net/packages/VanessaE/currency/">currency</a></li>
+</ul>
+
+<p><a name="Links"></a></p>
+<h3>Links</h3>
+
+<ul>
+    <li><a href="https://content.minetest.net/packages/AntumDeluge/server_shop/"><img src="https://content.minetest.net/packages/AntumDeluge/server_shop/shields/title/" alt="ContentDB"/></a></li>
+    <li><a href="https://github.com/AntumMT/mod-server_shop">GitHub repo</a></li>
+    <li><a href="https://forum.minetest.net/viewtopic.php?t=26645">Forum</a></li>
+    <li><a href="https://antummt.github.io/mod-server_shop/reference/latest/">Reference</a></li>
+    <li><a href="changelog.txt">Changelog</a></li>
+    <li><a href="TODO.txt">TODO</a></li>
+</ul>
+
+
+
+
+
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/AntumDeluge/LDoc/tree/custom">LDoc 1.4.6-antum-dev</a></i>
+<i style="float:right;">Last updated 2021-08-16 06:30:35 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
