@@ -1,7 +1,7 @@
 
---- API
+--- Server Shops API
 --
---  @module api.lua
+--  @topic api.lua
 
 
 local ss = server_shop
@@ -39,10 +39,6 @@ ss.get_currencies = function()
 end
 
 --- Registers an item that can be used as currency.
---
---  TODO:
---
---  - after registering currency, should re-organize table from highest value to lowest
 --
 --  @function server_shop.register_currency
 --  @tparam string item Item name.
@@ -101,12 +97,13 @@ end
 
 --- Registers a shop.
 --
---  Aliases:
---  - server_shop.register_shop
+--  **Aliases:**
+--
+--  - server\_shop.register\_shop
 --
 --  @function server_shop.register
 --  @tparam string id Shop string identifier.
---  @param name Can be a human readable string name or a `table` with fiels "name", "products", & "buyer".
+--  @param name Can be a human readable `string` name or a `table` with fiels "name", "products", & "buyer".
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
 --  @tparam[opt] bool buyer Denotes whether to register seller or buyer shop (default: `false` (seller)).
 ss.register = function(id, name, products, buyer)
@@ -232,7 +229,7 @@ end
 --- Checks if a player has admin rights to for managing shop.
 --
 --  @function server_shop.is_shop_admin
---  @param player Player requesting permissions.
+--  @tparam ObjectRef player Player requesting permissions.
 --  @return `true` if player has *server* priv.
 ss.is_shop_admin = function(player)
 	if not player then
@@ -245,9 +242,9 @@ end
 --- Checks if a player is the owner of node.
 --
 --  @function server_shop.is_shop_owner
---  @param pos Position of shop node.
---  @param player Player to be checked.
---  @return `true` if player is owner.
+--  @tparam vector pos Position of shop node.
+--  @tparam ObjectRef player Player to be checked.
+--  @treturn bool `true` if player is owner.
 ss.is_shop_owner = function(pos, player)
 	if not player then
 		return false

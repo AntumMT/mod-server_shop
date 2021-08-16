@@ -1,4 +1,9 @@
 
+--- Server Shops Formspec
+--
+--  @topic formspec
+
+
 local ss = server_shop
 local S = core.get_translator(ss.modname)
 
@@ -148,9 +153,9 @@ end
 --- Retrieves formspec layout.
 --
 --  @function server_shop.get_formspec
---  @param pos
---  @param player
---  @tparam bool buyer
+--  @tparam vector pos Shop node coordinates.
+--  @tparam player ObjectRef Player to whom the formspec is shown.
+--  @tparam[opt] bool buyer `true` if the shop in question is a buyer shop (default: false).
 --  @treturn string Formspec formatted string.
 ss.get_formspec = function(id, player, buyer)
 		if buyer ~= nil then
@@ -268,9 +273,9 @@ end
 --- Displays formspec to player.
 --
 --  @function server_shop.show_formspec
---  @param pos
---  @param player
---  @tparam bool buyer
+--  @tparam vector pos Shop node coordinates.
+--  @tparam player ObjectRef Player to whom the formspec is shown.
+--  @tparam[opt] bool buyer (deprecated)
 ss.show_formspec = function(pos, player, buyer)
 	if buyer ~= nil then
 		ss.log("warning", "show_formspec: \"buyer\" parameter is deprecated")

@@ -1,4 +1,9 @@
 
+--- Server Shops Nodes
+--
+--  @topic nodes
+
+
 local ss = server_shop
 local S = core.get_translator(ss.modname)
 
@@ -26,6 +31,10 @@ local def = {
 			return ss.is_shop_owner(pos, player) or ss.is_shop_admin(player)
 		end,
 	},
+
+	--- Small Shop Node
+	--
+	--  @node server_shop:shop_small
 	small = {
 		drawtype = "normal",
 		tiles = {
@@ -38,6 +47,11 @@ local def = {
 			"server_shop_side.png",
 		},
 	},
+
+	--- Large Shop Node
+	--
+	--  @node server_shop:shop_large
+	--  @img server_shop_front.png
 	large = {
 		drawtype = "mesh",
 		mesh = "server_shop.obj",
