@@ -3,8 +3,7 @@
 # Translators: Jordan Irwin (AntumDeluge)
 
 
-Seller Shop=Vendedor
-Buyer Shop=Comprador
+Shop=Tienda
 Buy=Comprar
 Sell=Vender
 Refund=Reembolsar

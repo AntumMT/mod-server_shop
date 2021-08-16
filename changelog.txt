@@ -5,7 +5,12 @@ next
 - added Spanish translation
 - added "tall" shop nodes
 - fixed buyer shop not being registered when currency & default mods not available
+- "buy" & "sell" functions are deteremined by shop "type" instead of separate registered nodes
 - default currencies not registered if currency mod not available
+- "get_currencies", "get_shops", & "get_shop" return table copy
+- added methods:
+	- server_shop.unregister
+	- server_shop.shop_type
 
 
 v1.4
