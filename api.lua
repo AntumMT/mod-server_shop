@@ -10,7 +10,7 @@ local sellers = {}
 local buyers = {}
 local shops = sellers -- backward compat
 
-function ss.get_shops(buyer)
+ss.get_shops = function()
 	if buyer then
 		return buyers
 	end
@@ -100,7 +100,7 @@ end
 --  @function server_shop.format_id
 --  @tparam string id Shop identifier string.
 --  @treturn string Formatted string.
-function ss.format_id(id)
+ss.format_id = function(id)
 	return id:trim():gsub("%s", "_")
 end
 
@@ -139,7 +139,7 @@ end
 --  @tparam string id Shop string identifier.
 --  @tparam string name Human readable name.
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
-function ss.register_buyer(id, name, products)
+ss.register_buyer = function(id, name, products)
 	if type(id) ~= "string" then
 		ss.log("error", ss.modname .. ".register_buyer: invalid \"id\" parameter")
 		return
@@ -171,7 +171,7 @@ end
 --  @tparam string name Human readable name.
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
 --  @tparam bool buyer Denotes whether to register seller or buyer shop (default: `false` (seller)).
-function ss.register_shop(id, name, products, buyer)
+ss.register_shop = function(id, name, products, buyer)
 	if buyer then
 		ss.register_buyer(id, name, products)
 	else
@@ -185,7 +185,7 @@ end
 --  @tparam string id String identifier of shop.
 --  @tparam bool buyer Denotes whether seller or buyer shops will be parsed (default: false).
 --  @treturn table Table of shop contents.
-function ss.get_shop(id, buyer)
+ss.get_shop = function(id, buyer)
 	if buyer then
 		return buyers[id]
 	end
@@ -198,8 +198,8 @@ end
 --  @function server_shop.is_registered
 --  @tparam string id Shop string identifier.
 --  @tparam bool buyer Denotes whether to check seller or buyer shops (default: false).
---  @tparam bool `true` if the shop ID is found.
-function ss.is_registered(id, buyer)
+--  @treturn bool `true` if the shop ID is found.
+ss.is_registered = function(id, buyer)
 	return ss.get_shop(id, buyer) ~= nil
 end
 
@@ -208,7 +208,7 @@ end
 --  @function server_shop.is_shop_admin
 --  @param player Player requesting permissions.
 --  @return `true` if player has *server* priv.
-function ss.is_shop_admin(player)
+ss.is_shop_admin = function(player)
 	if not player then
 		return false
 	end
@@ -222,7 +222,7 @@ end
 --  @param pos Position of shop node.
 --  @param player Player to be checked.
 --  @return `true` if player is owner.
-function ss.is_shop_owner(pos, player)
+ss.is_shop_owner = function(pos, player)
 	if not player then
 		return false
 	end

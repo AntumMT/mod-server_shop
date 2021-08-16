@@ -18,7 +18,7 @@ local transaction = dofile(ss.modpath .. "/transaction.lua")
 --  @tparam string id String identifier of shop.
 --  @tparam bool buyer
 --  @treturn string Shop's name representation.
-local function get_shop_name(id, buyer)
+local get_shop_name = function(id, buyer)
 	local shop = ss.get_shop(id, buyer)
 	if shop then
 		return shop.name
@@ -33,7 +33,7 @@ end
 --  @param idx Index of the item to retrieve.
 --  @tparam bool buyer
 --  @return String item identifier or `nil` if shop does not contain item.
-local function get_shop_index(shop_id, idx, buyer)
+local get_shop_index = function(shop_id, idx, buyer)
 	local shop = ss.get_shop(shop_id, buyer)
 	if shop then
 		local product = shop.products[idx]
@@ -50,7 +50,7 @@ end
 --  @param id String identifier of shop.
 --  @tparam bool buyer
 --  @return String of shop contents.
-function get_product_list(id, buyer)
+local get_product_list = function(id, buyer)
 	local products = ""
 	local shop = ss.get_shop(id, buyer)
 
@@ -93,7 +93,7 @@ end
 --  @local
 --  @function format_formname
 --  @tparam bool buyer Denotes buyer or seller (default: `false` (seller)).
-local function format_formname(buyer)
+local format_formname = function(buyer)
 	if buyer then
 		return ss.modname .. ":buy"
 	end
@@ -127,7 +127,7 @@ end
 --  @param player
 --  @tparam bool buyer
 --  @treturn string Formspec formatted string.
-function ss.get_formspec(pos, player, buyer)
+ss.get_formspec = function(pos, player, buyer)
 		buyer = buyer == true
 
 		local smeta = core.get_meta(pos)
@@ -244,7 +244,7 @@ end
 --  @param pos
 --  @param player
 --  @tparam bool buyer
-function ss.show_formspec(pos, player, buyer)
+ss.show_formspec = function(pos, player, buyer)
 	core.show_formspec(player:get_player_name(), format_formname(buyer),
 		ss.get_formspec(pos, player, buyer))
 end
