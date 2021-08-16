@@ -21,9 +21,9 @@ jobs:
     - name: Setup LDoc
       run: git clone --branch=custom https://github.com/AntumDeluge/LDoc.git ldoc
     - name: Checkout & Build Docs
-      run: git clone https://github.com/AntumMT/mod-equip_exam.git equip_exam && cd equip_exam && chmod +x .ldoc/build_versioned_docs.sh && ./.ldoc/build_versioned_docs.sh
+      run: git clone https://github.com/AntumMT/mod-server_shop.git server_shop && cd server_shop && chmod +x .ldoc/build_versioned_docs.sh && ./.ldoc/build_versioned_docs.sh
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: equip_exam/docs/
+        publish_dir: server_shop/docs/
