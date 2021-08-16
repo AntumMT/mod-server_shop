@@ -23,4 +23,3 @@ TODO:
 		- "/server_shop reload"
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
 	- support groups in buyer shops
-	- add Spanish translation
