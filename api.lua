@@ -76,19 +76,23 @@ ss.register_currency = function(item, value)
 end
 
 if ss.use_currency_defaults then
-	local mg_notes = {
-		{"currency:minegeld", 1},
-		{"currency:minegeld_5", 5},
-		{"currency:minegeld_10", 10},
-		{"currency:minegeld_50", 50},
-		{"currency:minegeld_100", 100},
-	}
+	if not core.get_modpath("currency") then
+		ss.log("warning", "currency mod not found, not registering default currencies")
+	else
+		local mg_notes = {
+			{"currency:minegeld", 1},
+			{"currency:minegeld_5", 5},
+			{"currency:minegeld_10", 10},
+			{"currency:minegeld_50", 50},
+			{"currency:minegeld_100", 100},
+		}
 
-	for _, c in ipairs(mg_notes) do
-		ss.register_currency(c[1], c[2])
+		for _, c in ipairs(mg_notes) do
+			ss.register_currency(c[1], c[2])
+		end
+
+		ss.currency_suffix = "MG"
 	end
-
-	ss.currency_suffix = "MG"
 end
 
 --- Checks ID string for invalid characters.

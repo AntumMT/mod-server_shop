@@ -5,6 +5,7 @@ next
 - added Spanish translation
 - added "tall" shop nodes
 - fixed buyer shop not being registered when currency & default mods not available
+- default currencies not registered if currency mod not available
 
 
 v1.4
