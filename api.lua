@@ -19,7 +19,6 @@ function ss.get_shops(buyer)
 end
 
 local registered_currencies = {}
-local currency_count = 0
 
 -- Suffix displayed after deposited amount.
 ss.currency_suffix = nil
@@ -28,15 +27,19 @@ ss.currency_suffix = nil
 --
 --  @function server_shop.currency_is_registered
 --  @treturn bool `true` if at least one currency item is registered.
-function ss.currency_is_registered()
-	return currency_count > 0
+ss.currency_is_registered = function()
+	for k, v in pairs(registered_currencies) do
+		return true
+	end
+
+	return false
 end
 
 --- Retrieves registered currencies & values.
 --
 --  @function server_shop.get_currencies
 --  @treturn table Registered currencies.
-function ss.get_currencies()
+ss.get_currencies = function()
 	return table.copy(registered_currencies)
 end
 
@@ -49,7 +52,7 @@ end
 --  @function server_shop.register_currency
 --  @tparam string item Item name.
 --  @tparam int value Value the item should represent.
-function ss.register_currency(item, value)
+ss.register_currency = function(item, value)
 	if not core.registered_items[item] then
 		ss.log("warning", "Registering unrecognized item as currency: " .. item)
 	end
@@ -68,7 +71,6 @@ function ss.register_currency(item, value)
 	end
 
 	registered_currencies[item] = value
-	currency_count = currency_count + 1
 
 	ss.log("action", item .. " registered as currency with value of " .. tostring(value))
 end
