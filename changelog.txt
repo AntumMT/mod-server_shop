@@ -2,6 +2,7 @@
 next
 ----
 - model moved to simple_models mod
+- added node sounds
 
 
 v1.5
