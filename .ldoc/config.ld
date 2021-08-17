@@ -40,6 +40,7 @@ file = {
 	"api.lua",
 	"formspec.lua",
 	"node.lua",
+	"command.lua",
 }
 
 new_type("setting", "Settings")
