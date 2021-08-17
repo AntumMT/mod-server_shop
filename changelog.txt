@@ -1,4 +1,9 @@
 
+next
+----
+- model moved to simple_models mod
+
+
 v1.5
 ----
 - added "textdomain" line to localization template

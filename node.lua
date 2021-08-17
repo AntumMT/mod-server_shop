@@ -54,7 +54,7 @@ local def = {
 	--  @img server_shop_front.png
 	large = {
 		drawtype = "mesh",
-		mesh = "server_shop.obj",
+		mesh = "node_1x2x1.obj",
 		tiles = {"server_shop_mesh.png",},
 		selection_box = {
 			type = "fixed",
