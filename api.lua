@@ -314,4 +314,68 @@ ss.file_load = function()
 		end
 	end
 end
-# ---
+
+--- Permanently registers a shop.
+--
+--  @function server_shop.file_register
+--  @tparam string id Shop identifier.
+--  @tparam ShopDef def Shop definition.
+ss.file_register = function(id, def)
+	local shops_data = wdata.read("server_shops") or {}
+
+	local existing = {}
+	for idx=1, #shops_data do
+		local entry = shops_data[idx]
+		if (entry.type == "sell" or entry.type == "buy") and id == entry.id then
+			table.insert(existing, 1, idx)
+		end
+	end
+
+	for _, idx in ipairs(existing) do
+		table.remove(shops_data, idx)
+	end
+
+	def.id = id
+	table.insert(shops_data, def)
+
+	ss.register(id, def)
+	wdata.write("server_shops", shops_data)
+end
+
+--- Permanently adds a product to a shop.
+--
+--  @function server_shop.file_add_product
+--  @tparam string id Shop identifier.
+--  @tparam string name Item technical name.
+--  @tparam int value Item value.
+--  @tparam[opt] int idx Shop index for item placement.
+ss.file_add_product = function(id, name, value, idx)
+	local shops_data = wdata.read("server_shops") or {}
+
+	local target_shop
+	for idx=1, #shops_data do
+		local entry = shops_data[idx]
+		if entry.type == "sell" or entry.type == "buy" then
+			if id == entry.id then
+				target_shop = entry
+				break
+			end
+		end
+	end
+
+	if not target_shop then
+		ss.log("error", "cannot add item to non-registered shop ID: " .. id)
+		return false
+	end
+
+	-- FIXME: check for duplicates
+
+	if not idx or idx > #target_shop.products then
+		table.insert(target_shop.products, {name, value})
+	else
+		table.insert(target_shop.products, idx, {name, value})
+	end
+
+	ss.register(id, target_shop)
+	wdata.write("server_shops", shops_data)
+end
