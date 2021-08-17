@@ -3,6 +3,7 @@ next
 ----
 - model moved to simple_models mod
 - added node sounds
+- uses wdata for reading/writing shops config
 
 
 v1.5

@@ -253,3 +253,65 @@ ss.is_shop_owner = function(pos, player)
 	local meta = core.get_meta(pos)
 	return player:get_player_name() == meta:get_string("owner")
 end
+
+local shops_file = core.get_worldpath() .. "/server_shops.json"
+
+local function shop_file_error(msg)
+	ss.log("error", shops_file .. ": " .. msg)
+end
+
+--- Loads configuration from world path.
+--
+--  Configuration file is <world\_path>/server\_shops.json
+--
+--  @function server_shop.file_load
+ss.file_load = function()
+	local shops_data = wdata.read("server_shops") or {}
+
+	for _, shop in ipairs(shops_data) do
+		if shop.type == "currency" then
+			ss.log("warning", "using \"currency\" key in server_shops.json is deprecated, please use \"currencies\"")
+
+			if type(shop.value) ~= "number" or shop.value <= 0 then
+				shop_file_error("invalid or undeclared currency \"value\"; must be a number greater than 0")
+			end
+
+			ss.register_currency(shop.name, shop.value)
+		elseif shop.type == "currencies" then
+			if not shop.currencies then shop.currencies = shop.value end -- allow "value" to be used instead of "currencies"
+			for k, v in pairs(shop.currencies) do
+				ss.register_currency(k, v)
+			end
+		elseif shop.type == "suffix" then
+			if type(shop.value) ~= "string" or shop.value:trim() == "" then
+				shop_file_error("invalid or undeclared suffix \"value\"; must be non-empty string")
+			else
+				ss.currency_suffix = shop.value
+			end
+		elseif shop.type == "sell" or shop.type == "buy" then
+			if type(shop.id) ~= "string" or shop.id:trim() == "" then
+				shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
+			elseif type(shop.name) ~= "string" or shop.name:trim() == "" then
+				shop_file_error("invalid or undeclared \"name\"; must be non-empty string")
+			elseif type(shop.products) ~= "table" then
+				shop_file_error("invalid or undeclared \"products\" list; must be non-empty table")
+			else
+				if not shop.products then shop.products = {} end
+				if #shop.products == 0 then
+					ss.log("warning", shops_file .. ": empty shop list for shop id \"" .. shop.id .. "\"")
+				end
+
+				if shop.type == "sell" then
+					server_shop.register_seller(shop.id, shop.name, shop.products)
+				else
+					server_shop.register_buyer(shop.id, shop.name, shop.products)
+				end
+			end
+		elseif not shop.type then
+			ss.log("error", shops_file .. ": mandatory \"type\" parameter not set")
+		else
+			ss.log("error", shops_file .. ": Unrecognized type: " .. shop.type)
+		end
+	end
+end
+# ---
