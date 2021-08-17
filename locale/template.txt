@@ -19,7 +19,22 @@ WARNING: @1 @2 was dropped on the ground.=
 # chat commands
 Manage shops configuration.=
 command=
+params=
 Must provide a command: @1=
 "@1" command takes no parameters.=
-Shops configuration loaded.=
+Too many parameters.=
 Unknown command: @1=
+
+# reload command
+Shops configuration loaded.=
+
+# register command
+ID=
+name=
+product1@=value,product2@=value,...=
+Must provide ID.=
+Must provide type.=
+Must provide name.=
+Shop type must be "@1" or "@2".=
+"@1" is not a recognized item.=
+Item value must be a number.=

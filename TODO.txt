@@ -14,7 +14,6 @@ TODO:
 	- fix so unknown items don't mess up shop (may become a problem when shops are registered live)
 	- allow shops to be configured live
 	- register chat command "/server_shop" to register live
-		- "/server_shop register <buyer>|<seller> <id>"
 		- "/server_shop unregister <buyer>|<seller> <id>"
 		- "/server_shop add <buyer>|<seller> <id> <item> <price>"
 		- "/server_shop remove <buyer>|<seller> <id> <item>

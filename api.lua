@@ -111,6 +111,10 @@ ss.register = function(id, name, products, buyer)
 		products = name.products
 		buyer = name.buyer
 		name = name.name
+
+		if name.type then
+			buyer = name.type == "buy"
+		end
 	end
 
 	if type(id) ~= "string" then
@@ -411,7 +415,6 @@ ss.prune_shops = function()
 				table.remove(def.products, idx)
 				pruned = true
 			elseif not value then
-				-- FIXME: this should be done in registration method
 				ss.log("warning", "removing item \"" .. pname
 					.. "\" without value from seller shop id \"" .. id .. "\"")
 				table.remove(def.products, idx)
