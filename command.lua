@@ -16,7 +16,7 @@ local commands = {
 }
 
 local format_usage = function(cmd)
-	local usage = "Usage:\n  /"..ss.modname.." "..cmd
+	local usage = S("Usage:").."\n  /"..ss.modname.." "..cmd
 	local params = commands[cmd]
 	if params and params ~= "" then
 		usage = usage.." "..params

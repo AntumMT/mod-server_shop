@@ -18,6 +18,7 @@ WARNING: @1 @2 was dropped on the ground.=AVISO: @1 @2 se cayó en la tierra.
 
 # chat commands
 Manage shops configuration.=Administrar configuración de tiendas.
+Usage:=Uso:
 command=orden
 params=parámetros
 Must provide a command: @1=Debe producir un orden: @1

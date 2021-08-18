@@ -18,6 +18,7 @@ WARNING: @1 @2 was dropped on the ground.=
 
 # chat commands
 Manage shops configuration.=
+Usage:=
 command=
 params=
 Must provide a command: @1=
