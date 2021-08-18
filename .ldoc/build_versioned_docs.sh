@@ -67,7 +67,7 @@ for vinfo in $(git tag -l --sort=-v:refname | grep "^v[0-9]"); do
 
 	# show version info
 	for html in $(find "${d_temp}" -type f -name "*.html"); do
-		sed -i -e "s|^<h1>Sounds</h1>$|<h1>Sounds <span style=\"font-size:12pt;\">(${vinfo})</span></h1>|" "${html}"
+		sed -i -e "s|^<h1>Server Shops</h1>$|<h1>Server Shops <span style=\"font-size:12pt;\">(${vinfo})</span></h1>|" "${html}"
 	done
 
 	# copy screenshot

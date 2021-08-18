@@ -29,10 +29,16 @@ sed -i -e 's/local version = .*$/local version = master/' "${f_config_tmp}"
 # create new files
 ldoc --UNSAFE_NO_SANDBOX -c "${f_config_tmp}" -d "${d_export}/${vinfo}" "${d_root}"
 
+# check exit status
+if test ${retval} -ne 0; then
+	echo -e "\nan error occurred (ldoc return code: ${retval})"
+	exit ${retval}
+fi
+
 # show version info
 echo -e "\nfinding ${vinfo}..."
 for html in $(find "${d_export}/${vinfo}" -type f -name "*.html"); do
-	sed -i -e "s|^<h1>Sounds</h1>$|<h1>Sounds <span style=\"font-size:12pt;\">(${vinfo})</span></h1>|" "${html}"
+	sed -i -e "s|^<h1>Server Shops</h1>$|<h1>Server Shops <span style=\"font-size:12pt;\">(${vinfo})</span></h1>|" "${html}"
 done
 
 # copy screenshot
