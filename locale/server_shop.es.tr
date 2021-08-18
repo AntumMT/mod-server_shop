@@ -25,6 +25,7 @@ Must provide a command: @1=Debe producir un orden: @1
 "@1" command takes no parameters.=Orden "@1" no requiere parametros.
 Too many parameters.=Demasiado parámetros.
 Unknown command: @1=Orden desconocido: @1
+Must provide ID.=Se requiere ID.
 
 # reload command
 Shops configuration loaded.=Configuración de tiendas cargada.
@@ -33,10 +34,13 @@ Shops configuration loaded.=Configuración de tiendas cargada.
 ID=
 name=nombre
 product1@=value,product2@=value,...=producto1@=valor,producto2@=valor,...
-Must provide ID.=Se requiere ID.
 Must provide type.=Se requiere tipo.
 Must provide name.=Se requiere nombre.
 Shop type must be "@1" or "@2".=Tipo de tienda debe ser "@1" o "@2".
 "@1" is not a recognized item.="@1" no es objeto conocido.
 Item value must be a number.=Valor de objeto debe ser número.
 Registered shop with ID: @1=Agregó al registro tienda con ID: @1
+
+# unregister command
+Cannot unregister shop with ID: @1=No puede quitar del registro tienda con ID: @1
+Unregistered shop with ID: @1=Se quitó del registro tienda con ID: @1

@@ -384,6 +384,36 @@ ss.file_add_product = function(id, name, value, idx)
 	wdata.write("server_shops", shops_data)
 end
 
+--- Unregisters a shop & updates configuration.
+--
+--  @function server_shop.file_unregister
+--  @tparam string id Shop identifier.
+--  @treturn bool
+ss.file_unregister = function(id)
+	local shops_data = wdata.read("server_shops") or {}
+
+	local unregister_idx
+	for idx=1, #shops_data do
+		local entry = shops_data[idx]
+		if entry.type == "sell" or entry.type == "buy" then
+			if id == entry.id then
+				unregister_idx = idx
+				break
+			end
+		end
+	end
+
+	if not unregister_idx then
+		ss.log("warning", "cannot unregister unknown shop ID: " .. id)
+		return false
+	end
+
+	table.remove(shops_data, unregister_idx)
+	ss.unregister(id)
+	wdata.write("server_shops", shops_data)
+	return true
+end
+
 --- Prunes unknown items & updates aliases in shops.
 --
 --  @function server_shop.prune_shops

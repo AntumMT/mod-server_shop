@@ -6,7 +6,8 @@ next
 - uses wdata for reading/writing shops config
 - added "server_shop" chat command:
 	- reload: reloads shops configuration
-	- register: registers new shop & adds to configuration
+	- register: registers new shop & updates configuration
+	- unregister: unregister shop id & updates configuration
 
 
 v1.5

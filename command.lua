@@ -8,11 +8,12 @@ local ss = server_shop
 local S = core.get_translator(ss.modname)
 
 
-local command_list = {"reload", "register"}
+local command_list = {"reload", "register", "unregister"}
 local commands = {
 	reload = "",
 	register = "<"..S("ID")..">".." <sell/buy> ".."<"..S("name")..">"
 		.." ["..S("product1=value,product2=value,...").."]",
+	unregister = "<"..S("ID")..">",
 }
 
 local format_usage = function(cmd)
@@ -38,6 +39,9 @@ end
 --  - register
 --    - Registers new shop & adds to configuration.
 --    - parameters: <id> <sell/buy> <name> [product1=value,product2=value,...]
+--  - unregister
+--    - Unregisters shop & updates configuration.
+--    - parameters: <id>
 core.register_chatcommand(ss.modname, {
 	description = S("Manage shops configuration."),
 	privs = {server=true},
@@ -109,6 +113,21 @@ core.register_chatcommand(ss.modname, {
 			ss.prune_shops()
 
 			return true, S("Registered shop with ID: @1", shop_id)
+		elseif cmd == "unregister" then
+			if #params > 1 then
+				return false, S("Too many parameters.").."\n\n"..format_usage(cmd)
+			end
+
+			local shop_id = params[1]
+			if not shop_id then
+				return false, S("Must provide ID.").."\n\n"..format_usage(cmd)
+			end
+
+			if not ss.file_unregister(shop_id) then
+				return false, S("Cannot unregister shop with ID: @1", shop_id)
+			end
+
+			return true, S("Unregistered shop with ID: @1", shop_id)
 		end
 
 		return false, S("Unknown command: @1", cmd)
