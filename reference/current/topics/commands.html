@@ -25,7 +25,7 @@
 
 <div id="navigation">
 <br/>
-<h1>Server Shops <span style="font-size:12pt;">(v1.5)</span></h1>
+<h1>Server Shops <span style="font-size:12pt;">(v1.6)</span></h1>
 
 
 <ul>
@@ -34,7 +34,7 @@
 
 <h2>Contents</h2>
 <ul>
-<li><a href="#Nodes">Nodes</a></li>
+<li><a href="#Chat_Commands">Chat Commands</a></li>
 </ul>
 
 
@@ -43,7 +43,8 @@
   <li><a href="../topics/settings.lua.html">settings</a></li>
   <li><a href="../topics/api.lua.html">api</a></li>
   <li><a href="../topics/formspec.html">formspec</a></li>
-  <li><strong>nodes</strong></li>
+  <li><a href="../topics/nodes.html">nodes</a></li>
+  <li><strong>commands</strong></li>
   <li><a href="../topics/README.md.html">README</a></li>
 </ul>
 
@@ -51,22 +52,18 @@
 
 <div id="content">
 
-<h1>Topic <code>nodes</code></h1>
-<p>Server Shops Nodes</p>
+<h1>Topic <code>commands</code></h1>
+<p>Server Shops Chat Commands</p>
 <p>
 
 </p>
 
 
-<h2><a href="#Nodes">Nodes</a></h2>
+<h2><a href="#Chat_Commands">Chat Commands</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#server_shop:shop_small">server_shop:shop_small</a></td>
-	<td class="summary">Small Shop Node</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#server_shop:shop_large">server_shop:shop_large</a></td>
-	<td class="summary">Large Shop Node</td>
+	<td class="name" nowrap><a href="#server_shop">server_shop &lt;command&gt; [params]</a></td>
+	<td class="summary">Manages shops &amp; config.</td>
 	</tr>
 </table>
 
@@ -74,15 +71,15 @@
 <br/>
 
 
-    <h2 class="section-header "><a name="Nodes"></a>Nodes</h2>
+    <h2 class="section-header "><a name="Chat_Commands"></a>Chat Commands</h2>
 
     <dl class="function">
     <dt>
-    <a name = "server_shop:shop_small"></a>
-    <strong>server_shop:shop_small</strong>
+    <a name = "server_shop &lt;command&gt; [params]"></a>
+    <strong>server_shop &lt;command&gt; [params]</strong>
     </dt>
     <dd>
-    Small Shop Node
+    Manages shops &amp; config.
 
     </ul>
     </ul>
@@ -93,35 +90,33 @@
     </ul>
     </ul>
 
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "server_shop:shop_large"></a>
-    <strong>server_shop:shop_large</strong>
-    </dt>
-    <dd>
-    Large Shop Node
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    <h3>Image:</h3>
     <ul>
-         <img src="../data/server_shop_front.png" style="width:32px;" />
+        <li><span class="parameter">command</span>
+         Command to execute.
+        </li>
+        <li><span class="parameter">params</span>
+         Parameters associated with command.
+         (<em>optional</em>)
+        </li>
     </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">/server_shop &lt;command&gt; [&lt;params&gt;]
+
+Commands:
+- reload
+  - Reloads shops configuration.
+- register
+  - Registers new shop &amp; updates configuration.
+  - parameters: &lt;id&gt; &lt;sell/buy&gt; &lt;name&gt; [product1=value,product2=value,...]
+- unregister
+  - Unregisters shop &amp; updates configuration.
+  - parameters: &lt;id&gt;</pre>
     </ul>
-    </ul>
-
-
-
-
-
 
 </dd>
 </dl>
