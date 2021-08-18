@@ -342,7 +342,6 @@ ss.file_register = function(id, def)
 	def.id = id
 	table.insert(shops_data, def)
 
-	ss.register(id, def)
 	wdata.write("server_shops", shops_data)
 end
 

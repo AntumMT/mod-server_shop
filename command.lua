@@ -110,6 +110,7 @@ core.register_chatcommand(ss.modname, {
 				name = shop_name,
 				products = products,
 			})
+			ss.file_load()
 			ss.prune_shops()
 
 			return true, S("Registered shop with ID: @1", shop_id)
