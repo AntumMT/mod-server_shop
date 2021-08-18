@@ -27,17 +27,19 @@ local format_usage = function(cmd)
 end
 
 
---- Manages shops config.
+--- Manages shops & config.
 --
 --  @chatcmd server_shop
+--  @param command Command to execute.
+--  @param[opt] params Parameters associated with command.
 --  @usage
---  /server_shop command [params]
+--  /server_shop <command> [<params>]
 --
 --  Commands:
 --  - reload
 --    - Reloads shops configuration.
 --  - register
---    - Registers new shop & adds to configuration.
+--    - Registers new shop & updates configuration.
 --    - parameters: <id> <sell/buy> <name> [product1=value,product2=value,...]
 --  - unregister
 --    - Unregisters shop & updates configuration.
