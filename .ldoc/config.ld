@@ -45,6 +45,7 @@ file = {
 
 new_type("setting", "Settings")
 new_type("node", "Nodes")
+new_type("chatcmd", "Chat Commands")
 
 local function video_frame(src)
 	return '<iframe width="560" height="315" src="' .. src
@@ -147,11 +148,24 @@ local setting_handler = function(item)
 	return item
 end
 
+local chatcmd_handler = function(item)
+	for _, p in ipairs(item.params) do
+		if item.modifiers.param[p].opt then
+			item.name = item.name .. " [" .. p .. "]"
+		else
+			item.name = item.name .. " &lt;" .. p .. "&gt;"
+		end
+	end
+
+	return item
+end
 
 function custom_display_name_handler(item, default_handler)
 	if not is_registered(item) then
 		if item.type == "setting" then
 			item = setting_handler(item)
+		elseif item.type == "chatcmd" then
+			item = chatcmd_handler(item)
 		end
 
 		local parse_tags = {"priv", "note"}
