@@ -51,17 +51,6 @@ core.register_chatcommand(ss.modname, {
 			return false, S("Must provide a command: @1", table.concat(command_list, ", "))
 		end
 
-		local unknown_cmd = true
-		for _, c in ipairs(commands) do
-			if cmd == c then
-				unknown_cmd = false
-				break
-			end
-		end
-
-		if unknown_cmd then
-		end
-
 		if cmd == "reload" then
 			if #params > 0 then
 				return false, S('"@1" command takes no parameters.', cmd).."\n\n"..format_usage(cmd)
