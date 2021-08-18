@@ -39,3 +39,4 @@ Must provide name.=
 Shop type must be "@1" or "@2".=
 "@1" is not a recognized item.=
 Item value must be a number.=
+Registered shop with ID: @1=

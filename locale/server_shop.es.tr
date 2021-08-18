@@ -39,3 +39,4 @@ Must provide name.=Se requiere nombre.
 Shop type must be "@1" or "@2".=Tipo de tienda debe ser "@1" o "@2".
 "@1" is not a recognized item.="@1" no es objeto conocido.
 Item value must be a number.=Valor de objeto debe ser número.
+Registered shop with ID: @1=Agregó al registro tienda con ID: @1
