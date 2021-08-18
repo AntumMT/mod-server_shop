@@ -35,10 +35,15 @@ for vinfo in $(git tag -l --sort=-v:refname | grep "^v[0-9]"); do
 	d_temp="${d_ldoc}/temp"
 	mkdir -p "${d_temp}"
 
-	# backward compat
-	f_config="${d_root}/docs/config.ld"
+	f_config="${d_ldoc}/config.ld"
 	if test ! -f "${f_config}"; then
-		f_config="${d_ldoc}/config.ld"
+		# backward compat
+		f_config="${d_root}/docs/config.ld"
+	fi
+
+	if test ! -f "${f_config}"; then
+		echo -e "\nLDoc config not found, skipping build for ${vinfo} ..."
+		continue
 	fi
 
 	parse_readme="${d_ldoc}/parse_readme.py"
