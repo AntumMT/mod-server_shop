@@ -46,7 +46,11 @@ for f in to_update:
 		if not version_set:
 			if "=" in replacement and li.startswith(replacement):
 				key = li.split(" = ")[0]
-				li = "{} = {}".format(key, new_version)
+				if replacement.startswith("local"):
+					# use string in LDoc config trailing 0s aren't trimmed
+					li = '{} = "{}"'.format(key, new_version)
+				else:
+					li = "{} = {}".format(key, new_version)
 				version_set = True
 			elif li == replacement:
 				li = "v{}".format(new_version)
