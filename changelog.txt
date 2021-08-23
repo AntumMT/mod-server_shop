@@ -1,4 +1,9 @@
 
+next
+----
+- updated for simple_models v2021-08-23
+
+
 v1.6
 ----
 - model moved to simple_models mod

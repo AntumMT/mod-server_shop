@@ -60,15 +60,15 @@ local def = {
 	--  @img server_shop_front.png
 	large = {
 		drawtype = "mesh",
-		mesh = "node_1x2x1.obj",
+		mesh = smodel.cube_1x2x1.mesh,
 		tiles = {"server_shop_mesh.png",},
 		selection_box = {
 			type = "fixed",
-			fixed = {-0.5, -0.5, -0.5, 0.5, 1.5, 0.5},
+			fixed = smodel.cube_1x2x1.box,
 		},
 		collision_box = {
 			type = "fixed",
-			fixed = {-0.5, -0.5, -0.5, 0.5, 1.5, 0.5},
+			fixed = smodel.cube_1x2x1.box,
 		},
 	},
 }
