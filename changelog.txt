@@ -1,4 +1,9 @@
 
+next
+----
+- updated for simple_models v2021-08-26
+
+
 v1.6.1
 ------
 - updated for simple_models v2021-08-23

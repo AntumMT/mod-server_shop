@@ -5,6 +5,7 @@
 
 
 local ss = server_shop
+local smodel = simple_models
 local S = core.get_translator(ss.modname)
 
 
