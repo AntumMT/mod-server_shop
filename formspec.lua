@@ -16,7 +16,7 @@ local btn_y = 4.6
 local transaction = dofile(ss.modpath .. "/transaction.lua")
 
 
---- Retrieves shop name by ID.
+--- Retrieves shop name by ID *(deprecated)*.
 --
 --  @local
 --  @function get_shop_name
@@ -24,6 +24,8 @@ local transaction = dofile(ss.modpath .. "/transaction.lua")
 --  @tparam bool buyer
 --  @treturn string Shop's name representation.
 local get_shop_name = function(id, buyer)
+	ss.log("warning", "get_shop_name: function is deprecated")
+
 	if buyer ~= nil then
 		ss.log("warning", "get_shop_name: \"buyer\" parameter is deprecated")
 	end

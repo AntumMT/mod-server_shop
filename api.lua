@@ -56,7 +56,7 @@ ss.register_currency = function(item, value)
 
 	local old_value = registered_currencies[item]
 	if old_value then
-		ss.log("warning", "Overwriting value for currency " .. item
+		ss.log("warning", "overwriting value for currency " .. item
 			.. " from " .. tostring(old_value)
 			.. " to " .. tostring(value))
 	end
@@ -131,12 +131,11 @@ ss.register = function(id, name, products, buyer)
 	id = ss.format_id(id)
 
 	if shops[id] ~= nil then
-		ss.log("warning", "Overwriting shop with id: "..id)
+		ss.log("warning", "overwriting shop with ID: " .. id)
 	end
 
 	shops[id] = {name=name:trim(), products=products, buyer=buyer}
-
-	ss.log("action", "Registered "..ss.shop_type(id).." shop with id: "..id)
+	ss.log("action", "registered " .. ss.shop_type(id) .. " shop with ID: " .. id)
 end
 
 -- backward compatibility
@@ -148,15 +147,14 @@ ss.register_shop = ss.register
 --  @tparam string Shop ID.
 --  @treturn bool `true` if shop was unregistered.
 ss.unregister = function(id)
-	local unregistered = false
 	if shops[id] ~= nil then
 		local stype = ss.shop_type(id)
 		shops[id] = nil
-		ss.log("action", "Unregistered "..stype.." shop with id: "..id)
+		ss.log("action", "unregistered " .. stype .. " shop with ID: " .. id)
 		return true
 	end
 
-	ss.log("action", "Cannot unregister non-registered shop with id: "..id)
+	ss.log("action", "cannot unregister non-registered shop with ID: " .. id)
 	return false
 end
 
@@ -270,6 +268,8 @@ end
 --
 --  @function server_shop.file_load
 ss.file_load = function()
+	ss.log("debug", "loading server_shops.json")
+
 	local shops_data = wdata.read("server_shops") or {}
 
 	for _, shop in ipairs(shops_data) do
@@ -282,7 +282,9 @@ ss.file_load = function()
 
 			ss.register_currency(shop.name, shop.value)
 		elseif shop.type == "currencies" then
-			if not shop.currencies then shop.currencies = shop.value end -- allow "value" to be used instead of "currencies"
+			-- allow "value" to be used instead of "currencies"
+			if not shop.currencies then shop.currencies = shop.value end
+
 			for k, v in pairs(shop.currencies) do
 				ss.register_currency(k, v)
 			end
@@ -293,6 +295,13 @@ ss.file_load = function()
 				ss.currency_suffix = shop.value
 			end
 		elseif shop.type == "sell" or shop.type == "buy" then
+			-- check for unknown keys
+			for k in pairs(shop) do
+				if k ~= "type" and k ~= "id" and k ~= "products" and k ~= "name" then
+					ss.log("warning", "unknown key: " .. k)
+				end
+			end
+
 			if type(shop.id) ~= "string" or shop.id:trim() == "" then
 				shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
 			elseif type(shop.name) ~= "string" or shop.name:trim() == "" then
@@ -312,9 +321,11 @@ ss.file_load = function()
 				end
 			end
 		elseif not shop.type then
-			ss.log("error", shops_file .. ": mandatory \"type\" parameter not set")
+			ss.log("error", shops_file .. ": mandatory \"type\" parameter not set for shop ID: "
+				.. tostring(shop.id))
 		else
-			ss.log("error", shops_file .. ": Unrecognized type: " .. shop.type)
+			ss.log("error", shops_file .. ": Unrecognized type \"" .. shop.type
+				.. "\" for shop ID: " .. tostring(shop.id))
 		end
 	end
 end
@@ -432,32 +443,35 @@ ss.prune_shops = function()
 		end
 	end
 
-	-- prune unregistered items
+	-- prune unregistered items & items without value
 	for id, def in pairs(ss.get_shops()) do
+		local s_type = def.buyer and "buyer" or "seller"
+
 		local pruned = false
 		for idx = #def.products, 1, -1 do
-			local pname = def.products[idx][1]
+			local product = def.products[idx][1]
 			local value = def.products[idx][2]
-			if not core.registered_items[pname] then
-				ss.log("warning", "removing unregistered item \"" .. pname
-					.. "\" from seller shop id \"" .. id .. "\"")
-				table.remove(def.products, idx)
-				pruned = true
-			elseif not value then
-				ss.log("warning", "removing item \"" .. pname
-					.. "\" without value from seller shop id \"" .. id .. "\"")
-				table.remove(def.products, idx)
-				pruned = true
-			end
 
-			-- check aliases
-			local alias_of = core.registered_aliases[pname]
-			if alias_of then
-				ss.log("action", "replacing alias \"" .. pname .. "\" with \"" .. alias_of
-					.. "\" in seller shop id \"" .. id .. "\"")
+			if not value then
+				ss.log("warning", "pruning item \"" .. product
+					.. "\" without value from " .. s_type .. " shop ID: " .. id)
 				table.remove(def.products, idx)
-				table.insert(def.products, idx, {alias_of, value})
 				pruned = true
+			elseif not core.registered_items[product] then
+				local alias_of = core.registered_aliases[product]
+				if not alias_of then
+					ss.log("warning", "pruning unregistered item \"" .. product
+						.. "\" from " .. s_type .. " shop ID: " .. id)
+				end
+
+				table.remove(def.products, idx)
+				pruned = true
+
+				if alias_of then
+					ss.log("action", "replacing alias \"" .. product .. "\" with \""
+						.. alias_of .. "\" in seller shop ID: " .. id)
+					table.insert(def.products, idx, {alias_of, value})
+				end
 			end
 		end
 
