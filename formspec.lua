@@ -273,6 +273,7 @@ local get_config_fs = function(pos)
 
 	local fs = "formspec_version[4]"
 		.. "size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
+		.. "label[0.2,0.4;" .. S("Configure Shop") .. "]"
 		.. "field[2.0,1.5;6,0.5;in_id;ID;" .. n_meta:get_string("id") .. "]"
 		.. "field_close_on_enter[in_id;false]"
 		.. "field[2.0,2.5;6,0.5;in_label;Label;" .. n_meta:get_string("label") .. "]"

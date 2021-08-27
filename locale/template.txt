@@ -9,6 +9,7 @@ Sell=
 Refund=
 Close=
 Configure=
+Configure Shop=
 Save=
 Cancel=
 Deposited: @1=
