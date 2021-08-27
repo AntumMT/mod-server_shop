@@ -6,6 +6,7 @@ next
 - shop ID, label, & infotext are set in config formspec
 - changed server_shops.json format to have keys "shops", "currencies", & "suffix"
 	- legacy formatted files will be updated
+- added methods for removing items from shop lists
 
 
 v1.6.2

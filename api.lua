@@ -379,6 +379,78 @@ ss.add_product_persist = function(id, product, value, idx)
 	end
 end
 
+local get_product_index = function(id, product)
+	local target_shop = ss.get_shop(id)
+
+	if not target_shop or not target_shop.products or #target_shop.products == 0 then
+		return
+	end
+
+	local indexes = {}
+	for idx=1, #target_shop.products do
+		if product == target_shop.products[idx][1] then
+			table.insert(indexes, idx)
+		end
+	end
+
+	return #indexes > 0 and indexes or nil
+end
+
+--- Removes product(s) from a shop.
+--
+--  @function server_shop.remove_product
+--  @tparam string id Shop identifier.
+--  @tparam string product Item technical name.
+--  @tparam[opt] bool all If `false`, only removes first instance of `product` from shop list (default: `true`).
+--  @treturn table Shop definition that was altered or `nil`.
+ss.remove_product = function(id, product, all)
+	all = all ~= false
+
+	local target_shop = shops[id]
+	if not target_shop then
+		ss.log("error", "remove_product: cannot remove from unknown shop ID: " .. tostring(id))
+		return
+	end
+
+	if type(product) ~= "string" then
+		ss.log("error", "remove_product: \"product\" must be a string for shop ID: " .. id)
+		return
+	end
+
+	local indexes = get_product_index(id, product)
+	if not indexes then
+		ss.log("warning", "remove_product: \"" .. product .. "\" was not found in shop ID: " .. id)
+		return
+	end
+
+	if not all then
+		table.remove(target_shop.products, indexes[1])
+	else
+		for i=#indexes, 1, -1 do
+			table.remove(target_shop.products, indexes[i])
+		end
+	end
+
+	return target_shop
+end
+
+--- Removes product(s) from a shop & updates config.
+--
+--  @function server_shop.remove_product_persist
+--  @tparam string id Shop identifier.
+--  @tparam string product Item technical name.
+--  @tparam[opt] bool all If `false`, only removes first instance of `product` from shop list (default: `true`).
+ss.remove_product_persist = function(id, product, all)
+	local target_shop = ss.remove_product(id, product, all)
+	if target_shop then
+		local shops_data = wdata.read("server_shops") or {}
+		shops_data.shops = shops_data.shops or {}
+		shops_data.shops[id] = target_shop
+		wdata.write("server_shops", shops_data)
+	end
+end
+
+
 local shops_file = core.get_worldpath() .. "/server_shops.json"
 
 local function shop_file_error(msg)
