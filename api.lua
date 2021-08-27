@@ -300,58 +300,79 @@ ss.file_load = function()
 
 	local shops_data = wdata.read("server_shops") or {}
 
-	for _, shop in ipairs(shops_data) do
-		if shop.type == "currency" then
-			ss.log("warning", "using \"currency\" key in server_shops.json is deprecated, please use \"currencies\"")
+	-- update from legacy format
+	if #shops_data > 0 then
+		ss.log("action", "updating server_shops.json from legacy format ...")
 
-			if type(shop.value) ~= "number" or shop.value <= 0 then
-				shop_file_error("invalid or undeclared currency \"value\"; must be a number greater than 0")
+		local new_shops_data = {shops={}, currencies={}}
+
+		for _, entry in ipairs(shops_data) do
+			if entry.type == "currency" then
+				ss.log("warning", "using \"currency\" key in server_shops.json is deprecated,"
+					.. " please use \"currencies\"")
+
+				new_shops_data.currencies[entry.name] = entry.value
+			elseif entry.type == "currencies" then
+				-- allow "value" to be used instead of "currencies"
+				if not entry.currencies then entry.currencies = entry.value end
+
+				for k, v in pairs(entry.currencies) do
+					new_shops_data.currencies[k] = v
+				end
+			elseif entry.type == "suffix" then
+				new_shops_data.suffix = entry.value
+			elseif entry.type == "sell" or entry.type == "buy" then
+				if type(entry.id) ~= "string" or entry.id:trim() == "" then
+					shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
+				end
+
+				new_shops_data.shops[entry.id] = {products=entry.products, type=entry.type}
+			elseif not entry.type then
+				shop_file_error("mandatory \"type\" parameter not set for shop ID: "
+					.. tostring(entry.id))
+			else
+				shop_file_error("unrecognized type \"" .. entry.type
+					.. "\" for shop ID: " .. tostring(entry.id))
 			end
+		end
 
-			ss.register_currency(shop.name, shop.value)
-		elseif shop.type == "currencies" then
-			-- allow "value" to be used instead of "currencies"
-			if not shop.currencies then shop.currencies = shop.value end
+		shops_data = new_shops_data
 
-			for k, v in pairs(shop.currencies) do
+		-- backup legacy file
+		os.rename(shops_file, shops_file .. ".bak")
+		-- update config
+		wdata.write("server_shops", shops_data)
+	end
+
+	if shops_data.suffix ~= nil then
+		if type(shops_data.suffix) == "string" then
+			ss.currency_suffix = shops_data.suffix
+		else
+			shop_file_error("\"suffix\" must be a string")
+		end
+	end
+
+	if shops_data.currencies ~= nil then
+		if type(shops_data.currencies) == "table" then
+			for k, v in pairs(shops_data.currencies) do
 				ss.register_currency(k, v)
 			end
-		elseif shop.type == "suffix" then
-			if type(shop.value) ~= "string" or shop.value:trim() == "" then
-				shop_file_error("invalid or undeclared suffix \"value\"; must be non-empty string")
-			else
-				ss.currency_suffix = shop.value
-			end
-		elseif shop.type == "sell" or shop.type == "buy" then
-			-- check for unknown keys
-			for k in pairs(shop) do
-				if k ~= "type" and k ~= "id" and k ~= "products" and k ~= "name" then
-					ss.log("warning", "unknown key: " .. k)
-				end
-			end
-
-			if shop.name ~= nil then
-				ss.log("warning", "server_shops.json: \"name\" attribute is deprecated")
-			end
-
-			if type(shop.id) ~= "string" or shop.id:trim() == "" then
-				shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
-			elseif type(shop.products) ~= "table" then
-				shop_file_error("invalid or undeclared \"products\" list; must be non-empty table")
-			else
-				if not shop.products then shop.products = {} end
-				if #shop.products == 0 then
-					ss.log("warning", shops_file .. ": empty shop list for shop id \"" .. shop.id .. "\"")
-				end
-
-				ss.register(shop.id, shop.products, shop.type == "buy")
-			end
-		elseif not shop.type then
-			ss.log("error", shops_file .. ": mandatory \"type\" parameter not set for shop ID: "
-				.. tostring(shop.id))
 		else
-			ss.log("error", shops_file .. ": Unrecognized type \"" .. shop.type
-				.. "\" for shop ID: " .. tostring(shop.id))
+			shop_file_error("\"currencies\" must be a table")
+		end
+	end
+
+	if shops_data.shops ~= nil then
+		if type(shops_data.shops) == "table" then
+			for id, def in pairs(shops_data.shops) do
+				if def.type ~= "sell" and def.type ~= "buy" then
+					shop_file_error("shop \"type\" must by either \"sell\" or \"buy\" for ID: " .. id)
+				else
+					ss.register(id, def.products, def.type == "buy")
+				end
+			end
+		else
+			shop_file_error("\"shops\" must be a table")
 		end
 	end
 end
@@ -364,25 +385,14 @@ end
 --  @tparam[opt] bool buyer
 ss.file_register = function(id, products, buyer)
 	local shops_data = wdata.read("server_shops") or {}
-
-	local existing = {}
-	for idx=1, #shops_data do
-		local entry = shops_data[idx]
-		if (entry.type == "sell" or entry.type == "buy") and id == entry.id then
-			table.insert(existing, 1, idx)
-		end
-	end
-
-	for _, idx in ipairs(existing) do
-		table.remove(shops_data, idx)
-	end
+	shops_data.shops = shops_data.shops or {}
 
 	local s_type = "sell"
 	if buyer then
 		s_type = "buy"
 	end
 
-	table.insert(shops_data, {id=id, products=products, type=s_type})
+	shops_data.shops[id] = {products=products, type=s_type}
 	wdata.write("server_shops", shops_data)
 end
 
@@ -395,20 +405,17 @@ end
 --  @tparam[opt] int idx Shop index for item placement.
 ss.file_add_product = function(id, name, value, idx)
 	local shops_data = wdata.read("server_shops") or {}
-
-	local target_shop
-	for idx=1, #shops_data do
-		local entry = shops_data[idx]
-		if entry.type == "sell" or entry.type == "buy" then
-			if id == entry.id then
-				target_shop = entry
-				break
-			end
-		end
-	end
+	shops_data.shops = shops_data.shops or {}
+	local target_shop = shops_data[id]
 
 	if not target_shop then
-		ss.log("error", "cannot add item to non-registered shop ID: " .. id)
+		ss.log("error", "file_add_product: cannot add item to unknown shop ID: " .. tostring(id))
+		return false
+	elseif type(name) ~= "string" then
+		ss.log("error", "file_add_product: \"name\" must be a string for shop ID: " .. id)
+		return false
+	elseif type(value) ~= "number" then
+		ss.log("error", "file_add_product: \"value\" must be a number for shop ID: " .. id)
 		return false
 	end
 
@@ -431,24 +438,14 @@ end
 --  @treturn bool
 ss.file_unregister = function(id)
 	local shops_data = wdata.read("server_shops") or {}
+	shops_data.shops = shops_data.shops or {}
 
-	local unregister_idx
-	for idx=1, #shops_data do
-		local entry = shops_data[idx]
-		if entry.type == "sell" or entry.type == "buy" then
-			if id == entry.id then
-				unregister_idx = idx
-				break
-			end
-		end
-	end
-
-	if not unregister_idx then
+	if not shops_data.shops[id] then
 		ss.log("warning", "cannot unregister unknown shop ID: " .. id)
 		return false
 	end
 
-	table.remove(shops_data, unregister_idx)
+	shops_data.shops[id] = nil
 	ss.unregister(id)
 	wdata.write("server_shops", shops_data)
 	return true
