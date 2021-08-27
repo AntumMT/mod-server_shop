@@ -21,6 +21,7 @@ You haven't deposited enough money.=
 You purchased @1 @2 for @3 @4.=
 You sold @1 @2 for @3 @4.=
 WARNING: @1 @2 was dropped on the ground.=
+Cannot use shops because there are no registered currencies.=
 
 # chat commands
 Manage shops configuration.=

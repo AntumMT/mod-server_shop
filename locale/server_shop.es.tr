@@ -21,6 +21,7 @@ You haven't deposited enough money.=No has depositado suficiente dinero.
 You purchased @1 @2 for @3 @4.=Compraste @1 @2 por @3 @4.
 You sold @1 @2 for @3 @4.=Vendiste @1 @2 por @3 @4.
 WARNING: @1 @2 was dropped on the ground.=AVISO: @1 @2 se cayó en la tierra.
+Cannot use shops because there are no registered currencies.=No se pueden usar las tiendas porque no hay monedas registradas.
 
 # chat commands
 Manage shops configuration.=Administrar configuración de tiendas.
