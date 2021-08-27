@@ -420,7 +420,7 @@ end
 --  @tparam string id Shop identifier.
 --  @tparam string product Item technical name.
 --  @tparam[opt] bool all If `false`, only removes first instance of `product` from shop list (default: `true`).
---  @treturn table Shop definition that was altered or `nil`.
+--  @return Shop definition that was altered or `nil` & number of items removed.
 ss.remove_product = function(id, product, all)
 	all = all ~= false
 
@@ -441,15 +441,18 @@ ss.remove_product = function(id, product, all)
 		return
 	end
 
+	local count = 0
 	if not all then
 		table.remove(target_shop.products, indexes[1])
+		count = 1
 	else
 		for i=#indexes, 1, -1 do
 			table.remove(target_shop.products, indexes[i])
+			count = count + 1
 		end
 	end
 
-	return target_shop
+	return target_shop, count
 end
 
 --- Removes product(s) from a shop & updates config.
@@ -458,14 +461,17 @@ end
 --  @tparam string id Shop identifier.
 --  @tparam string product Item technical name.
 --  @tparam[opt] bool all If `false`, only removes first instance of `product` from shop list (default: `true`).
+--  @treturn int Number of items removed.
 ss.remove_product_persist = function(id, product, all)
-	local target_shop = ss.remove_product(id, product, all)
+	local target_shop, count = ss.remove_product(id, product, all)
 	if target_shop then
 		local shops_data = wdata.read("server_shops") or {}
 		shops_data.shops = shops_data.shops or {}
 		shops_data.shops[id] = target_shop
 		wdata.write("server_shops", shops_data)
 	end
+
+	return count
 end
 
 
