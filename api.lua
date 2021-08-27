@@ -95,6 +95,27 @@ ss.format_id = function(id)
 	return id:trim():gsub("%s", "_")
 end
 
+--- Used for debugging.
+--
+--  @local
+--  @tparam table products
+--  @tparam[opt] string delim
+local format_shop_list = function(products, delim)
+	delim = delim or ", "
+
+	local p_list = {}
+	for _, p in ipairs(products) do
+		local p_string = tostring(p[1]) .. ": " .. tostring(p[2])
+		if ss.currency_suffix then
+			p_string = p_string .. " " .. ss.currency_suffix
+		end
+
+		table.insert(p_list, p_string)
+	end
+
+	return table.concat(p_list, delim)
+end
+
 --- Registers a shop.
 --
 --  **Aliases:**
@@ -103,28 +124,27 @@ end
 --
 --  @function server_shop.register
 --  @tparam string id Shop string identifier.
---  @param name Can be a human readable `string` name or a `table` with fiels "name", "products", & "buyer".
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
---  @tparam[opt] bool buyer Denotes whether to register seller or buyer shop (default: `false` (seller)).
-ss.register = function(id, name, products, buyer)
-	if type(name) == "table" then
-		products = name.products
-		buyer = name.buyer
-		name = name.name
-
-		if name.type then
-			buyer = name.type == "buy"
-		end
-	end
-
+--  @tparam[opt] bool buyer
+ss.register = function(id, products, buyer, buyer_old)
 	if type(id) ~= "string" then
 		ss.log("error", ss.modname .. ".register: invalid \"id\" parameter")
 		return
-	elseif type(name) ~= "string" then
-		ss.log("error", ss.modname .. ".register: invalid \"name\" parameter")
-		return
-	elseif type(products) ~= "table" then
-		ss.log("error", ss.modname .. ".register: invalid \"products\" parameter")
+	end
+
+	local shop_def = {}
+
+	if type(products) == "string" then
+		ss.log("warning", ss.modname .. ".register: string \"products\" parameter deprecated")
+		shop_def.products = buyer
+		shop_def.buyer = buyer_old == true
+	else
+		shop_def.products = products
+		shop_def.buyer = buyer == true
+	end
+
+	if type(shop_def.products) ~= "table" then
+		ss.log("error", ss.modname .. ".register: invalid \"products\" list")
 		return
 	end
 
@@ -134,8 +154,9 @@ ss.register = function(id, name, products, buyer)
 		ss.log("warning", "overwriting shop with ID: " .. id)
 	end
 
-	shops[id] = {name=name:trim(), products=products, buyer=buyer}
+	shops[id] = shop_def
 	ss.log("action", "registered " .. ss.shop_type(id) .. " shop with ID: " .. id)
+	ss.log("debug", "product list:\n  " .. format_shop_list(shops[id].products, "\n  "))
 end
 
 -- backward compatibility
@@ -161,21 +182,28 @@ end
 --- Registers a seller shop.
 --
 --  @function server_shop.register_seller
---  @tparam string id Shop string identifier.
---  @tparam string name Human readable name.
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
-ss.register_seller = function(id, name, products)
-	return ss.register(id, name, products)
+ss.register_seller = function(id, products, old_products)
+	if type(products) == "string" then
+		ss.log("warning", ss.modname .. ".register_seller: string \"products\" parameter deprecated")
+		products = old_products
+	end
+
+	return ss.register(id, products)
 end
 
 --- Registers a buyer shop.
 --
 --  @function server_shop.register_buyer
 --  @tparam string id Shop string identifier.
---  @tparam string name Human readable name.
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
-ss.register_buyer = function(id, name, products)
-	return ss.register(id, name, products, true)
+ss.register_buyer = function(id, products, old_products)
+	if type(products) == "string" then
+		ss.log("warning", ss.modname .. ".register_buyer: string \"products\" parameter deprecated")
+		products = old_products
+	end
+
+	return ss.register(id, products, true)
 end
 
 --- Retrieves shop product list.
@@ -302,10 +330,12 @@ ss.file_load = function()
 				end
 			end
 
+			if shop.name ~= nil then
+				ss.log("warning", "server_shops.json: \"name\" attribute is deprecated")
+			end
+
 			if type(shop.id) ~= "string" or shop.id:trim() == "" then
 				shop_file_error("invalid or undeclared \"id\"; must be non-empty string")
-			elseif type(shop.name) ~= "string" or shop.name:trim() == "" then
-				shop_file_error("invalid or undeclared \"name\"; must be non-empty string")
 			elseif type(shop.products) ~= "table" then
 				shop_file_error("invalid or undeclared \"products\" list; must be non-empty table")
 			else
@@ -314,11 +344,7 @@ ss.file_load = function()
 					ss.log("warning", shops_file .. ": empty shop list for shop id \"" .. shop.id .. "\"")
 				end
 
-				if shop.type == "sell" then
-					server_shop.register_seller(shop.id, shop.name, shop.products)
-				else
-					server_shop.register_buyer(shop.id, shop.name, shop.products)
-				end
+				ss.register(shop.id, shop.products, shop.type == "buy")
 			end
 		elseif not shop.type then
 			ss.log("error", shops_file .. ": mandatory \"type\" parameter not set for shop ID: "
@@ -476,8 +502,7 @@ ss.prune_shops = function()
 		end
 
 		if pruned then
-			ss.unregister(id)
-			ss.register(id, def)
+			ss.register(id, def.products, def.buyer)
 		end
 	end
 end
