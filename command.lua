@@ -107,10 +107,7 @@ core.register_chatcommand(ss.modname, {
 				end
 			end
 
-			ss.file_register(shop_id, {
-				type = shop_type,
-				products = products,
-			})
+			ss.file_register(shop_id, products, shop_type == "buy")
 			ss.file_load()
 			ss.prune_shops()
 

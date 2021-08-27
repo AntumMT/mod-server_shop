@@ -360,8 +360,9 @@ end
 --
 --  @function server_shop.file_register
 --  @tparam string id Shop identifier.
---  @tparam ShopDef def Shop definition.
-ss.file_register = function(id, def)
+--  @tparam ProductList products List of products & values.
+--  @tparam[opt] bool buyer
+ss.file_register = function(id, products, buyer)
 	local shops_data = wdata.read("server_shops") or {}
 
 	local existing = {}
@@ -376,9 +377,12 @@ ss.file_register = function(id, def)
 		table.remove(shops_data, idx)
 	end
 
-	def.id = id
-	table.insert(shops_data, def)
+	local s_type = "sell"
+	if buyer then
+		s_type = "buy"
+	end
 
+	table.insert(shops_data, {id=id, products=products, type=s_type})
 	wdata.write("server_shops", shops_data)
 end
 
