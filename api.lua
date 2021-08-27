@@ -162,6 +162,27 @@ end
 -- backward compatibility
 ss.register_shop = ss.register
 
+--- Registers a shop & updates config.
+--
+--  @function server_shop.register_persist
+--  @tparam string id Shop string identifier.
+--  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
+--  @tparam[opt] bool buyer
+ss.register_persist = function(id, products, buyer)
+	ss.register(id, products, buyer)
+
+	local shops_data = wdata.read("server_shops") or {}
+	shops_data.shops = shop_data.shops or {}
+
+	local s_type = "sell"
+	if buyer then
+		s_type = "buy"
+	end
+
+	shops_data.shops[id] = {products=products, type=s_type}
+	wdata.write("server_shops", shops_data)
+end
+
 --- Unregisters a shop.
 --
 --  @function server_shop.unregister
@@ -177,6 +198,25 @@ ss.unregister = function(id)
 
 	ss.log("action", "cannot unregister non-registered shop with ID: " .. id)
 	return false
+end
+
+--- Unregisters a shop & updates config.
+--
+--  @function server_shop.unregister
+--  @tparam string Shop ID.
+--  @treturn bool `true` if shop was unregistered.
+ss.unregister_persist = function(id)
+	local retval = ss.unregister(id)
+
+	if retval then
+		local shops_data = wdata.read("server_shops") or {}
+		shops_data.shops = shop_data.shops or {}
+
+		shops_data.shops[id] = nil
+		wdata.write("server_shops", shops_data)
+	end
+
+	return retval
 end
 
 --- Registers a seller shop.
@@ -377,25 +417,6 @@ ss.file_load = function()
 	end
 end
 
---- Permanently registers a shop.
---
---  @function server_shop.file_register
---  @tparam string id Shop identifier.
---  @tparam ProductList products List of products & values.
---  @tparam[opt] bool buyer
-ss.file_register = function(id, products, buyer)
-	local shops_data = wdata.read("server_shops") or {}
-	shops_data.shops = shops_data.shops or {}
-
-	local s_type = "sell"
-	if buyer then
-		s_type = "buy"
-	end
-
-	shops_data.shops[id] = {products=products, type=s_type}
-	wdata.write("server_shops", shops_data)
-end
-
 --- Permanently adds a product to a shop.
 --
 --  @function server_shop.file_add_product
@@ -429,26 +450,6 @@ ss.file_add_product = function(id, name, value, idx)
 
 	ss.register(id, target_shop)
 	wdata.write("server_shops", shops_data)
-end
-
---- Unregisters a shop & updates configuration.
---
---  @function server_shop.file_unregister
---  @tparam string id Shop identifier.
---  @treturn bool
-ss.file_unregister = function(id)
-	local shops_data = wdata.read("server_shops") or {}
-	shops_data.shops = shops_data.shops or {}
-
-	if not shops_data.shops[id] then
-		ss.log("warning", "cannot unregister unknown shop ID: " .. id)
-		return false
-	end
-
-	shops_data.shops[id] = nil
-	ss.unregister(id)
-	wdata.write("server_shops", shops_data)
-	return true
 end
 
 --- Prunes unknown items & updates aliases in shops.

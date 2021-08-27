@@ -107,10 +107,7 @@ core.register_chatcommand(ss.modname, {
 				end
 			end
 
-			ss.file_register(shop_id, products, shop_type == "buy")
-			ss.file_load()
-			ss.prune_shops()
-
+			ss.register_persist(shop_id, products, shop_type == "buy")
 			return true, S("Registered shop with ID: @1", shop_id)
 		elseif cmd == "unregister" then
 			if #params > 1 then
@@ -122,7 +119,7 @@ core.register_chatcommand(ss.modname, {
 				return false, S("Must provide ID.").."\n\n"..format_usage(cmd)
 			end
 
-			if not ss.file_unregister(shop_id) then
+			if not ss.unregister_persist(shop_id) then
 				return false, S("Cannot unregister shop with ID: @1", shop_id)
 			end
 
