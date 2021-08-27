@@ -41,7 +41,6 @@ ID=
 name=nombre
 product1@=value,product2@=value,...=producto1@=valor,producto2@=valor,...
 Must provide type.=Se requiere tipo.
-Must provide name.=Se requiere nombre.
 Shop type must be "@1" or "@2".=Tipo de tienda debe ser "@1" o "@2".
 "@1" is not a recognized item.="@1" no es objeto conocido.
 Item value must be a number.=Valor de objeto debe ser número.
