@@ -19,3 +19,5 @@ TODO:
 		- "/server_shop remove <buyer>|<seller> <id> <item>
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
 	- support groups in buyer shops
+	- change server_shops.json format to have keys "shops", "currencies", & "suffix"
+	- use "persist" option for updating server_shops.json when shops are (un)registered/modified
