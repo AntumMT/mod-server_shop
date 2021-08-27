@@ -274,11 +274,11 @@ local get_config_fs = function(pos)
 	local fs = "formspec_version[4]"
 		.. "size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
 		.. "label[0.2,0.4;" .. S("Configure Shop") .. "]"
-		.. "field[2.0,1.5;6,0.5;in_id;ID;" .. n_meta:get_string("id") .. "]"
+		.. "field[2.0,1.5;6,0.5;in_id;" .. S("ID") .. ";" .. n_meta:get_string("id") .. "]"
 		.. "field_close_on_enter[in_id;false]"
-		.. "field[2.0,2.5;6,0.5;in_label;Label;" .. n_meta:get_string("label") .. "]"
+		.. "field[2.0,2.5;6,0.5;in_label;" .. S("Label") .. ";" .. n_meta:get_string("label") .. "]"
 		.. "field_close_on_enter[in_label;false]"
-		.. "textarea[2.0,3.5;6,2.5;in_info;Infotext;" .. n_meta:get_string("infotext") .. "]"
+		.. "textarea[2.0,3.5;6,2.5;in_info;" .. S("Infotext") .. ";" .. n_meta:get_string("infotext") .. "]"
 		.. "button[" .. margin_r-(btn_w+0.2) .. "," .. margin_b .. ";" .. btn_w
 				.. ",0.75;btn_save;" .. S("Save") .. "]"
 		.. "button[" .. margin_r .. "," .. margin_b .. ";" .. btn_w
