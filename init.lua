@@ -5,6 +5,8 @@ local ss = server_shop
 ss.modname = core.get_current_modname()
 ss.modpath = core.get_modpath(ss.modname)
 
+local debug_mods = core.settings:get_bool("debug_mods", false)
+
 function ss.log(lvl, msg)
 	if not msg then
 		msg = lvl
@@ -12,6 +14,14 @@ function ss.log(lvl, msg)
 	end
 
 	msg = "[" .. ss.modname .. "] " .. msg
+
+	if lvl == "debug" then
+		if not debug_mods then return end
+
+		msg = "[DEBUG] " .. msg
+		lvl = nil
+	end
+
 	if not lvl then
 		core.log(msg)
 	else
