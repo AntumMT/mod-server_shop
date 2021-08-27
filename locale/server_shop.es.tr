@@ -33,20 +33,20 @@ Must provide a command: @1=Debe producir un orden: @1
 Too many parameters.=Demasiado parámetros.
 Unknown command: @1=Orden desconocido: @1
 Must provide ID.=Se requiere ID.
-
-# reload command
 Shops configuration loaded.=Configuración de tiendas cargada.
-
-# register command
 ID=
 name=nombre
+product=producto
 product1@=value,product2@=value,...=producto1@=valor,producto2@=valor,...
 Must provide type.=Se requiere tipo.
 Shop type must be "@1" or "@2".=Tipo de tienda debe ser "@1" o "@2".
 "@1" is not a recognized item.="@1" no es objeto conocido.
 Item value must be a number.=Valor de objeto debe ser número.
 Registered shop with ID: @1=Agregó al registro tienda con ID: @1
-
-# unregister command
-Cannot unregister shop with ID: @1=No puede quitar del registro tienda con ID: @1
 Unregistered shop with ID: @1=Se quitó del registro tienda con ID: @1
+Cannot unregister shop with ID: @1=No puede quitar del registro tienda con ID: @1
+Added 1 item to shop ID @1.=Se agregó 1 producto a tienda con ID @1.
+Added @1 items to shop ID @2.=Se agregó @1 productos a tienda con ID @2.
+Removed 1 item from shop ID @1.=Se quitó 1 producto de tienda con ID @1.
+Removed @1 items from shop ID @2.=Se quitó @1 productos de tienda con ID @2.
+An error occurred when trying to remove @1 from shop ID @2.=Se occurió un error al intentar de quitar @1 de tienda con ID @2.

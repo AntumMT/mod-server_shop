@@ -8,12 +8,15 @@ local ss = server_shop
 local S = core.get_translator(ss.modname)
 
 
-local command_list = {"reload", "register", "unregister"}
+local command_list = {"reload", "register", "unregister", "add", "remove", "removeall"}
 local commands = {
 	reload = "",
 	register = "<" .. S("ID") .. ">" .. " <sell/buy> "
 		.. " [" .. S("product1=value,product2=value,...") .. "]",
 	unregister = "<" .. S("ID") .. ">",
+	add = "<" .. S("ID") .. "> <" .. S("product1=value,product2=value,...") .. ">",
+	remove = "<" .. S("ID") .. "> <" .. S("product") .. ">",
+	removeall = "<" .. S("ID") .. "> <" .. S("product") .. ">",
 }
 
 local format_usage = function(cmd)
@@ -44,6 +47,15 @@ end
 --  - unregister
 --    - Unregisters shop & updates configuration.
 --    - parameters: <id>
+--  - add
+--    - Adds 1 or more items to a shop's product list.
+--    - parameters: <id> <product1=value,product2=value,...>
+--  - remove
+--    - Removes the first instance of an item from a shop's product list.
+--    - parameters: <id> <product>
+--  - removeall
+--    - Removes all instances of an item from a shop's product list.
+--    - parameters: <id> <product>
 core.register_chatcommand(ss.modname, {
 	description = S("Manage shops configuration."),
 	privs = {server=true},
@@ -56,6 +68,8 @@ core.register_chatcommand(ss.modname, {
 		if not cmd then
 			return false, S("Must provide a command: @1", table.concat(command_list, ", "))
 		end
+
+		local shop_id = params[1]
 
 		if cmd == "reload" then
 			if #params > 0 then
@@ -72,7 +86,6 @@ core.register_chatcommand(ss.modname, {
 					.. format_usage(cmd)
 			end
 
-			local shop_id = params[1]
 			local shop_type = params[2]
 			local shop_products = params[3]
 
@@ -111,12 +124,12 @@ core.register_chatcommand(ss.modname, {
 			return true, S("Registered shop with ID: @1", shop_id)
 		elseif cmd == "unregister" then
 			if #params > 1 then
-				return false, S("Too many parameters.").."\n\n"..format_usage(cmd)
+				return false, S("Too many parameters.") .. "\n\n"
+					.. format_usage(cmd)
 			end
 
-			local shop_id = params[1]
 			if not shop_id then
-				return false, S("Must provide ID.").."\n\n"..format_usage(cmd)
+				return false, S("Must provide ID.") .. "\n\n" .. format_usage(cmd)
 			end
 
 			if not ss.unregister_persist(shop_id) then
@@ -124,6 +137,74 @@ core.register_chatcommand(ss.modname, {
 			end
 
 			return true, S("Unregistered shop with ID: @1", shop_id)
+		elseif cmd == "add" then
+			if #params > 2 then
+				return false, S("Too many parameters.") .. "\n\n"
+					.. format_usage(cmd)
+			end
+
+			if not shop_id then
+				return false, S("Must provide ID.") .. "\n\n" .. format_usage(cmd)
+			end
+
+			local shop_products = params[2]
+			if not shop_products then
+				return false, S("Must provide product.") .. "\n\n" .. format_usage(cmd)
+			end
+
+			local products = {}
+			shop_products = shop_products:split(",")
+			for _, p in ipairs(shop_products) do
+				local item = p:split("=")
+				local item_name = item[1]
+				local item_value = tonumber(item[2])
+
+				if not core.registered_items[item_name] then
+					return false, S('"@1" is not a recognized item.', item_name)
+						.. "\n\n" .. format_usage(cmd)
+				elseif not item_value then
+					return false, S("Item value must be a number.")
+						.. "\n\n" .. format_usage(cmd)
+				end
+
+				table.insert(products, {item_name, item_value})
+			end
+
+			ss.add_product_persist(shop_id, products)
+			if #products == 1 then
+				return true, S("Added 1 item to shop ID @1.", shop_id)
+			else
+				return true, S("Added @1 items to shop ID @2.", #products, shop_id)
+			end
+		elseif cmd == "remove" or cmd == "removeall" then
+			if #params > 2 then
+				return false, S("Too many parameters.") .. "\n\n"
+					.. format_usage(cmd)
+			end
+
+			if not shop_id then
+				return false, S("Must provide ID.").. "\n\n" .. format_usage(cmd)
+			end
+
+			local product = params[2]
+			if not product then
+				return false, S("Must provide product.") .. "\n\n" .. format_usage(cmd)
+			end
+
+			local count = 0
+			if cmd == "remove" then
+				count = ss.remove_product_persist(shop_id, product, false)
+			else
+				count = ss.remove_product_persist(shop_id, product, true)
+			end
+
+			if count == 1 then
+				return true, S("Removed 1 item from shop ID @1.", shop_id)
+			elseif count > 1 then
+				return true, S("Removed @1 items from shop ID @2.", count, shop_id)
+			end
+
+			return false, S("An error occurred when trying to remove @1 from shop ID @2.")
 		end
 
 		return false, S("Unknown command: @1", cmd)

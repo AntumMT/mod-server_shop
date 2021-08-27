@@ -14,8 +14,5 @@ TODO:
 	- add player shops
 	- fix so unknown items don't mess up shop (may become a problem when shops are registered live)
 	- allow shops to be configured live
-	- register chat command "/server_shop" to register live
-		- "/server_shop add <buyer>|<seller> <id> <item> <price>"
-		- "/server_shop remove <buyer>|<seller> <id> <item>
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
 	- support groups in buyer shops

@@ -7,6 +7,10 @@ next
 - changed server_shops.json format to have keys "shops", "currencies", & "suffix"
 	- legacy formatted files will be updated
 - added methods for removing items from shop lists
+- added "server_shop" chat sub-commands:
+	- add: adds 1 or more items to a shop's product list
+	- remove: removes the first instance of an item from a shop's product list
+	- removeall: removes all instances of an item from a shop's product list
 
 
 v1.6.2
