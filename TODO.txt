@@ -9,7 +9,7 @@ TODO:
 	- fix stepping sound for "large" node
 - Misc.:
 	- make usable with "folks" mod
-	- set shop name from formspec instead of registration so shops with different names can use same content
+	- remove deprecated attribute "name" from shop configuration & registration
 	- add player shops
 	- fix so unknown items don't mess up shop (may become a problem when shops are registered live)
 	- allow shops to be configured live

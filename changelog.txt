@@ -1,4 +1,9 @@
 
+next
+----
+- shop labels are configured from formspec instead of shop name attribute
+
+
 v1.6.2
 ------
 - updated for simple_models v2021-08-26

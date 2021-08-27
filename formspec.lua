@@ -155,13 +155,9 @@ end
 --  @function server_shop.get_formspec
 --  @tparam vector pos Shop node coordinates.
 --  @tparam ObjectRef player Player to whom the formspec is shown.
---  @tparam[opt] bool buyer `true` if the shop in question is a buyer shop (default: false).
+--  @tparam[opt] MetaRef n_meta
 --  @treturn string Formspec formatted string.
-ss.get_formspec = function(id, player, buyer)
-		if buyer ~= nil then
-			ss.log("warning", "get_formspec: \"buyer\" parameter is deprecated")
-		end
-
+ss.get_formspec = function(id, player, n_meta)
 		local pmeta = player:get_meta()
 		local shop = ss.get_shop(id)
 
@@ -195,16 +191,15 @@ ss.get_formspec = function(id, player, buyer)
 					..btn_close
 		end
 
-		if shop and shop.name and shop.name ~= "" then
-			formspec = formspec .. "label[0.2,0.4;" .. shop.name .. "]"
+		local shop_name = n_meta:get_string("label")
+		if shop_name ~= "" then
+			formspec = formspec .. "label[0.2,0.4;" .. shop_name .. "]"
 		end
 
 		if ss.is_shop_admin(player) then
 			formspec = formspec
-				.. "button[" .. tostring(fs_width-6.2) .. ",0.2;" .. tostring(btn_w)
-				.. ",0.75;btn_id;" .. S("Set ID") .. "]"
-				.. "field[" .. tostring(fs_width-4.3) .. ",0.2;4.1,0.75;input_id;;" .. id .. "]"
-				.. "field_close_on_enter[input_id;false]"
+				.. "button[" .. margin_r .. ",0.2;" .. tostring(btn_w)
+				.. ",0.75;btn_config;" .. S("Configure") .. "]"
 		end
 
 		local selected_idx = 1
@@ -270,6 +265,27 @@ ss.get_formspec = function(id, player, buyer)
 		return formspec	.. "list[current_player;main;2.15,5.5;8,4;0]" .. btn_close
 end
 
+local get_config_fs = function(pos)
+	local margin_r = fs_width-(btn_w+0.2)
+	local margin_b = fs_height-(0.75+0.2)
+
+	local n_meta = core.get_meta(pos)
+
+	local fs = "formspec_version[4]"
+		.. "size[" .. tostring(fs_width) .. "," .. tostring(fs_height) .."]"
+		.. "field[2.0,1.5;6,0.5;in_id;ID;" .. n_meta:get_string("id") .. "]"
+		.. "field_close_on_enter[in_id;false]"
+		.. "field[2.0,2.5;6,0.5;in_label;Label;" .. n_meta:get_string("label") .. "]"
+		.. "field_close_on_enter[in_label;false]"
+		.. "textarea[2.0,3.5;6,2.5;in_info;Infotext;" .. n_meta:get_string("infotext") .. "]"
+		.. "button[" .. margin_r-(btn_w+0.2) .. "," .. margin_b .. ";" .. btn_w
+				.. ",0.75;btn_save;" .. S("Save") .. "]"
+		.. "button[" .. margin_r .. "," .. margin_b .. ";" .. btn_w
+				.. ",0.75;btn_cancel;" .. S("Cancel") .. "]"
+
+	return fs
+end
+
 --- Displays formspec to player.
 --
 --  @function server_shop.show_formspec
@@ -281,15 +297,49 @@ ss.show_formspec = function(pos, player, buyer)
 		ss.log("warning", "show_formspec: \"buyer\" parameter is deprecated")
 	end
 
-	local id = core.get_meta(pos):get_string("id")
+	local n_meta = core.get_meta(pos)
+	local id = n_meta:get_string("id")
 
 	core.show_formspec(player:get_player_name(), format_formname(ss.shop_type(id)),
-		ss.get_formspec(id, player))
+		ss.get_formspec(id, player, n_meta))
 end
 
 
 core.register_on_player_receive_fields(function(player, formname, fields)
-	if string.find(formname, ss.modname..":") == 1 then
+	if formname == ss.modname .. ":config" then
+		local pos = core.deserialize(player:get_meta():get_string(ss.modname .. ":pos"))
+		if not pos then
+			ss.log("error", "cannot retrieve shop position from player meta data")
+			return false
+		end
+
+		if fields.btn_save then
+			if not ss.is_shop_admin(player) then
+				ss.log("warning", "non-admin player " .. player:get_player_name()
+					.. " attempted to configure shop at " .. core.pos_to_string(pos))
+				return false
+			end
+
+			local n_meta = core.get_meta(pos)
+
+			local shop_id = tostring(fields.in_id):trim()
+			local shop_label = tostring(fields.in_label):trim()
+			local shop_info = tostring(fields.in_info):trim()
+
+			local attribs = {
+				id = shop_id ~= "" and shop_id or nil,
+				label = shop_label ~= "" and shop_label or nil,
+				infotext = shop_info ~= "" and shop_info or nil,
+			}
+
+			for attrib, value in pairs(attribs) do
+				n_meta:set_string(attrib, value)
+			end
+		end
+
+		ss.show_formspec(pos, player)
+		return false
+	elseif string.find(formname, ss.modname..":") == 1 then
 		local buyer = formname == format_formname(true)
 
 		local pmeta = player:get_meta()
@@ -330,39 +380,10 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			end
 
 			return false
-		elseif fields.btn_id or (fields.key_enter and fields.key_enter_field == "input_id") then
-			-- safety check that only server admin can set ID
-			if not ss.is_shop_admin(player) then
-				ss.log("warning", "non-admin player " .. player.get_player_name()
-					.. " attempted to change shop ID at ("
-					.. tostring(pos.x) .. "," .. tostring(pos.y) .. "," .. tostring(pos.z)
-					.. ")")
-				return false
-			end
-
-			-- should not happen
-			if not fields.input_id then
-				ss.log("error", "Cannot retrieve ID input")
-				return false
-			end
-
-			fields.input_id = ss.format_id(fields.input_id)
-			smeta:set_string("id", fields.input_id)
-
-			-- set or remove displayed text when pointed at
-			local shop_name = get_shop_name(fields.input_id)
-			if shop_name then
-				smeta:set_string("infotext", shop_name)
-				smeta:set_string("name", shop_name)
-			else
-				smeta:set_string("infotext", nil)
-				smeta:set_string("name", nil)
-			end
-
-			ss.log("action", "admin " .. player:get_player_name()
-				.. " set shop ID at ("
-				.. tostring(pos.x) .. "," .. tostring(pos.y) .. "," .. tostring(pos.z)
-				.. ") to \"" .. id .. "\"")
+		elseif fields.btn_config then
+			core.show_formspec(player:get_player_name(), ss.modname .. ":config",
+				get_config_fs(pos))
+			return false
 		elseif fields.products then
 			local idx = tonumber(fields.products:sub(5))
 			if type(idx) == "number" then
