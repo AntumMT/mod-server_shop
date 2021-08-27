@@ -323,6 +323,62 @@ ss.unregister_persist = function(id)
 	return retval
 end
 
+--- Adds a product to a shop.
+--
+--  @function server_shop:add_product
+--  @tparam string id Shop identifier.
+--  @tparam string product Item technical name.
+--  @tparam number value Product's represented value.
+--  @tparam[opt] number idx Position in shop list where item should be inserted.
+--  @treturn table Shop definition that was altered or `nil`.
+ss.add_product = function(id, product, value, idx)
+	local target_shop = shops[id]
+	if not target_shop then
+		ss.log("error", "add_product: cannot add to unknown shop ID: " .. tostring(id))
+		return
+	end
+
+	if type(product) ~= "string" then
+		ss.log("error", "add_product: \"product\" must be a string for shop ID: " .. id)
+		return
+	elseif type(value) ~= "number" then
+		ss.log("error", "add_product: \"value\" must be a number for shop ID: " .. id)
+		return
+	end
+
+	target_shop.products = target_shop.products or {}
+	if not idx or idx > #target_shop.products then
+		idx = #target_shop.products + 1
+	end
+
+	for _, p in ipairs(target_shop.products) do
+		if product == p[1] then
+			ss.log("warning", "add_product: adding duplicate item to shop ID: " .. id)
+			break
+		end
+	end
+
+	table.insert(target_shop.products, {product, value})
+	return target_shop
+end
+
+--- Adds a product to a shop & updates config.
+--
+--  @function server_shop.add_product_persist
+--  @tparam string id Shop identifier.
+--  @tparam string product Item technical name.
+--  @tparam number value Product's represented value.
+--  @tparam[opt] number idx Position in shop list where item should be inserted.
+ss.add_product_persist = function(id, product, value, idx)
+	local target_shop = ss.add_product(id, product, value, idx)
+	if target_shop then
+		local shops_data = wdata.read("server_shops") or {}
+		shops_data.shops = shops_data.shops or {}
+		shops_data.shops[id] = target_shop
+		wdata.write("server_shops", shops_data)
+	end
+end
+
 local shops_file = core.get_worldpath() .. "/server_shops.json"
 
 local function shop_file_error(msg)
@@ -414,41 +470,6 @@ ss.file_load = function()
 			shop_file_error("\"shops\" must be a table")
 		end
 	end
-end
-
---- Permanently adds a product to a shop.
---
---  @function server_shop.file_add_product
---  @tparam string id Shop identifier.
---  @tparam string name Item technical name.
---  @tparam int value Item value.
---  @tparam[opt] int idx Shop index for item placement.
-ss.file_add_product = function(id, name, value, idx)
-	local shops_data = wdata.read("server_shops") or {}
-	shops_data.shops = shops_data.shops or {}
-	local target_shop = shops_data[id]
-
-	if not target_shop then
-		ss.log("error", "file_add_product: cannot add item to unknown shop ID: " .. tostring(id))
-		return false
-	elseif type(name) ~= "string" then
-		ss.log("error", "file_add_product: \"name\" must be a string for shop ID: " .. id)
-		return false
-	elseif type(value) ~= "number" then
-		ss.log("error", "file_add_product: \"value\" must be a number for shop ID: " .. id)
-		return false
-	end
-
-	-- FIXME: check for duplicates
-
-	if not idx or idx > #target_shop.products then
-		table.insert(target_shop.products, {name, value})
-	else
-		table.insert(target_shop.products, idx, {name, value})
-	end
-
-	ss.register(id, target_shop)
-	wdata.write("server_shops", shops_data)
 end
 
 --- Prunes unknown items & updates aliases in shops.
