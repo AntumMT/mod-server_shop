@@ -8,15 +8,92 @@ local ss = server_shop
 
 
 local shops = {}
+local registered_currencies = {}
+-- Suffix displayed after deposited amount.
+ss.currency_suffix = nil
 
 ss.get_shops = function()
 	return table.copy(shops)
 end
 
-local registered_currencies = {}
+--- Retrieves shop product list.
+--
+--  @function server_shop.get_shop
+--  @tparam string id String identifier of shop.
+--  @tparam bool buyer Denotes whether seller or buyer shops will be parsed (default: false) (deprecated).
+--  @treturn table Table of shop contents.
+ss.get_shop = function(id, buyer)
+	if buyer ~= nil then
+		ss.log("warning", "get_shop: \"buyer\" parameter is deprecated")
+	end
 
--- Suffix displayed after deposited amount.
-ss.currency_suffix = nil
+	local s = shops[id]
+	if s then
+		s = table.copy(s)
+	end
+
+	return s
+end
+
+--- Checks if a shop is registered.
+--
+--  @function server_shop.is_registered
+--  @tparam string id Shop string identifier.
+--  @tparam bool buyer Denotes whether to check seller or buyer shops (default: false) (deprecated).
+--  @treturn bool `true` if the shop ID is found.
+ss.is_registered = function(id, buyer)
+	if buyer ~= nil then
+		ss.log("warning", "is_registered: \"buyer\" parameter is deprecated")
+	end
+
+	return ss.get_shop(id) ~= nil
+end
+
+--- Retrieves shop type string "buyer", "seller", or "unregistered".
+--
+--  @function server_shop.shop_type
+--  @tparam string id
+--  @treturn string
+ss.shop_type = function(id)
+	local shop = ss.get_shop(id)
+	if shop == nil then
+		return "unregistered"
+	end
+
+	if shop.buyer then
+		return "buyer"
+	end
+
+	return "seller"
+end
+
+--- Checks if a player has admin rights to for managing shop.
+--
+--  @function server_shop.is_shop_admin
+--  @tparam ObjectRef player Player requesting permissions.
+--  @return `true` if player has *server* priv.
+ss.is_shop_admin = function(player)
+	if not player then
+		return false
+	end
+
+	return core.check_player_privs(player, "server")
+end
+
+--- Checks if a player is the owner of node.
+--
+--  @function server_shop.is_shop_owner
+--  @tparam vector pos Position of shop node.
+--  @tparam ObjectRef player Player to be checked.
+--  @treturn bool `true` if player is owner.
+ss.is_shop_owner = function(pos, player)
+	if not player then
+		return false
+	end
+
+	local meta = core.get_meta(pos)
+	return player:get_player_name() == meta:get_string("owner")
+end
 
 --- Checks if there are registered currencies in order to give refunds.
 --
@@ -183,6 +260,33 @@ ss.register_persist = function(id, products, buyer)
 	wdata.write("server_shops", shops_data)
 end
 
+--- Registers a seller shop.
+--
+--  @function server_shop.register_seller
+--  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
+ss.register_seller = function(id, products, old_products)
+	if type(products) == "string" then
+		ss.log("warning", ss.modname .. ".register_seller: string \"products\" parameter deprecated")
+		products = old_products
+	end
+
+	return ss.register(id, products)
+end
+
+--- Registers a buyer shop.
+--
+--  @function server_shop.register_buyer
+--  @tparam string id Shop string identifier.
+--  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
+ss.register_buyer = function(id, products, old_products)
+	if type(products) == "string" then
+		ss.log("warning", ss.modname .. ".register_buyer: string \"products\" parameter deprecated")
+		products = old_products
+	end
+
+	return ss.register(id, products, true)
+end
+
 --- Unregisters a shop.
 --
 --  @function server_shop.unregister
@@ -217,111 +321,6 @@ ss.unregister_persist = function(id)
 	end
 
 	return retval
-end
-
---- Registers a seller shop.
---
---  @function server_shop.register_seller
---  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
-ss.register_seller = function(id, products, old_products)
-	if type(products) == "string" then
-		ss.log("warning", ss.modname .. ".register_seller: string \"products\" parameter deprecated")
-		products = old_products
-	end
-
-	return ss.register(id, products)
-end
-
---- Registers a buyer shop.
---
---  @function server_shop.register_buyer
---  @tparam string id Shop string identifier.
---  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
-ss.register_buyer = function(id, products, old_products)
-	if type(products) == "string" then
-		ss.log("warning", ss.modname .. ".register_buyer: string \"products\" parameter deprecated")
-		products = old_products
-	end
-
-	return ss.register(id, products, true)
-end
-
---- Retrieves shop product list.
---
---  @function server_shop.get_shop
---  @tparam string id String identifier of shop.
---  @tparam bool buyer Denotes whether seller or buyer shops will be parsed (default: false) (deprecated).
---  @treturn table Table of shop contents.
-ss.get_shop = function(id, buyer)
-	if buyer ~= nil then
-		ss.log("warning", "get_shop: \"buyer\" parameter is deprecated")
-	end
-
-	local s = shops[id]
-	if s then
-		s = table.copy(s)
-	end
-
-	return s
-end
-
---- Checks if a shop is registered.
---
---  @function server_shop.is_registered
---  @tparam string id Shop string identifier.
---  @tparam bool buyer Denotes whether to check seller or buyer shops (default: false) (deprecated).
---  @treturn bool `true` if the shop ID is found.
-ss.is_registered = function(id, buyer)
-	if buyer ~= nil then
-		ss.log("warning", "is_registered: \"buyer\" parameter is deprecated")
-	end
-
-	return ss.get_shop(id) ~= nil
-end
-
----
---
---  @function server_shop.shop_type
---  @tparam string id
-ss.shop_type = function(id)
-	local shop = ss.get_shop(id)
-	if shop == nil then
-		return "unregistered"
-	end
-
-	if shop.buyer then
-		return "buyer"
-	end
-
-	return "seller"
-end
-
---- Checks if a player has admin rights to for managing shop.
---
---  @function server_shop.is_shop_admin
---  @tparam ObjectRef player Player requesting permissions.
---  @return `true` if player has *server* priv.
-ss.is_shop_admin = function(player)
-	if not player then
-		return false
-	end
-
-	return core.check_player_privs(player, "server")
-end
-
---- Checks if a player is the owner of node.
---
---  @function server_shop.is_shop_owner
---  @tparam vector pos Position of shop node.
---  @tparam ObjectRef player Player to be checked.
---  @treturn bool `true` if player is owner.
-ss.is_shop_owner = function(pos, player)
-	if not player then
-		return false
-	end
-
-	local meta = core.get_meta(pos)
-	return player:get_player_name() == meta:get_string("owner")
 end
 
 local shops_file = core.get_worldpath() .. "/server_shops.json"
