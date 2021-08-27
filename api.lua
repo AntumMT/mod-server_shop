@@ -327,7 +327,7 @@ end
 --
 --  @function server_shop:add_product
 --  @tparam string id Shop identifier.
---  @tparam string product Item technical name.
+--  @param product Item technical name (`string`) or product/value pairs (`table`).
 --  @tparam number value Product's represented value.
 --  @tparam[opt] number idx Position in shop list where item should be inserted.
 --  @treturn table Shop definition that was altered or `nil`.
@@ -338,27 +338,45 @@ ss.add_product = function(id, product, value, idx)
 		return
 	end
 
-	if type(product) ~= "string" then
-		ss.log("error", "add_product: \"product\" must be a string for shop ID: " .. id)
-		return
-	elseif type(value) ~= "number" then
-		ss.log("error", "add_product: \"value\" must be a number for shop ID: " .. id)
+	local p_type = type(product)
+	if p_type ~= "string" and p_type ~= "table" then
+		ss.log("error", "add_product: \"product\" must be a string or table of"
+			.. " product/value pairs for shop ID: " .. id)
 		return
 	end
 
 	target_shop.products = target_shop.products or {}
-	if not idx or idx > #target_shop.products then
-		idx = #target_shop.products + 1
-	end
-
-	for _, p in ipairs(target_shop.products) do
-		if product == p[1] then
-			ss.log("warning", "add_product: adding duplicate item to shop ID: " .. id)
-			break
+	if p_type == "table" then
+		if value then
+			ss.log("warning", "add_product: \"value\" is ignored when product type is table")
 		end
+		if idx then
+			ss.log("warning", "add_product: \"idx\" is ignored when product type is table")
+		end
+
+		for _, p in ipairs(product) do
+			table.insert(target_shop.products, p)
+		end
+	else
+		if type(value) ~= "number" then
+			ss.log("error", "add_product: \"value\" must be a number for shop ID: " .. id)
+			return
+		end
+
+		if not idx or idx > #target_shop.products then
+			idx = #target_shop.products + 1
+		end
+
+		for _, p in ipairs(target_shop.products) do
+			if product == p[1] then
+				ss.log("warning", "add_product: adding duplicate item to shop ID: " .. id)
+				break
+			end
+		end
+
+		table.insert(target_shop.products, {product, value})
 	end
 
-	table.insert(target_shop.products, {product, value})
 	return target_shop
 end
 
@@ -366,7 +384,7 @@ end
 --
 --  @function server_shop.add_product_persist
 --  @tparam string id Shop identifier.
---  @tparam string product Item technical name.
+--  @param product Item technical name (`string`) or product/value pairs (`table`).
 --  @tparam number value Product's represented value.
 --  @tparam[opt] number idx Position in shop list where item should be inserted.
 ss.add_product_persist = function(id, product, value, idx)
