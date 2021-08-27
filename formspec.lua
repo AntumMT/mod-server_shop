@@ -314,7 +314,9 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			return false
 		end
 
-		if fields.btn_save then
+		if fields.btn_cancel then
+			ss.show_formspec(pos, player)
+		elseif fields.btn_save then
 			if not ss.is_shop_admin(player) then
 				ss.log("warning", "non-admin player " .. player:get_player_name()
 					.. " attempted to configure shop at " .. core.pos_to_string(pos))
@@ -336,9 +338,10 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			for attrib, value in pairs(attribs) do
 				n_meta:set_string(attrib, value)
 			end
+
+			ss.show_formspec(pos, player)
 		end
 
-		ss.show_formspec(pos, player)
 		return false
 	elseif string.find(formname, ss.modname..":") == 1 then
 		local buyer = formname == format_formname(true)
