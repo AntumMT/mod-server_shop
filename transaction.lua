@@ -25,12 +25,35 @@ end
 --  @tparam string id Shop id.
 --  @param player Player for whom deposit is being set.
 --  @tparam int amount The amount deposit should be set to.
---  @tparam bool buyer Denotes whether shop is a seller or buyer
+--  @tparam[opt] bool buyer Denotes whether shop is a seller or buyer
 local function set_deposit(id, player, amount, buyer)
-	local pmeta = player:get_meta()
-	local deposit_id = format_deposit_id(id, buyer)
+	local p_meta = player:get_meta()
+	local d_type = type(amount)
 
-	pmeta:set_int(deposit_id, amount)
+	if not buyer then
+		if d_type ~= "number" then
+			ss.log("error", "set_deposit: \"amount\" must be number for seller shops")
+			return
+		end
+
+		p_meta:set_int(format_deposit_id(id, false), amount)
+	else
+		if d_type == "table" then
+			amount = amount.name .. "," .. amount.count
+		elseif d_type ~= "string" then
+			ss.log("error", "set_deposit: \"amount\" must be a string (\"item,num\") or"
+				.. "table ({item, num}) for buyer shops")
+			return
+		end
+
+		if not string.find(amount, ",") then
+			ss.log("error", "set_deposit: malformatted \"amount\" (" .. amount
+				.. "), must be \"item,num\"")
+			return
+		end
+
+		p_meta:set_string(format_deposit_id(id, true), amount)
+	end
 end
 
 --- Retrieves amount player has deposited at shop.
@@ -39,9 +62,38 @@ end
 --  @function get_deposit
 --  @tparam string id Shop id.
 --  @param player Player to check.
+--  @tparam[opt] bool buyer Denotes whether shop is a seller or buyer
 --  @treturn int Total amount currently deposited.
 local function get_deposit(id, player, buyer)
-	return player:get_meta():get_int(format_deposit_id(id, buyer))
+	local p_meta = player:get_meta()
+	local deposit
+	if not buyer then
+		deposit = p_meta:get_int(format_deposit_id(id, false))
+	else
+		deposit = p_meta:get_string(format_deposit_id(id, true)):split(",")
+		deposit = {
+			name = deposit[1],
+			count = tonumber(deposit[2]),
+		}
+	end
+
+	return deposit
+end
+
+--- Clears deposit info from player meta.
+--
+--  @local
+--  @tparam string id Shop identifier.
+--  @tparam ObjectRef player
+--  @tparam bool buyer
+--  @treturn bool
+local clear_deposit = function(id, player, buyer)
+	local p_meta = player:get_meta()
+	local deposit_id = format_deposit_id(id, buyer)
+
+	p_meta:set_string(deposit_id, nil)
+
+	return p_meta:get_string(deposit_id) == ""
 end
 
 --- Add item(s) to player inventory or drops on ground.
@@ -115,10 +167,10 @@ local function give_refund(id, player, buyer)
 		return
 	end
 
-	local pmeta = player:get_meta()
+	local p_meta = player:get_meta()
 	local deposit_id = format_deposit_id(id, buyer)
 
-	local refund, remain = calculate_refund(pmeta:get_int(deposit_id))
+	local refund, remain = calculate_refund(p_meta:get_int(deposit_id))
 	for _, istack in ipairs(refund) do
 		give_product(player, istack)
 	end
@@ -126,7 +178,7 @@ local function give_refund(id, player, buyer)
 	if remain > 0 then
 		ss.log("warning", "refund left remaining balance: Shop ID: " .. id
 			.. ", Player: " .. player:get_player_name() .. ", Balance: " .. remain)
-		pmeta:set_int(deposit_id, remain)
+		p_meta:set_int(deposit_id, remain)
 		return
 	end
 
@@ -136,7 +188,7 @@ local function give_refund(id, player, buyer)
 	end
 
 	-- reset deposited amount after refund
-	pmeta:set_string(deposit_id, nil)
+	p_meta:set_string(deposit_id, nil)
 end
 
 --- Calculates the price of item being purchased.
@@ -211,6 +263,7 @@ end
 return {
 	set_deposit = set_deposit,
 	get_deposit = get_deposit,
+	clear_deposit = clear_deposit,
 	give_product = give_product,
 	calculate_refund = calculate_refund,
 	give_refund = give_refund,

@@ -8,7 +8,6 @@ TODO:
 	- make colorable with unifieddyes
 	- fix stepping sound for "large" node
 - Misc.:
-	- store inventory contents in node/player meta in case of server crash/shutdown (buyer shops only)
 	- make usable with "folks" mod
 	- add player shops
 	- fix so unknown items don't mess up shop (may become a problem when shops are registered live)

@@ -7,6 +7,7 @@
 local ss = server_shop
 local S = core.get_translator(ss.modname)
 
+local transaction = dofile(ss.modpath .. "/transaction.lua")
 local inventory = dofile(ss.modpath .. "/deposit.lua")
 
 
@@ -14,8 +15,6 @@ local fs_width = 14
 local fs_height = 11
 local btn_w = 1.75
 local btn_y = 4.6
-
-local transaction = dofile(ss.modpath .. "/transaction.lua")
 
 
 --- Retrieves shop name by ID *(deprecated)*.
@@ -165,13 +164,25 @@ ss.get_formspec = function(id, player, n_meta)
 		local pmeta = player:get_meta()
 		local shop = ss.get_shop(id)
 
-		local buyer, deposited
+		local buyer, deposited, inv, inv_name
 		if shop then
 			buyer = shop.buyer == true
-			deposited = transaction.get_deposit(id, player)
+			deposited = transaction.get_deposit(id, player, buyer)
 
 			-- store ID in player meta for retrieval during transactions
 			pmeta:set_string(ss.modname .. ":id", id)
+
+			-- make sure inventory has been created
+			inv, inv_name = inventory.get(player:get_player_name(), buyer)
+
+			-- check if player did not get items back
+			if buyer and inv:is_empty("deposit") then
+				if deposited.count and deposited.count > 0 then
+					local stack = ItemStack(deposited.name)
+					stack:set_count(deposited.count)
+					inv:add_item("deposit", stack)
+				end
+			end
 		end
 
 		local margin_r = fs_width-(btn_w+0.2)
@@ -241,9 +252,6 @@ ss.get_formspec = function(id, player, n_meta)
 		end
 
 		if shop then -- don't allow deposits to unregistered stores
-			-- make sure inventory has been created
-			local inv, inv_name = inventory.get(player:get_player_name(), buyer)
-
 			formspec = formspec .. "list[detached:" .. inv_name .. ";deposit;0.2,1.5;1,1;0]"
 		end
 
@@ -377,10 +385,12 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 						local product = inv:get_stack("deposit", 1)
 						transaction.give_product(player, product)
 						inv:remove_item("deposit", product)
+						-- clear deposit info from player meta
+						transaction.clear_deposit(id, player, true)
 					end
 				else
 					-- return money to player if formspec closed
-					transaction.give_refund(id, player, buyer)
+					transaction.give_refund(id, player, false)
 				end
 			end
 
@@ -454,6 +464,8 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 					product:get_description(), total, ss.currency_suffix))
 
 			inv:remove_item("deposit", product)
+			-- clear deposit info from player meta
+			transaction.clear_deposit(id, player, true)
 
 			if remain > 0 then
 				ss.log("warning", "buyer shop \"" .. id .. "\" failed to refund "

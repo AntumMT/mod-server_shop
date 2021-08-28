@@ -5,14 +5,14 @@ local transaction = dofile(ss.modpath .. "/transaction.lua")
 
 local seller_callbacks = {
 	allow_put = function(inv, listname, index, stack, player)
-		local pmeta = player:get_meta()
-		local id = pmeta:get_string(ss.modname .. ":id")
+		local p_meta = player:get_meta()
+		local id = p_meta:get_string(ss.modname .. ":id")
 		if id:trim() == "" then return 0 end
 
 		local to_deposit = transaction.calculate_currency_value(stack)
 		if to_deposit <= 0 then return 0 end
 
-		local pos = core.deserialize(pmeta:get_string(ss.modname .. ":pos"))
+		local pos = core.deserialize(p_meta:get_string(ss.modname .. ":pos"))
 		if not pos then return 0 end
 
 		transaction.set_deposit(id, player, transaction.get_deposit(id, player) + to_deposit)
@@ -26,15 +26,43 @@ local seller_callbacks = {
 
 local buyer_callbacks = {
 	allow_put = function(inv, listname, index, stack, player)
-		local pmeta = player:get_meta()
-		local id = pmeta:get_string(ss.modname .. ":id")
+		local p_meta = player:get_meta()
+		local id = p_meta:get_string(ss.modname .. ":id")
 		if id:trim() == "" then return 0 end
 
 		local to_deposit = transaction.calculate_product_value(stack, id, true)
 		if to_deposit <= 0 then return 0 end
 
-		local pos = core.deserialize(pmeta:get_string(ss.modname .. ":pos"))
+		local pos = core.deserialize(p_meta:get_string(ss.modname .. ":pos"))
 		if not pos then return 0 end
+
+		local s_name = stack:get_name()
+		local s_count = stack:get_count()
+		local dep = transaction.get_deposit(id, player, true)
+		dep.name = dep.name or s_name
+		dep.count = dep.count or 0
+
+		if dep.name ~= s_name then
+			dep.name = s_name
+			dep.count = s_count
+		else
+			dep.count = dep.count + s_count
+		end
+
+		transaction.set_deposit(id, player, dep, true)
+
+		return s_count
+	end,
+
+	allow_take = function(inv, listname, index, stack, player)
+		-- clear deposit
+		local p_meta = player:get_meta()
+		local id = p_meta:get_string(ss.modname .. ":id")
+		if id:trim() ~= "" then
+			if not transaction.clear_deposit(id, player, true) then
+				ss.log("warning", "InvRef.allow_take: could not clear deposit from buyer shop ID: " .. id)
+			end
+		end
 
 		return stack:get_count()
 	end,
