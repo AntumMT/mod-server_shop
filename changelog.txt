@@ -11,6 +11,8 @@ next
 	- add: adds 1 or more items to a shop's product list
 	- remove: removes the first instance of an item from a shop's product list
 	- removeall: removes all instances of an item from a shop's product list
+	- list: lists all registered shop IDs
+	- info: lists information about a shop
 - shops use unique inventories for individuals so deposits cannot be stolen by others
 - buyer shop deposit contents stored in player meta to persist through server crash/restart
 

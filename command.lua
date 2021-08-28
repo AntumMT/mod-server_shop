@@ -8,7 +8,7 @@ local ss = server_shop
 local S = core.get_translator(ss.modname)
 
 
-local command_list = {"reload", "register", "unregister", "add", "remove", "removeall"}
+local command_list = {"reload", "register", "unregister", "add", "remove", "removeall", "list", "info"}
 local commands = {
 	reload = "",
 	register = "<" .. S("ID") .. ">" .. " <sell/buy> "
@@ -17,6 +17,8 @@ local commands = {
 	add = "<" .. S("ID") .. "> <" .. S("product1=value,product2=value,...") .. ">",
 	remove = "<" .. S("ID") .. "> <" .. S("product") .. ">",
 	removeall = "<" .. S("ID") .. "> <" .. S("product") .. ">",
+	list = "",
+	info = "<" .. S("ID") .. ">",
 }
 
 local format_usage = function(cmd)
@@ -69,6 +71,11 @@ end
 --  - removeall
 --    - Removes all instances of an item from a shop's product list.
 --    - parameters: <id> <product>
+--  - list
+--    - Lists all registered shop IDs.
+--  - info
+--    - Lists information about a shop.
+--    - parameters: <id>
 core.register_chatcommand(ss.modname, {
 	description = S("Manage shops configuration.") .. "\n\n"
 		.. format_usage(),
@@ -225,6 +232,63 @@ core.register_chatcommand(ss.modname, {
 			end
 
 			return false, S("Shop ID @1 does not contain @2 in its product list.", shop_id, product)
+		elseif cmd == "list" then
+			if #params > 0 then
+				return false, S('"@1" command takes no parameters.', cmd) .. "\n\n"
+			end
+
+			local shops_list = {}
+			for id in pairs(ss.get_shops()) do
+				table.insert(shops_list, id)
+			end
+
+			local msg
+			local id_count = #shops_list
+			if id_count > 0 then
+				if id_count == 1 then
+					msg = S("There is 1 shop registered: @1", table.concat(shops_list, ", "))
+				else
+					msg = S("There are @1 shops registered: @2", id_count, table.concat(shops_list, ", "))
+				end
+			else
+				msg = S("There are no shops registered.")
+			end
+
+			return true, msg
+		elseif cmd == "info" then
+			if #params > 1 then
+				return false, S("Too many parameters.") .. "\n\n"
+					.. format_usage(cmd)
+			end
+
+			if not shop_id then
+				return false, S("Must provide ID.").. "\n\n" .. format_usage(cmd)
+			end
+
+			local shop = ss.get_shop(shop_id)
+			if not shop then
+				return false, S("Shop ID @1 is not registered.", shop_id)
+			end
+
+			local s_type = S("seller")
+			if shop.buyer then
+				s_type = S("buyer")
+			end
+
+			local product_list = {}
+			for _, p in ipairs(shop.products) do
+				p = p[1] .. " (" .. p[2]
+				if ss.currency_suffix then
+					p = p .. " " .. ss.currency_suffix
+				end
+				p = p .. ")"
+
+				table.insert(product_list, p)
+			end
+
+			return true, S("Information about shop ID: @1", shop_id)
+				.. "\n" .. S("Type: @1", s_type)
+				.. "\n" .. S("Products: @1", table.concat(product_list, ", "))
 		end
 
 		return false, S("Unknown command: @1", cmd)
