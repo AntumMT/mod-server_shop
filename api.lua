@@ -269,7 +269,7 @@ ss.register_persist = function(id, products, buyer)
 	ss.register(id, products, buyer)
 
 	local shops_data = wdata.read("server_shops") or {}
-	shops_data.shops = shop_data.shops or {}
+	shops_data.shops = shops_data.shops or {}
 
 	local s_type = "sell"
 	if buyer then
