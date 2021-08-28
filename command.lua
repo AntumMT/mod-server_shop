@@ -10,6 +10,10 @@ local S = core.get_translator(ss.modname)
 
 local commands = {
 	{
+		cmd = "help",
+		params = "[" .. S("command") .. "]",
+	},
+	{
 		cmd = "list",
 	},
 	{
@@ -81,6 +85,9 @@ end
 --  /server_shop <command> [<params>]
 --
 --  Commands:
+--  - help
+--    - Shows usage info.
+--    - parameters: [command]
 --  - list
 --    - Lists all registered shop IDs.
 --  - info
@@ -119,7 +126,30 @@ core.register_chatcommand(ss.modname, {
 
 		local shop_id = params[1]
 
-		if cmd == "reload" then
+		if cmd == "help" then
+			if #params > 1 then
+				return false, S("Too many parameters.") .. "\n\n"
+					.. format_usage(cmd)
+			end
+
+			if params[1] then
+				local sub_cmd
+				for _, c in ipairs(commands) do
+					if params[1] == c.cmd then
+						sub_cmd = c.cmd
+						break
+					end
+				end
+
+				if sub_cmd then
+					return true, format_usage(sub_cmd)
+				else
+					return false, S("Unknown command: @1", sub_cmd)
+				end
+			end
+
+			return true, S("Manage shops configuration.") .. "\n\n" .. format_usage()
+		elseif cmd == "reload" then
 			if #params > 0 then
 				return false, S('"@1" command takes no parameters.', cmd) .. "\n\n"
 					.. format_usage(cmd)
