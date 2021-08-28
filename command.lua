@@ -20,10 +20,23 @@ local commands = {
 }
 
 local format_usage = function(cmd)
-	local usage = S("Usage:") .. "\n  /" .. ss.modname .. " " .. cmd
-	local params = commands[cmd]
-	if params and params ~= "" then
-		usage = usage .. " " .. params
+	local usage = S("Usage:")
+	if cmd then
+		usage = usage .. "\n  /" .. ss.modname .. " " .. cmd
+
+		local params = commands[cmd]
+		if params and params ~= "" then
+			usage = usage .. " " .. params
+		end
+	else
+		for _, c in ipairs(command_list) do
+			usage = usage .. "\n  /" .. ss.modname .. " " .. c
+
+			local params = commands[c]
+			if params and params ~= "" then
+				usage = usage .. " " .. params
+			end
+		end
 	end
 
 	return usage
@@ -59,7 +72,8 @@ end
 core.register_chatcommand(ss.modname, {
 	description = S("Manage shops configuration."),
 	privs = {server=true},
-	params = "<" .. S("command") .. "> [" .. S("params") .. "]",
+	params = "<" .. S("command") .. "> [" .. S("params") .. "]\n\n"
+		.. format_usage(),
 	func = function(name, param)
 		local params = param:split(" ")
 		local cmd = params[1]
