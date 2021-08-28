@@ -49,4 +49,5 @@ Added 1 item to shop ID @1.=Se agregó 1 producto a tienda con ID @1.
 Added @1 items to shop ID @2.=Se agregó @1 productos a tienda con ID @2.
 Removed 1 item from shop ID @1.=Se quitó 1 producto de tienda con ID @1.
 Removed @1 items from shop ID @2.=Se quitó @1 productos de tienda con ID @2.
-An error occurred when trying to remove @1 from shop ID @2.=Se occurió un error al intentar de quitar @1 de tienda con ID @2.
+Shop ID @1 does not contain @2 in its product list.=Tienda con ID @1 no contiene @2 en la lista de productos.
+Shop ID @1 is not registered.=Tienda con ID @1 no está registrado.

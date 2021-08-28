@@ -161,6 +161,10 @@ core.register_chatcommand(ss.modname, {
 				return false, S("Must provide ID.") .. "\n\n" .. format_usage(cmd)
 			end
 
+			if not ss.is_registered(shop_id) then
+				return false, S("Shop ID @1 is not registered.", shop_id)
+			end
+
 			local shop_products = params[2]
 			if not shop_products then
 				return false, S("Must provide product.") .. "\n\n" .. format_usage(cmd)
@@ -212,10 +216,12 @@ core.register_chatcommand(ss.modname, {
 				count = ss.remove_product_persist(shop_id, product, true)
 			end
 
-			if count == 1 then
-				return true, S("Removed 1 item from shop ID @1.", shop_id)
-			elseif count > 1 then
-				return true, S("Removed @1 items from shop ID @2.", count, shop_id)
+			if count then
+				if count == 1 then
+					return true, S("Removed 1 item from shop ID @1.", shop_id)
+				elseif count > 1 then
+					return true, S("Removed @1 items from shop ID @2.", count, shop_id)
+				end
 			end
 
 			return false, S("Shop ID @1 does not contain @2 in its product list.", shop_id, product)
