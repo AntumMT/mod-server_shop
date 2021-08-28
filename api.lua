@@ -314,7 +314,7 @@ ss.unregister_persist = function(id)
 
 	if retval then
 		local shops_data = wdata.read("server_shops") or {}
-		shops_data.shops = shop_data.shops or {}
+		shops_data.shops = shops_data.shops or {}
 
 		shops_data.shops[id] = nil
 		wdata.write("server_shops", shops_data)
