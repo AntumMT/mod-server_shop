@@ -8,17 +8,38 @@ local ss = server_shop
 local S = core.get_translator(ss.modname)
 
 
-local command_list = {"reload", "register", "unregister", "add", "remove", "removeall", "list", "info"}
 local commands = {
-	reload = "",
-	register = "<" .. S("ID") .. ">" .. " <sell/buy> "
-		.. " [" .. S("product1=value,product2=value,...") .. "]",
-	unregister = "<" .. S("ID") .. ">",
-	add = "<" .. S("ID") .. "> <" .. S("product1=value,product2=value,...") .. ">",
-	remove = "<" .. S("ID") .. "> <" .. S("product") .. ">",
-	removeall = "<" .. S("ID") .. "> <" .. S("product") .. ">",
-	list = "",
-	info = "<" .. S("ID") .. ">",
+	{
+		cmd = "list",
+	},
+	{
+		cmd = "info",
+		params = "<" .. S("ID") .. ">",
+	},
+	{
+		cmd = "register",
+		params = "<" .. S("ID") .. ">" .. " <sell/buy> "
+			.. " [" .. S("product1=value,product2=value,...") .. "]",
+	},
+	{
+		cmd = "unregister",
+		params = "<" .. S("ID") .. ">",
+	},
+	{
+		cmd = "add",
+		params = "<" .. S("ID") .. "> <" .. S("product1=value,product2=value,...") .. ">",
+	},
+	{
+		cmd = "remove",
+		params = "<" .. S("ID") .. "> <" .. S("product") .. ">",
+	},
+	{
+		cmd = "removeall",
+		params = "<" .. S("ID") .. "> <" .. S("product") .. ">",
+	},
+	{
+		cmd = "reload",
+	},
 }
 
 local format_usage = function(cmd)
@@ -26,17 +47,23 @@ local format_usage = function(cmd)
 	if cmd then
 		usage = usage .. "\n  /" .. ss.modname .. " " .. cmd
 
-		local params = commands[cmd]
-		if params and params ~= "" then
+		local params
+		for _, c in ipairs(commands) do
+			if c.cmd == cmd then
+				params = c.params
+				break
+			end
+		end
+
+		if params then
 			usage = usage .. " " .. params
 		end
 	else
-		for _, c in ipairs(command_list) do
-			usage = usage .. "\n  /" .. ss.modname .. " " .. c
+		for _, c in ipairs(commands) do
+			usage = usage .. "\n  /" .. ss.modname .. " " .. c.cmd
 
-			local params = commands[c]
-			if params and params ~= "" then
-				usage = usage .. " " .. params
+			if c.params then
+				usage = usage .. " " .. c.params
 			end
 		end
 	end
@@ -54,8 +81,11 @@ end
 --  /server_shop <command> [<params>]
 --
 --  Commands:
---  - reload
---    - Reloads shops configuration.
+--  - list
+--    - Lists all registered shop IDs.
+--  - info
+--    - Lists information about a shop.
+--    - parameters: <id>
 --  - register
 --    - Registers new shop & updates configuration.
 --    - parameters: <id> <sell/buy> [product1=value,product2=value,...]
@@ -71,11 +101,8 @@ end
 --  - removeall
 --    - Removes all instances of an item from a shop's product list.
 --    - parameters: <id> <product>
---  - list
---    - Lists all registered shop IDs.
---  - info
---    - Lists information about a shop.
---    - parameters: <id>
+--  - reload
+--    - Reloads shops configuration.
 core.register_chatcommand(ss.modname, {
 	description = S("Manage shops configuration.") .. "\n\n"
 		.. format_usage(),
