@@ -7,6 +7,8 @@
 local ss = server_shop
 local S = core.get_translator(ss.modname)
 
+local inventory = dofile(ss.modpath .. "/deposit.lua")
+
 
 local fs_width = 14
 local fs_height = 11
@@ -239,9 +241,10 @@ ss.get_formspec = function(id, player, n_meta)
 		end
 
 		if shop then -- don't allow deposits to unregistered stores
-			local inv_type = format_formname(buyer)
+			-- make sure inventory has been created
+			local inv, inv_name = inventory.get(player:get_player_name(), buyer)
 
-			formspec = formspec .. "list[detached:" .. inv_type .. ";deposit;0.2,1.5;1,1;0]"
+			formspec = formspec .. "list[detached:" .. inv_name .. ";deposit;0.2,1.5;1,1;0]"
 		end
 
 		formspec = formspec .. "textlist[2.15,1.5;9.75,3;products;"
@@ -348,6 +351,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	elseif string.find(formname, ss.modname..":") == 1 then
 		local buyer = formname == format_formname(true)
 
+		local p_name = player:get_player_name()
 		local pmeta = player:get_meta()
 		local pos = core.deserialize(pmeta:get_string(ss.modname .. ":pos"))
 		if not pos then
@@ -366,7 +370,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		if fields.quit then
 			if server_shop.refund_on_close then
 				if buyer then
-					local inv = core.get_inventory({type="detached", name=ss.modname .. ":buy"})
+					local inv = inventory.get(p_name, true)
 					if not inv then return false end
 
 					if not inv:is_empty("deposit") then
@@ -387,7 +391,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 			return false
 		elseif fields.btn_config then
-			core.show_formspec(player:get_player_name(), ss.modname .. ":config",
+			core.show_formspec(p_name, ss.modname .. ":config",
 				get_config_fs(pos))
 			return false
 		elseif fields.products then
@@ -411,7 +415,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 			local deposited = transaction.get_deposit(id, player)
 			if total > deposited then
-				core.chat_send_player(player:get_player_name(), S("You haven't deposited enough money."))
+				core.chat_send_player(p_name, S("You haven't deposited enough money."))
 				return false
 			end
 
@@ -422,15 +426,15 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			transaction.set_deposit(id, player, deposited - total, buyer)
 
 			-- execute transaction
-			core.chat_send_player(player:get_player_name(),
+			core.chat_send_player(p_name,
 				S("You purchased @1 @2 for @3 @4.", product:get_count(),
 					product:get_description(), total, ss.currency_suffix))
 
 			transaction.give_product(player, product, product_quant)
 		elseif fields.btn_sell then
-			local inv = core.get_inventory({type="detached", name=ss.modname .. ":buy",})
+			local inv, inv_name = inventory.get(p_name, true)
 			if not inv then
-				ss.log("error", "could not retrieve detached inventory: " .. ss.modname .. ":buy")
+				ss.log("error", "could not retrieve detached inventory: " .. inv_name)
 				return false
 			end
 
@@ -445,7 +449,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 				transaction.give_product(player, istack)
 			end
 
-			core.chat_send_player(player:get_player_name(),
+			core.chat_send_player(p_name,
 				S("You sold @1 @2 for @3 @4.", product:get_count(),
 					product:get_description(), total, ss.currency_suffix))
 
@@ -453,10 +457,10 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 			if remain > 0 then
 				ss.log("warning", "buyer shop \"" .. id .. "\" failed to refund "
-					.. remain .. " to player " .. player:get_player_name())
+					.. remain .. " to player " .. p_name)
 			elseif remain < 0 then
 				ss.log("warning", "buyer shop \"" .. id .. "\" gave "
-					.. remain .. " extra to player " .. player:get_player_name())
+					.. remain .. " extra to player " .. p_name)
 			end
 		end
 

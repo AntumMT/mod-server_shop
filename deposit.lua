@@ -40,5 +40,49 @@ local buyer_callbacks = {
 	end,
 }
 
-core.create_detached_inventory(ss.modname .. ":sell", seller_callbacks):set_size("deposit", 1)
-core.create_detached_inventory(ss.modname .. ":buy", buyer_callbacks):set_size("deposit", 1)
+
+--- Formats inventory name.
+--
+--  @local
+--  @tparam string p_name Player's name.
+--  @tparam[opt] bool buyer
+--  @treturn string Inventory name.
+local get_inv_name = function(p_name, buyer)
+	local inv_type = "sell"
+	if buyer then
+		inv_type = "buy"
+	end
+
+	return ss.modname .. ":" .. inv_type .. ":" .. p_name
+end
+
+--- Retrieves a shop inventory.
+--
+--  If the inventory does not exist, a new one is created.
+--
+--  @local
+--  @tparam string p_name Player's name.
+--  @tparam[opt] bool buyer
+--  @return Inventory (`InvRef`) & inventory name (`string`).
+local get_inv = function(p_name, buyer)
+	local inv_name = get_inv_name(p_name, buyer)
+	local inv = core.get_inventory({type="detached", name=inv_name})
+
+	if not inv then
+		local callbacks = seller_callbacks
+		if buyer then
+			callbacks = buyer_callbacks
+		end
+
+		inv = core.create_detached_inventory(inv_name, callbacks)
+		inv:set_size("deposit", 1)
+	end
+
+	return inv, inv_name
+end
+
+
+return {
+	get_name = get_inv_name,
+	get = get_inv,
+}

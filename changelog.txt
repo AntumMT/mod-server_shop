@@ -11,6 +11,7 @@ next
 	- add: adds 1 or more items to a shop's product list
 	- remove: removes the first instance of an item from a shop's product list
 	- removeall: removes all instances of an item from a shop's product list
+- shops use unique inventories for individuals so deposits cannot be stolen by others
 
 
 v1.6.2

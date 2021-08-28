@@ -2,14 +2,13 @@
 TODO:
 - Security:
 	- might be an issue if admin changes shop ID while player is using
-	- items can be stolen from detached inventory by other players
 - Functionality:
 	- optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
 - Aestethics:
 	- make colorable with unifieddyes
 	- fix stepping sound for "large" node
 - Misc.:
-	- store inventory contents in node meta in case of server crash/shutdown
+	- store inventory contents in node/player meta in case of server crash/shutdown (buyer shops only)
 	- make usable with "folks" mod
 	- add player shops
 	- fix so unknown items don't mess up shop (may become a problem when shops are registered live)
@@ -17,3 +16,4 @@ TODO:
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
 	- support groups in buyer shops
 	- fix shops from config being unregistered if the product list is empty
+	- fix cannot right-click deposit into inventory multiple times (seller shops only)
