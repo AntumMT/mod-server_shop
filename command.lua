@@ -70,17 +70,17 @@ end
 --    - Removes all instances of an item from a shop's product list.
 --    - parameters: <id> <product>
 core.register_chatcommand(ss.modname, {
-	description = S("Manage shops configuration."),
-	privs = {server=true},
-	params = "<" .. S("command") .. "> [" .. S("params") .. "]\n\n"
+	description = S("Manage shops configuration.") .. "\n\n"
 		.. format_usage(),
+	privs = {server=true},
+	params = "<" .. S("command") .. "> [" .. S("params") .. "]",
 	func = function(name, param)
 		local params = param:split(" ")
 		local cmd = params[1]
 		table.remove(params, 1)
 
 		if not cmd then
-			return false, S("Must provide a command: @1", table.concat(command_list, ", "))
+			return false, S("Must provide a command:") .. "\n\n" .. format_usage()
 		end
 
 		local shop_id = params[1]
@@ -218,7 +218,7 @@ core.register_chatcommand(ss.modname, {
 				return true, S("Removed @1 items from shop ID @2.", count, shop_id)
 			end
 
-			return false, S("An error occurred when trying to remove @1 from shop ID @2.")
+			return false, S("Shop ID @1 does not contain @2 in its product list.", shop_id, product)
 		end
 
 		return false, S("Unknown command: @1", cmd)
