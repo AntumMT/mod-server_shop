@@ -12,6 +12,26 @@ local registered_currencies = {}
 -- Suffix displayed after deposited amount.
 ss.currency_suffix = nil
 
+local update_config = function(shops_data)
+	shops_data.shops = shops_data.shops or {}
+
+	local shops_formatted = {}
+	for id, s in pairs(shops_data.shops) do
+		local s_type = s.type
+		if not s_type then
+			s_type = "sell"
+			if s.buyer then
+				s_type = "buy"
+			end
+		end
+
+		shops_formatted[id] = {products=s.products, type=s_type}
+	end
+
+	shops_data.shops = shops_formatted
+	wdata.write("server_shops", shops_data)
+end
+
 ss.get_shops = function()
 	return table.copy(shops)
 end
@@ -257,7 +277,7 @@ ss.register_persist = function(id, products, buyer)
 	end
 
 	shops_data.shops[id] = {products=products, type=s_type}
-	wdata.write("server_shops", shops_data)
+	update_config(shops_data)
 end
 
 --- Registers a seller shop.
@@ -317,7 +337,7 @@ ss.unregister_persist = function(id)
 		shops_data.shops = shops_data.shops or {}
 
 		shops_data.shops[id] = nil
-		wdata.write("server_shops", shops_data)
+		update_config(shops_data)
 	end
 
 	return retval
@@ -393,7 +413,7 @@ ss.add_product_persist = function(id, product, value, idx)
 		local shops_data = wdata.read("server_shops") or {}
 		shops_data.shops = shops_data.shops or {}
 		shops_data.shops[id] = target_shop
-		wdata.write("server_shops", shops_data)
+		update_config(shops_data)
 	end
 end
 
@@ -468,7 +488,7 @@ ss.remove_product_persist = function(id, product, all)
 		local shops_data = wdata.read("server_shops") or {}
 		shops_data.shops = shops_data.shops or {}
 		shops_data.shops[id] = target_shop
-		wdata.write("server_shops", shops_data)
+		update_config(shops_data)
 	end
 
 	return count
@@ -531,8 +551,7 @@ ss.file_load = function()
 
 		-- backup legacy file
 		os.rename(shops_file, shops_file .. ".bak")
-		-- update config
-		wdata.write("server_shops", shops_data)
+		update_config(shops_data)
 	end
 
 	if shops_data.suffix ~= nil then
@@ -557,7 +576,7 @@ ss.file_load = function()
 		if type(shops_data.shops) == "table" then
 			for id, def in pairs(shops_data.shops) do
 				if def.type ~= "sell" and def.type ~= "buy" then
-					shop_file_error("shop \"type\" must by either \"sell\" or \"buy\" for ID: " .. id)
+					shop_file_error("shop \"type\" must be either \"sell\" or \"buy\" for ID: " .. id)
 				else
 					ss.register(id, def.products, def.type == "buy")
 				end
@@ -571,9 +590,9 @@ end
 --- Prunes unknown items & updates aliases in shops.
 --
 --  @function server_shop.prune_shops
---  @tparam[opt] bool update_config
-ss.prune_shops = function(update_config)
-	update_config = update_config == true
+--  @tparam[opt] bool persist
+ss.prune_shops = function(persist)
+	persist = persist == true
 
 	-- show warning if no currencies are registered
 	if not ss.currency_is_registered() then
@@ -627,9 +646,9 @@ ss.prune_shops = function(update_config)
 		end
 	end
 
-	if update_config then
+	if persist then
 		local shops_data = wdata.read("server_shops")
 		shops_data.shops = shops
-		wdata.write("server_shops", shops_data)
+		update_config(shops_data)
 	end
 end
