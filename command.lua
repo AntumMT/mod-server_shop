@@ -12,55 +12,78 @@ local commands = {
 	{
 		cmd = "help",
 		params = "[" .. S("command") .. "]",
+		desc = S("Shows usage info."),
 	},
 	{
 		cmd = "list",
+		desc = S("Lists all registered shop IDs."),
 	},
 	{
 		cmd = "info",
 		params = "<" .. S("ID") .. ">",
+		desc = S("Lists information about a shop."),
 	},
 	{
 		cmd = "register",
 		params = "<" .. S("ID") .. ">" .. " <sell/buy> "
 			.. " [" .. S("product1=value,product2=value,...") .. "]",
+		desc = S("Registers a new shop."),
+		persists = true,
 	},
 	{
 		cmd = "unregister",
 		params = "<" .. S("ID") .. ">",
+		desc = S("Unregisters a shop."),
+		persists = true,
 	},
 	{
 		cmd = "add",
 		params = "<" .. S("ID") .. "> <" .. S("product1=value,product2=value,...") .. ">",
+		desc = S("Adds one or more items to a shop's product list."),
+		persists = true,
 	},
 	{
 		cmd = "remove",
 		params = "<" .. S("ID") .. "> <" .. S("product") .. ">",
+		desc = S("Removes first instance of an item from a shop's product list."),
+		persists = true,
 	},
 	{
 		cmd = "removeall",
 		params = "<" .. S("ID") .. "> <" .. S("product") .. ">",
+		desc = S("Removes all instances of an item from a shop's product list."),
+		persists = true,
 	},
 	{
 		cmd = "reload",
+		desc = S("Reloads shops configuration."),
 	},
 }
 
 local format_usage = function(cmd)
 	local usage = S("Usage:")
 	if cmd then
-		usage = usage .. "\n  /" .. ss.modname .. " " .. cmd
 
-		local params
+		local desc, params, persists
 		for _, c in ipairs(commands) do
 			if c.cmd == cmd then
+				desc = c.desc
 				params = c.params
+				persists = c.persists
 				break
 			end
 		end
 
+		usage = usage .. "\n  /" .. ss.modname .. " " .. cmd
 		if params then
 			usage = usage .. " " .. params
+		end
+
+		if desc then
+			if persists then
+				desc = desc .. " " .. S("(changes are written to config)")
+			end
+			usage = desc .. "\n\n" .. usage
 		end
 	else
 		for _, c in ipairs(commands) do

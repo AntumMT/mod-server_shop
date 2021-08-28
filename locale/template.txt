@@ -25,6 +25,16 @@ Cannot use shops because there are no registered currencies.=
 
 # chat commands
 Manage shops configuration.=
+Shows usage info.=
+Lists all registered shop IDs.=
+Lists information about a shop.=
+Registers a new shop.=
+Unregisters a shop.=
+Adds one or more items to a shop's product list.=
+Removes first instance of an item from a shop's product list.=
+Removes all instances of an item from a shop's product list.=
+Reloads shops configuration.=
+(changes are written to config)=
 Usage:=
 command=
 params=

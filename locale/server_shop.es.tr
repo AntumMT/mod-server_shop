@@ -25,6 +25,16 @@ Cannot use shops because there are no registered currencies.=No se pueden usar l
 
 # chat commands
 Manage shops configuration.=Administrar configuración de tiendas.
+Shows usage info.=Muestra información del uso.
+Lists all registered shop IDs.=Muestra todas las ID de tiendas registradas.
+Lists information about a shop.=Muestra información de una tienda.
+Registers a new shop.=Registra una tienda nueva.
+Unregisters a shop.=Quita del registro una tienda.
+Adds one or more items to a shop's product list.=Agrega uno o más productos a la lista de una tienda.
+Removes first instance of an item from a shop's product list.=Quita el primero instancia de un producto de la lista de una tienda.
+Removes all instances of an item from a shop's product list.=Quita todos las instancias de un producto de la lista de una tienda.
+Reloads shops configuration.=Vuelva a cargar la configuración de tiendas.
+(changes are written to config)=(los cambios están grabados a la configuración)
 Usage:=Uso:
 command=orden
 params=parámetros
