@@ -44,4 +44,6 @@ end
 
 
 ss.file_load()
-core.register_on_mods_loaded(ss.prune_shops)
+core.register_on_mods_loaded(function()
+	ss.prune_shops(true)
+end)

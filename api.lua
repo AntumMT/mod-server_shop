@@ -571,7 +571,10 @@ end
 --- Prunes unknown items & updates aliases in shops.
 --
 --  @function server_shop.prune_shops
-ss.prune_shops = function()
+--  @tparam[opt] bool update_config
+ss.prune_shops = function(update_config)
+	update_config = update_config == true
+
 	-- show warning if no currencies are registered
 	if not ss.currency_is_registered() then
 		ss.log("warning", "no currencies registered")
@@ -622,5 +625,11 @@ ss.prune_shops = function()
 		if pruned then
 			ss.register(id, def.products, def.buyer)
 		end
+	end
+
+	if update_config then
+		local shops_data = wdata.read("server_shops")
+		shops_data.shops = shops
+		wdata.write("server_shops", shops_data)
 	end
 end
