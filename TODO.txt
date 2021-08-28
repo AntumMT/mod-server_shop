@@ -1,7 +1,5 @@
 
 TODO:
-- Security:
-	- might be an issue if admin changes shop ID while player is using
 - Functionality:
 	- optimize how refunds are given (e.g. if there is no room for 50s, but room for 1s, then give out 1s instead)
 - Aestethics:
@@ -10,9 +8,6 @@ TODO:
 - Misc.:
 	- make usable with "folks" mod
 	- add player shops
-	- fix so unknown items don't mess up shop (may become a problem when shops are registered live)
-	- allow shops to be configured live
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
-	- support groups in buyer shops
 	- fix shops from config being unregistered if the product list is empty
 	- fix cannot right-click deposit into inventory multiple times (seller shops only)
