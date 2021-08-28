@@ -283,6 +283,7 @@ end
 --- Registers a seller shop.
 --
 --  @function server_shop.register_seller
+--  @tparam string id Shop string identifier.
 --  @tparam table[string,int] products List of products & prices in format `{item_name, price}`.
 ss.register_seller = function(id, products, old_products)
 	if type(products) == "string" then
@@ -310,7 +311,7 @@ end
 --- Unregisters a shop.
 --
 --  @function server_shop.unregister
---  @tparam string Shop ID.
+--  @tparam string id Shop ID.
 --  @treturn bool `true` if shop was unregistered.
 ss.unregister = function(id)
 	if shops[id] ~= nil then
@@ -590,7 +591,7 @@ end
 --- Prunes unknown items & updates aliases in shops.
 --
 --  @function server_shop.prune_shops
---  @tparam[opt] bool persist
+--  @tparam[opt] bool persist If `true`, changes will be written to config.
 ss.prune_shops = function(persist)
 	persist = persist == true
 
