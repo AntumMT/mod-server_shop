@@ -9,5 +9,4 @@ TODO:
 	- make usable with "folks" mod
 	- add player shops
 	- use a spinner to select custom amount (example in terraform: https://github.com/x2048/terraform/blob/4b36d36/init.lua#L316 )
-	- fix shops from config being unregistered if the product list is empty
 	- fix cannot right-click deposit into inventory multiple times (seller shops only)

@@ -17,6 +17,7 @@ next
 - shops use unique inventories for individuals so deposits cannot be stolen by others
 - buyer shop deposit contents stored in player meta to persist through server crash/restart
 - increased "buy" dropdown quantities to include 1-10
+- fixed shops from config not registering if the product list is nil
 
 
 v1.6.2

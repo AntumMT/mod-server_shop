@@ -240,6 +240,9 @@ ss.register = function(id, products, buyer, buyer_old)
 		shop_def.buyer = buyer == true
 	end
 
+	-- allow shops to be initialized without products
+	shop_def.products = shop_def.products or {}
+
 	if type(shop_def.products) ~= "table" then
 		ss.log("error", ss.modname .. ".register: invalid \"products\" list")
 		return
