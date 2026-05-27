@@ -144,8 +144,11 @@ For buyer shops, the product list shows what items can be sold to this shop & ho
 ### Links:
 
 - [![ContentDB](https://content.luanti.org/packages/AntumDeluge/server_shop/shields/title/)](https://content.luanti.org/packages/AntumDeluge/server_shop/)
-- [GitHub repo](https://github.com/AntumMT/mod-server_shop)
 - [Forum](https://forum.luanti.org/viewtopic.php?t=26645)
+- Git repos:
+    - [Codeberg](https://codeberg.org/AntumLuanti/mod-server_shop)
+    - [GitHub](https://github.com/AntumMT/mod-server_shop)
+    - [GitLab](https://gitlab.com/AntumMT/mod-server_shop)
 - [Reference](https://antummt.github.io/mod-server_shop/reference/latest/)
 - [Changelog](changelog.txt)
 - [TODO](TODO.txt)
