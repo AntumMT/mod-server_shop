@@ -1,0 +1,19 @@
+{
+	"type": "MOD",
+	"title": "Server Shops",
+	"name": "server_shop",
+	"short_description": "Shops intended to be set up by server administrators.",
+	"dev_state": "ACTIVELY_DEVELOPED",
+	"ai_disclosure": "NONE",
+	"tags": ["commerce", "multiplayer"],
+	"content_warnings": null,
+	"license": "MIT",
+	"media_license": "CC0-1.0",
+	"repo": "https://codeberg.org/AntumLuanti/mod-server_shop",
+	"website": null,
+	"issue_tracker": "https://codeberg.org/AntumLuanti/mod-server_shop/issues",
+	"forums": "26645",
+	"video_url": null,
+	"donate_url": null,
+	"translation_url": null
+}
