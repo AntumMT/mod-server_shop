@@ -30,7 +30,7 @@ project = "Server Shops"
 format = "markdown"
 boilerplate = false
 not_luadoc = true
-favicon = "https://www.minetest.net/media/icon.svg"
+favicon = "https://www.luanti.org/media/icon.svg"
 readme = ".ldoc/README.md"
 
 local version = "1.6.2"
@@ -194,15 +194,15 @@ end
 
 
 local custom_see_links = {
-	["ObjectRef"] = "https://minetest.gitlab.io/minetest/class-reference/#objectref",
-	["PlayerMetaRef"] = "https://minetest.gitlab.io/minetest/class-reference/#playermetaref",
-	["ItemDef"] = "https://minetest.gitlab.io/minetest/definition-tables/#item-definition",
-	["ItemStack"] = "https://minetest.gitlab.io/minetest/class-reference/#itemstack",
-	["groups"] = "https://minetest.gitlab.io/minetest/groups/",
-	["entity_damage_mechanism"] = "https://minetest.gitlab.io/minetest/entity-damage-mechanism/",
-	["vector"] = "https://minetest.gitlab.io/minetest/representations-of-simple-things/#positionvector",
-	["SoundParams"] = "https://minetest.gitlab.io/minetest/sounds/",
-	["currency"] = "https://content.minetest.net/packages/VanessaE/currency/",
+	["ObjectRef"] = "https://api.luanti.org/class-reference/#objectref",
+	["PlayerMetaRef"] = "https://api.luanti.org/class-reference/#playermetaref",
+	["ItemDef"] = "https://api.luanti.org/definition-tables/#item-definition",
+	["ItemStack"] = "https://api.luanti.org/class-reference/#itemstack",
+	["groups"] = "https://api.luanti.org/groups/",
+	["entity_damage_mechanism"] = "https://api.luanti.org/entity-damage-mechanism/",
+	["vector"] = "https://api.luanti.org/representations-of-simple-things/#positionvector",
+	["SoundParams"] = "https://api.luanti.org/sounds/",
+	["currency"] = "https://content.luanti.org/packages/VanessaE/currency/",
 }
 
 local function format_custom_see(name, section)

@@ -2,7 +2,7 @@
 
 ### Description:
 
-Shops intended to be set up by [Minetest](https://www.minetest.net/) server administrators.
+Shops intended to be set up by [Luanti](https://www.luanti.org/) server administrators.
 
 No craft recipe is given as this for administrators, currently a shop can only be set up with the `/giveme` command. The two shop nodes are `server_shop:shop_small` & `server_shop:shop_large` (they function identically).
 
@@ -143,12 +143,12 @@ For buyer shops, the product list shows what items can be sold to this shop & ho
 
 ### Links:
 
-- [![ContentDB](https://content.minetest.net/packages/AntumDeluge/server_shop/shields/title/)](https://content.minetest.net/packages/AntumDeluge/server_shop/)
+- [![ContentDB](https://content.luanti.org/packages/AntumDeluge/server_shop/shields/title/)](https://content.luanti.org/packages/AntumDeluge/server_shop/)
 - [GitHub repo](https://github.com/AntumMT/mod-server_shop)
-- [Forum](https://forum.minetest.net/viewtopic.php?t=26645)
+- [Forum](https://forum.luanti.org/viewtopic.php?t=26645)
 - [Reference](https://antummt.github.io/mod-server_shop/reference/latest/)
 - [Changelog](changelog.txt)
 - [TODO](TODO.txt)
 
 
-[mod.currency]: https://content.minetest.net/packages/VanessaE/currency/
+[mod.currency]: https://content.luanti.org/packages/VanessaE/currency/
