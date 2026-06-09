@@ -1,33 +1,15 @@
 
-server_shop = {}
-local ss = server_shop
+server_shop = {
+	modname = core.get_current_modname(),
+	log = function() end
+}
+server_shop.modpath = core.get_modpath(server_shop.modname)
 
-ss.modname = core.get_current_modname()
-ss.modpath = core.get_modpath(ss.modname)
-
-local debug_mods = core.settings:get_bool("debug_mods", false)
-
-function ss.log(lvl, msg)
-	if not msg then
-		msg = lvl
-		lvl = nil
-	end
-
-	msg = "[" .. ss.modname .. "] " .. msg
-
-	if lvl == "debug" then
-		if not debug_mods then return end
-
-		msg = "[DEBUG] " .. msg
-		lvl = nil
-	end
-
-	if not lvl then
-		core.log(msg)
-	else
-		core.log(lvl, msg)
-	end
+if core.global_exists("register_mod_logger") then
+	register_mod_logger(server_shop)
 end
+
+local ss = server_shop
 
 local scripts = {
 	"settings",
