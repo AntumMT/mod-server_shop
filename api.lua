@@ -652,7 +652,9 @@ ss.prune_shops = function(persist)
 
 	if persist then
 		local shops_data = wdata.read("server_shops")
-		shops_data.shops = shops
-		update_config(shops_data)
+		if shops_data then
+			shops_data.shops = shops
+			update_config(shops_data)
+		end
 	end
 end
