@@ -5,15 +5,15 @@ next
 - shop label provided by node meta instead of shop definition
 - shop ID, label, & infotext are set in config formspec
 - changed server_shops.json format to have keys "shops", "currencies", & "suffix"
-	- legacy formatted files will be updated
+  - legacy formatted files will be updated
 - added methods for removing items from shop lists
 - added "server_shop" chat sub-commands:
-	- add: adds 1 or more items to a shop's product list
-	- remove: removes the first instance of an item from a shop's product list
-	- removeall: removes all instances of an item from a shop's product list
-	- list: lists all registered shop IDs
-	- info: lists information about a shop
-	- help: shows usage info
+  - add: adds 1 or more items to a shop's product list
+  - remove: removes the first instance of an item from a shop's product list
+  - removeall: removes all instances of an item from a shop's product list
+  - list: lists all registered shop IDs
+  - info: lists information about a shop
+  - help: shows usage info
 - shops use unique inventories for individuals so deposits cannot be stolen by others
 - buyer shop deposit contents stored in player meta to persist through server crash/restart
 - increased "buy" dropdown quantities to include 1-10
@@ -36,9 +36,9 @@ v1.6
 - added node sounds
 - uses wdata for reading/writing shops config
 - added "server_shop" chat command:
-	- reload: reloads shops configuration
-	- register: registers new shop & updates configuration
-	- unregister: unregister shop id & updates configuration
+  - reload: reloads shops configuration
+  - register: registers new shop & updates configuration
+  - unregister: unregister shop id & updates configuration
 
 
 v1.5
@@ -51,8 +51,8 @@ v1.5
 - default currencies not registered if currency mod not available
 - "get_currencies", "get_shops", & "get_shop" return table copy
 - added methods:
-	- server_shop.unregister
-	- server_shop.shop_type
+  - server_shop.unregister
+  - server_shop.shop_type
 
 
 v1.4
