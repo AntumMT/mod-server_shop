@@ -1,3 +1,4 @@
-.*             export-ignore
-*.py           export-ignore
-models/*.blend export-ignore
+.*              export-ignore
+*.py            export-ignore
+models/*.blend  export-ignore
+screenshots/*   export-ignore
