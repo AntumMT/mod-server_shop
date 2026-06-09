@@ -164,7 +164,7 @@ ss.register_currency = function(item, value)
 end
 
 if ss.use_currency_defaults then
-	if not core.get_modpath("currency") then
+	if not core.get_modpath("currency") and not core.get_modpath("minimalist_currency") then
 		ss.log("warning", "currency mod not found, not registering default currencies")
 	else
 		local mg_notes = {
