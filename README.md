@@ -4,7 +4,7 @@
 
 Shops intended to be set up by [Luanti](https://www.luanti.org/) server administrators.
 
-No craft recipe is given as this for administrators, currently a shop can only be set up with the `/giveme` command. The two shop nodes are `server_shop:shop_small` & `server_shop:shop_large` (they function identically).
+No craft recipe is given as this is for administrators, currently a shop can only be set up with the `/giveme` command or from creative inventory. The two shop nodes are `server_shop:shop_small` & `server_shop:shop_large` (they function identically).
 
 ![screenshot](screenshot.png)
 
