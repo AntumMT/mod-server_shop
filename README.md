@@ -21,8 +21,8 @@ server_shop.register_seller("frank", "Frank's Shop", {{"default:wood", 2}})
 
 -- register buyer
 server_shop.register_buyer("julie", "Julie's Shop",  {
-	{"default:copper_lump", 5},
-	{"default:iron_lump", 6},
+  {"default:copper_lump", 5},
+  {"default:iron_lump", 6},
 })
 ```
 
@@ -71,7 +71,7 @@ Usage:
   - id: shop identifier
   - type: can be "buy" or "sell"
   - name: displayed shop name ("_" is replaced with " ")
-	- product list: comma-separated list in format "item=value"
+  - product list: comma-separated list in format "item=value"
 
 /server_shop unregister <id>
 - unregisters a shop & updates configuration file
@@ -89,14 +89,14 @@ server_shop.register_currency("currency:minegeld_5", 5)
 
 When registering new currencies in `server_shops.json`, set `type` to "currencies". `value` is a table of item names & worth:
 ```json
-	{
-		"type":"currencies",
-		"value":
-		{
-			"currency:minegeld":1,
-			"currency:minegeld_5":5,
-		},
-	},
+  {
+    "type":"currencies",
+    "value":
+    {
+      "currency:minegeld":1,
+      "currency:minegeld_5":5,
+    },
+  },
 ```
 
 You can also register a currency suffix to be displayed in the formspec. Simply set the string value of `server_shop.currency_suffix`:
@@ -107,10 +107,10 @@ server_shop.currency_suffix = "MG"
 
 In `server_shops.json`, set `type` to "suffix" & `value` to the string to be displayed:
 ```json
-	{
-		"type":"suffix",
-		"value":"MG",
-	},
+  {
+    "type":"suffix",
+    "value":"MG",
+  },
 ```
 
 By default, if the [currency][mod.currency] mod is installed, the minegeld notes will be registered as currency. This can be disabled by setting `server_shop.use_currency_defaults` to `false` in `minetest.conf`.
